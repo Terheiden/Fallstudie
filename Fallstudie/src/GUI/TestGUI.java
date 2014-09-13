@@ -19,24 +19,32 @@ import javax.swing.event.ChangeListener;
 
 public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	private JButton neuKaufenStadt, neuKaufenRastplatz, neuKaufenBahnhof, marketingBestätigen, mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
-	private JTextArea kennzahlen;
+	private JTextArea kennzahlenArea;
 	private JTextField marketingAusgabenField, anzBahnhofField, anzRastplatzField, anzStadtField;
 	private JTextField anzMitarbeiterBahnhofField, anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
 	private JTextField anzMitarbeiterGesField;
-	private JPanel karte, marketing;
+	//private JPanel karte, marketing;
 	private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
-	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel, kloAnzahl;
+	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel, kloAnzahlLabel;
 	
-	private String infoText;
+	private String kennzahlenText;
 	private int anzMitarbeiterGes, ausgabenMarketing, anzBahnhof, anzRastplatz, anzStadt;
 	private int anzMitarbeiterBahnhof, anzMitarbeiterRastplatz, anzMitarbeiterStadt;
 	private double preisBahnhof, preisRastplatz, preisStadt;
+	private int geld;
+	/*TODO:
+	 * Werte auf stimmigkeit prüfen: mitarbeiter usw.
+	 *  Werte einlesen und ausgeben
+	 *  Buttons mit simplen funktionen versehen
+	 *  Vermögen usw. einbauen(was alles?)
+	 */
+	
 	
 	public TestGUI(){
 		super("Klomanager");
 		setBounds(0, 0, 800, 600);
 		
-		infoText="Wichtige Daten";
+		kennzahlenText="Wichtige Daten";
 		anzMitarbeiterGes=3;
 		ausgabenMarketing= 0;
 		anzBahnhof = 1;
@@ -55,12 +63,16 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		preisSliderStadt = new JSlider(0, 10, 3);
 		preisSliderRast = new JSlider(0, 10, 3);
 		
-		kennzahlen = new JTextArea("Hier könnten wichtige Daten stehen");
+		kennzahlenArea = new JTextArea("Hier könnten wichtige Daten stehen");
 		
 		marketingAusgabenField = new JTextField("Wieviel möchtest du für Marketing ausgeben?");
 		anzBahnhofField = new JTextField(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JTextField(String.valueOf(anzRastplatz));
 		anzStadtField = new JTextField(String.valueOf(anzStadt));
+		anzMitarbeiterBahnhofField = new JTextField(String.valueOf(anzMitarbeiterBahnhof));
+		anzMitarbeiterRastplatzField = new JTextField(String.valueOf(anzMitarbeiterRastplatz));
+		anzMitarbeiterStadtField = new JTextField(String.valueOf(anzMitarbeiterStadt));
+		anzMitarbeiterGesField = new JTextField(String.valueOf(anzMitarbeiterGes));
 		
 		neuKaufenStadt = new JButton("Kaufe ein neues Stadtklo");
 		neuKaufenRastplatz = new JButton("Kaufe ein neues Rastplatzklo");
@@ -73,7 +85,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		preisLabel = new JLabel("Preis festlegen");
 		marketingLabel = new JLabel("Marketing");
 		mitarbeiterZuweisenLabel = new JLabel("Mitarbeiter zuweisen");
-		kloAnzahl = new JLabel("Anzahl");
+		kloAnzahlLabel = new JLabel("Anzahl");
 		
 		buildWindow();		
 	}
@@ -83,8 +95,8 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		setLayout(null);
 		
 		//Toiletten nach Region
-		add(kloAnzahl);
-		kloAnzahl.setBounds(215, 280, 40, 20);
+		add(kloAnzahlLabel);
+		kloAnzahlLabel.setBounds(215, 280, 40, 20);
 		add(preisLabel);
 		preisLabel.setBounds(255, 280, 100, 20);
 		add(mitarbeiterZuweisenLabel);
@@ -97,6 +109,9 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		anzBahnhofField.setBounds(220, 305, 30, 20);
 		add(preisSliderBahn);		
 		preisSliderBahn.setBounds(250, 300, 100, 40);
+		add(anzMitarbeiterBahnhofField);
+		anzMitarbeiterBahnhofField.setBounds(400, 305, 30, 20);
+		
 		
 		//Rastplatz
 		add(neuKaufenRastplatz);
@@ -105,6 +120,8 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		anzRastplatzField.setBounds(220, 405, 30, 20);
 		add(preisSliderRast);		
 		preisSliderRast.setBounds(250, 400, 100, 40);
+		add(anzMitarbeiterRastplatzField);
+		anzMitarbeiterRastplatzField.setBounds(400, 405, 30, 20);
 		
 		//Stadt
 		add(neuKaufenStadt);
@@ -113,11 +130,14 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		anzStadtField.setBounds(220, 505, 30, 20);
 		add(preisSliderStadt);		
 		preisSliderStadt.setBounds(250, 500, 100, 40);
+		add(anzMitarbeiterStadtField);
+		anzMitarbeiterStadtField.setBounds(400, 505, 30, 20);
 		
 		
 		//Rechte Seite
-		add(kennzahlen);
-		kennzahlen.setBounds(500, 30, 270, 240);
+		add(kennzahlenArea);
+		kennzahlenArea.setBounds(500, 30, 270, 240);
+		
 		add(marketingAusgabenField);
 		marketingAusgabenField.setBounds(500,400,200, 30);
 		add(marketingBestätigen);
@@ -125,13 +145,16 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		add(marketingLabel);
 		marketingLabel.setBounds(500, 320, 200, 30);
 		
+		add(nächsteRunde);
+		nächsteRunde.setBounds(600,478,180,80);
+		
 		//oben links
 		add(mitarbeiterEinstellen);
 		mitarbeiterEinstellen.setBounds(10, 10, 200, 30);
 		add(mitarbeiterEntlassen);
 		mitarbeiterEntlassen.setBounds(10, 50, 200, 30);
-		add(nächsteRunde);
-		nächsteRunde.setBounds(600,478,180,80);
+		add(anzMitarbeiterGesField);
+		anzMitarbeiterGesField.setBounds(250, 30, 50, 30);
 		
 		
 		/*add(karte, null);
