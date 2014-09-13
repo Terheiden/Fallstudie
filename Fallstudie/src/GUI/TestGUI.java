@@ -20,24 +20,48 @@ import javax.swing.event.ChangeListener;
 public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	private JButton neuKaufenStadt, neuKaufenRastplatz, neuKaufenBahnhof, marketingBestätigen, mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
 	private JTextArea kennzahlen;
-	private JTextField marketingAusgaben;
+	private JTextField marketingAusgabenField, anzBahnhofField, anzRastplatzField, anzStadtField;
+	private JTextField anzMitarbeiterBahnhofField, anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
+	private JTextField anzMitarbeiterGesField;
 	private JPanel karte, marketing;
-	private JSlider preisSlider;
-	private JLabel preisLabel, marketingLabel;
+	private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
+	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel, kloAnzahl;
 	
 	private String infoText;
-	private int anzMitarbeiter, ausgabenMarketing;
-	private double preis;
+	private int anzMitarbeiterGes, ausgabenMarketing, anzBahnhof, anzRastplatz, anzStadt;
+	private int anzMitarbeiterBahnhof, anzMitarbeiterRastplatz, anzMitarbeiterStadt;
+	private double preisBahnhof, preisRastplatz, preisStadt;
 	
 	public TestGUI(){
 		super("Klomanager");
 		setBounds(0, 0, 800, 600);
 		
-		karte = new JPanel();
-		marketing = new JPanel();
-		preisSlider = new JSlider(0, 10, 3);
+		infoText="Wichtige Daten";
+		anzMitarbeiterGes=3;
+		ausgabenMarketing= 0;
+		anzBahnhof = 1;
+		anzRastplatz = 1;
+		anzStadt = 1;
+		
+		anzMitarbeiterGes = 3;
+		anzMitarbeiterBahnhof = 1;
+		anzMitarbeiterRastplatz = 1;
+		anzMitarbeiterStadt = 1;
+		
+		
+		//karte = new JPanel();
+		//marketing = new JPanel();
+		preisSliderBahn = new JSlider(0, 10, 3);
+		preisSliderStadt = new JSlider(0, 10, 3);
+		preisSliderRast = new JSlider(0, 10, 3);
+		
 		kennzahlen = new JTextArea("Hier könnten wichtige Daten stehen");
-		marketingAusgaben = new JTextField("Wieviel möchtest du für Marketing ausgeben?");
+		
+		marketingAusgabenField = new JTextField("Wieviel möchtest du für Marketing ausgeben?");
+		anzBahnhofField = new JTextField(String.valueOf(anzBahnhof));
+		anzRastplatzField = new JTextField(String.valueOf(anzRastplatz));
+		anzStadtField = new JTextField(String.valueOf(anzStadt));
+		
 		neuKaufenStadt = new JButton("Kaufe ein neues Stadtklo");
 		neuKaufenRastplatz = new JButton("Kaufe ein neues Rastplatzklo");
 		neuKaufenBahnhof = new JButton("Kaufe ein neues Bahnhofsklo");
@@ -45,35 +69,63 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		mitarbeiterEinstellen = new JButton("Neuer Mitarbeiter");
 		mitarbeiterEntlassen = new JButton("Mitarbeiter feuern");
 		nächsteRunde = new JButton("Beende diese Runde");
+		
 		preisLabel = new JLabel("Preis festlegen");
 		marketingLabel = new JLabel("Marketing");
+		mitarbeiterZuweisenLabel = new JLabel("Mitarbeiter zuweisen");
+		kloAnzahl = new JLabel("Anzahl");
 		
 		buildWindow();		
-		
-		System.out.println("Hallo");
 	}
 	
 
 	private void buildWindow() {	
 		setLayout(null);
-		add(preisSlider);		
-		preisSlider.setBounds(250, 300, 100, 40);
+		
+		//Toiletten nach Region
+		add(kloAnzahl);
+		kloAnzahl.setBounds(215, 280, 40, 20);
 		add(preisLabel);
 		preisLabel.setBounds(255, 280, 100, 20);
+		add(mitarbeiterZuweisenLabel);
+		mitarbeiterZuweisenLabel.setBounds(355, 280, 150, 20);
+		
+		//Bahnhof		
+		add(neuKaufenBahnhof);
+		neuKaufenBahnhof.setBounds(10, 300, 200, 30);
+		add(anzBahnhofField);
+		anzBahnhofField.setBounds(220, 305, 30, 20);
+		add(preisSliderBahn);		
+		preisSliderBahn.setBounds(250, 300, 100, 40);
+		
+		//Rastplatz
+		add(neuKaufenRastplatz);
+		neuKaufenRastplatz.setBounds(10, 400, 200, 30);
+		add(anzRastplatzField);
+		anzRastplatzField.setBounds(220, 405, 30, 20);
+		add(preisSliderRast);		
+		preisSliderRast.setBounds(250, 400, 100, 40);
+		
+		//Stadt
+		add(neuKaufenStadt);
+		neuKaufenStadt.setBounds(10, 500, 200, 30);
+		add(anzStadtField);
+		anzStadtField.setBounds(220, 505, 30, 20);
+		add(preisSliderStadt);		
+		preisSliderStadt.setBounds(250, 500, 100, 40);
+		
+		
+		//Rechte Seite
 		add(kennzahlen);
 		kennzahlen.setBounds(500, 30, 270, 240);
-		add(marketingAusgaben);
-		marketingAusgaben.setBounds(500,400,200, 30);
+		add(marketingAusgabenField);
+		marketingAusgabenField.setBounds(500,400,200, 30);
 		add(marketingBestätigen);
 		marketingBestätigen.setBounds(500, 350, 200, 30);	
 		add(marketingLabel);
 		marketingLabel.setBounds(500, 320, 200, 30);
-		add(neuKaufenBahnhof);
-		neuKaufenBahnhof.setBounds(10, 300, 200, 30);
-		add(neuKaufenRastplatz);
-		neuKaufenRastplatz.setBounds(10, 400, 200, 30);
-		add(neuKaufenStadt);
-		neuKaufenStadt.setBounds(10, 500, 200, 30);
+		
+		//oben links
 		add(mitarbeiterEinstellen);
 		mitarbeiterEinstellen.setBounds(10, 10, 200, 30);
 		add(mitarbeiterEntlassen);
