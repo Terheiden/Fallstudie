@@ -49,6 +49,8 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		marketingLabel = new JLabel("Marketing");
 		
 		buildWindow();		
+		
+		System.out.println("Hallo");
 	}
 	
 
