@@ -39,7 +39,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	 *  Vermögen usw. einbauen(was alles?)
 	 */
 	
-	
+	//HI - Das bin ich :)
 	public TestGUI(){
 		super("Klomanager");
 		setBounds(0, 0, 800, 600);
