@@ -39,7 +39,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	 *  Vermögen usw. einbauen(was alles?)
 	 *  
 	 *  
-	 *  Erweiterung
+	 *  Erweiterung von Steffen
 	 */
 	
 	//HI - Das bin ich :)
