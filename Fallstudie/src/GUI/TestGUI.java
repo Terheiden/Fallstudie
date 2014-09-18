@@ -205,7 +205,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	public void stateChanged(ChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		// preis veränderung aktualisieren
-		
+		System.out.println("hallo");
 	}
 	
 
