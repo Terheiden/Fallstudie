@@ -37,6 +37,9 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	 *  Werte einlesen und ausgeben
 	 *  Buttons mit simplen funktionen versehen
 	 *  Vermögen usw. einbauen(was alles?)
+	 *  
+	 *  
+	 *  Erweiterung
 	 */
 	
 	
