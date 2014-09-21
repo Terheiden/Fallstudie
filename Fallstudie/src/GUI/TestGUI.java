@@ -24,7 +24,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	private JTextArea kennzahlenArea;
 	private JTextField marketingAusgabenField, anzBahnhofField, anzRastplatzField, anzStadtField;
 	private JTextField anzMitarbeiterBahnhofField, anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
-	private JTextField anzMitarbeiterGesField;
+	private JTextField anzMitarbeiterGesField, preisStadtField, preisRastplatzField, preisBahnhofField;
 	//private JPanel karte, marketing;
 	private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
 	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel, kloAnzahlLabel;
@@ -35,21 +35,20 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	private double preisBahnhof, preisRastplatz, preisStadt;
 	private int geld;
 	/*TODO:
-	 *  Werte auf stimmigkeit prüfen: mitarbeiter usw.
 	 *  Werte einlesen und ausgeben
 	 *  Buttons mit simplen funktionen versehen
-	 *  Vermögen usw. einbauen(was alles?)
+	 *  Vermögen, darlehen usw. einbauen(was alles?)
 	 */
 	
-	//HI - Das bin ich :)
+
 	public TestGUI(){
 		super("Klomanager");
 		setBounds(0, 0, 800, 620);
 		
 		//Variablen initialisieren
 		kennzahlenText="Wichtige Daten";
-		anzMitarbeiterGes=3;
-		ausgabenMarketing= 0;
+		anzMitarbeiterGes = 3;
+		ausgabenMarketing = 0;
 		anzBahnhof = 1;
 		anzRastplatz = 1;
 		anzStadt = 1;
@@ -67,10 +66,9 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		//Objekte erzeugen
 		
 		//Slider ändern -> können nur int liefern bzw. wie fein soll preis verstellbar sein?
-		//feld für aktuellen Preis hinzufügen
-		preisSliderBahn = new JSlider(0, 100, (int)preisBahnhof*10);
-		preisSliderStadt = new JSlider(0, 100, (int)preisStadt*10);
-		preisSliderRast = new JSlider(0, 100, (int)preisRastplatz*10);
+		preisSliderBahn = new JSlider(0, 1000, (int)preisBahnhof*100);
+		preisSliderStadt = new JSlider(0, 1000, (int)preisStadt*100);
+		preisSliderRast = new JSlider(0, 1000, (int)preisRastplatz*100);
 		
 		kennzahlenArea = new JTextArea(kennzahlenText);
 		
@@ -82,6 +80,9 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		anzMitarbeiterRastplatzField = new JTextField(String.valueOf(anzMitarbeiterRastplatz));
 		anzMitarbeiterStadtField = new JTextField(String.valueOf(anzMitarbeiterStadt));
 		anzMitarbeiterGesField = new JTextField(String.valueOf(anzMitarbeiterGes));
+		preisStadtField = new JTextField(String.valueOf(preisStadt));
+		preisBahnhofField = new JTextField(String.valueOf(preisBahnhof));
+		preisRastplatzField = new JTextField(String.valueOf(preisRastplatz));
 		
 		neuKaufenStadt = new JButton("Kaufe ein neues Stadtklo");
 		neuKaufenRastplatz = new JButton("Kaufe ein neues Rastplatzklo");
@@ -123,10 +124,13 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		add(anzBahnhofField);
 		anzBahnhofField.setBounds(220, 305, 30, 20);
 		add(preisSliderBahn);		
-		preisSliderBahn.setBounds(250, 300, 100, 40);
+		preisSliderBahn.setBounds(250, 300, 100, 20);
+		preisSliderBahn.addChangeListener(this);
+		add(preisBahnhofField);
+		preisBahnhofField.setBounds(282, 320, 30, 20);
+		preisBahnhofField.setEditable(false);
 		add(anzMitarbeiterBahnhofField);
 		anzMitarbeiterBahnhofField.setBounds(400, 305, 30, 20);
-		
 		
 		//Rastplatz
 		add(neuKaufenRastplatz);
@@ -136,7 +140,11 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		add(anzRastplatzField);
 		anzRastplatzField.setBounds(220, 405, 30, 20);
 		add(preisSliderRast);		
-		preisSliderRast.setBounds(250, 400, 100, 40);
+		preisSliderRast.setBounds(250, 400, 100, 20);
+		preisSliderRast.addChangeListener(this);
+		add(preisRastplatzField);
+		preisRastplatzField.setBounds(282, 420, 30, 20);
+		preisRastplatzField.setEditable(false);
 		add(anzMitarbeiterRastplatzField);
 		anzMitarbeiterRastplatzField.setBounds(400, 405, 30, 20);
 		
@@ -148,7 +156,11 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		add(anzStadtField);
 		anzStadtField.setBounds(220, 505, 30, 20);
 		add(preisSliderStadt);		
-		preisSliderStadt.setBounds(250, 500, 100, 40);
+		preisSliderStadt.setBounds(250, 500, 100, 20);
+		preisSliderStadt.addChangeListener(this);
+		add(preisStadtField);
+		preisStadtField.setBounds(282, 520, 30, 20);
+		preisStadtField.setEditable(false);
 		add(anzMitarbeiterStadtField);
 		anzMitarbeiterStadtField.setBounds(400, 505, 30, 20);
 		
@@ -221,7 +233,15 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	public void stateChanged(ChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		// preis veränderung aktualisieren
-		System.out.println("hallo");
+		if(arg0.getSource() == preisSliderBahn){
+			preisBahnhofField.setText(String.valueOf(preisSliderBahn.getValue()/100.0));
+		}
+		if(arg0.getSource() == preisSliderStadt){
+			preisStadtField.setText(String.valueOf(preisSliderStadt.getValue()/100.0));			
+		}
+		if(arg0.getSource() == preisSliderRast){
+			preisRastplatzField.setText(String.valueOf(preisSliderRast.getValue()/100.0));
+		}
 	}
 	
 
