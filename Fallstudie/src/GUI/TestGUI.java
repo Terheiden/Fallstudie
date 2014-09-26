@@ -20,24 +20,28 @@ import javax.swing.event.ChangeListener;
 public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	private JButton neuKaufenStadt, neuKaufenRastplatz, neuKaufenBahnhof;
 	private JButton verkaufeStadt, verkaufeRastplatz, verkaufeBahnhof;
-	private JButton marketingBestätigen, mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
+	private JButton mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
+
+	
 	private JTextArea kennzahlenArea;
 	private JTextField marketingAusgabenField, anzBahnhofField, anzRastplatzField, anzStadtField;
 	private JTextField anzMitarbeiterBahnhofField, anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
 	private JTextField anzMitarbeiterGesField, preisStadtField, preisRastplatzField, preisBahnhofField;
-	//private JPanel karte, marketing;
-	private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
-	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel, kloAnzahlLabel;
+	private JTextField darlehenField, darlehenTilgungField, darlehenAufnehmenField, bankField; 
+
+	//private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
+	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel;
+	private JLabel kloAnzahlLabel, darlehenLabel, bankLabel;
 	
 	private String kennzahlenText;
-	private int anzMitarbeiterGes, ausgabenMarketing, anzBahnhof, anzRastplatz, anzStadt;
+	private int anzMitarbeiterGes, anzBahnhof, anzRastplatz, anzStadt;
 	private int anzMitarbeiterBahnhof, anzMitarbeiterRastplatz, anzMitarbeiterStadt;
 	private double preisBahnhof, preisRastplatz, preisStadt;
-	private int geld;
+
 	/*TODO:
 	 *  Werte einlesen und ausgeben
 	 *  Buttons mit simplen funktionen versehen
-	 *  Vermögen, darlehen usw. einbauen(was alles?)
+	 *  einbauen(was alles?) gagdet auswahl
 	 */
 	
 
@@ -47,8 +51,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		
 		//Variablen initialisieren
 		kennzahlenText="Wichtige Daten";
-		anzMitarbeiterGes = 3;
-		ausgabenMarketing = 0;
+		anzMitarbeiterGes = 3;		
 		anzBahnhof = 1;
 		anzRastplatz = 1;
 		anzStadt = 1;
@@ -66,13 +69,14 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		//Objekte erzeugen
 		
 		//Slider ändern -> können nur int liefern bzw. wie fein soll preis verstellbar sein?
-		preisSliderBahn = new JSlider(0, 1000, (int)preisBahnhof*100);
-		preisSliderStadt = new JSlider(0, 1000, (int)preisStadt*100);
-		preisSliderRast = new JSlider(0, 1000, (int)preisRastplatz*100);
+		//Slider sind draußen
+		/*preisSliderBahn = new JSlider(0, 100, (int)preisBahnhof*10);
+		preisSliderStadt = new JSlider(0, 100, (int)preisStadt*10);
+		preisSliderRast = new JSlider(0, 100, (int)preisRastplatz*10);*/
 		
 		kennzahlenArea = new JTextArea(kennzahlenText);
 		
-		marketingAusgabenField = new JTextField("Wieviel möchtest du für Marketing ausgeben?");
+		marketingAusgabenField = new JTextField("");
 		anzBahnhofField = new JTextField(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JTextField(String.valueOf(anzRastplatz));
 		anzStadtField = new JTextField(String.valueOf(anzStadt));
@@ -83,23 +87,30 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		preisStadtField = new JTextField(String.valueOf(preisStadt));
 		preisBahnhofField = new JTextField(String.valueOf(preisBahnhof));
 		preisRastplatzField = new JTextField(String.valueOf(preisRastplatz));
+		darlehenField = new JTextField("50.000");
+		darlehenAufnehmenField = new JTextField("");
+		darlehenTilgungField = new JTextField("");
+		bankField = new JTextField("15.000");
 		
-		neuKaufenStadt = new JButton("Kaufe ein neues Stadtklo");
-		neuKaufenRastplatz = new JButton("Kaufe ein neues Rastplatzklo");
-		neuKaufenBahnhof = new JButton("Kaufe ein neues Bahnhofsklo");
-		verkaufeStadt = new JButton("Verkaufe ein Stadtklo"); 
-		verkaufeRastplatz = new JButton("Verkaufe ein Rastplatzklo");
-		verkaufeBahnhof = new JButton("Verkaufe ein Bahnhofsklo");
-			
-		marketingBestätigen = new JButton("Budget bestätigen");		
+		
+		
+		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
+		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
+		neuKaufenBahnhof = new JButton("Miete ein neues Bahnhofsklo");
+		verkaufeStadt = new JButton("Gebe ein Stadtklo ab"); 
+		verkaufeRastplatz = new JButton("Gebe ein Rastplatzklo ab");
+		verkaufeBahnhof = new JButton("Gebe ein Bahnhofsklo ab");
+				
 		mitarbeiterEinstellen = new JButton("Neuer Mitarbeiter");
 		mitarbeiterEntlassen = new JButton("Mitarbeiter feuern");
 		nächsteRunde = new JButton("Beende diese Runde");
 		
-		preisLabel = new JLabel("Preis festlegen");
-		marketingLabel = new JLabel("Marketing");
-		mitarbeiterZuweisenLabel = new JLabel("Mitarbeiter zuweisen");
+		preisLabel = new JLabel("<html>Preis<br>festlegen</html>");
+		marketingLabel = new JLabel("Marketingbudget");
+		mitarbeiterZuweisenLabel = new JLabel("<html>Mitarbeiter<br>zuweisen</html>");
 		kloAnzahlLabel = new JLabel("Anzahl");
+		darlehenLabel = new JLabel("Aufgenommene Darlehen  |  In Höhe von aufnehmen  |  Tilgen");
+		bankLabel = new JLabel("Bankguthaben");
 		
 		buildWindow();		
 	}
@@ -110,117 +121,102 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 		
 		//Toiletten nach Region
 		add(kloAnzahlLabel);
-		kloAnzahlLabel.setBounds(215, 280, 40, 20);
+		kloAnzahlLabel.setBounds(215, 270, 40, 20);
 		add(preisLabel);
-		preisLabel.setBounds(255, 280, 100, 20);
+		preisLabel.setBounds(265, 260, 70, 40);
 		add(mitarbeiterZuweisenLabel);
-		mitarbeiterZuweisenLabel.setBounds(355, 280, 150, 20);
-		
-		//Bahnhof		
-		add(neuKaufenBahnhof);
-		neuKaufenBahnhof.setBounds(10, 300, 200, 30);
-		add(verkaufeBahnhof);
-		verkaufeBahnhof.setBounds(10, 340, 200, 30);
-		add(anzBahnhofField);
-		anzBahnhofField.setBounds(220, 305, 30, 20);
-		add(preisSliderBahn);		
-		preisSliderBahn.setBounds(250, 300, 100, 20);
-		preisSliderBahn.addChangeListener(this);
-		add(preisBahnhofField);
-		preisBahnhofField.setBounds(282, 320, 30, 20);
-		preisBahnhofField.setEditable(false);
-		add(anzMitarbeiterBahnhofField);
-		anzMitarbeiterBahnhofField.setBounds(400, 305, 30, 20);
-		
-		//Rastplatz
-		add(neuKaufenRastplatz);
-		neuKaufenRastplatz.setBounds(10, 400, 200, 30);
-		add(verkaufeRastplatz);
-		verkaufeRastplatz.setBounds(10, 440, 200, 30);
-		add(anzRastplatzField);
-		anzRastplatzField.setBounds(220, 405, 30, 20);
-		add(preisSliderRast);		
-		preisSliderRast.setBounds(250, 400, 100, 20);
-		preisSliderRast.addChangeListener(this);
-		add(preisRastplatzField);
-		preisRastplatzField.setBounds(282, 420, 30, 20);
-		preisRastplatzField.setEditable(false);
-		add(anzMitarbeiterRastplatzField);
-		anzMitarbeiterRastplatzField.setBounds(400, 405, 30, 20);
+		mitarbeiterZuweisenLabel.setBounds(330, 260, 70, 40);
 		
 		//Stadt
 		add(neuKaufenStadt);
-		neuKaufenStadt.setBounds(10, 500, 200, 30);
+		neuKaufenStadt.setBounds(10, 300, 200, 30);
 		add(verkaufeStadt);
-		verkaufeStadt.setBounds(10, 540, 200, 30);
+		verkaufeStadt.setBounds(10, 340, 200, 30);
 		add(anzStadtField);
-		anzStadtField.setBounds(220, 505, 30, 20);
-		add(preisSliderStadt);		
-		preisSliderStadt.setBounds(250, 500, 100, 20);
-		preisSliderStadt.addChangeListener(this);
+		anzStadtField.setBounds(220, 305, 30, 20);
+		/*add(preisSliderStadt);		
+		preisSliderStadt.setBounds(250, 300, 100, 20);
+		preisSliderStadt.addChangeListener(this);*/
 		add(preisStadtField);
-		preisStadtField.setBounds(282, 520, 30, 20);
-		preisStadtField.setEditable(false);
+		preisStadtField.setBounds(282, 305, 30, 20);
+		//preisStadtField.setEditable(false);
 		add(anzMitarbeiterStadtField);
-		anzMitarbeiterStadtField.setBounds(400, 505, 30, 20);
+		anzMitarbeiterStadtField.setBounds(340, 305, 30, 20);
+		
+		//Bahnhof		
+		add(neuKaufenBahnhof);
+		neuKaufenBahnhof.setBounds(10, 400, 200, 30);
+		add(verkaufeBahnhof);
+		verkaufeBahnhof.setBounds(10, 440, 200, 30);
+		add(anzBahnhofField);
+		anzBahnhofField.setBounds(220, 405, 30, 20);
+		/*add(preisSliderBahn);		
+		preisSliderBahn.setBounds(250, 400, 100, 20);
+		preisSliderBahn.addChangeListener(this);*/
+		add(preisBahnhofField);
+		preisBahnhofField.setBounds(282, 405, 30, 20);
+		//preisBahnhofField.setEditable(false);
+		add(anzMitarbeiterBahnhofField);
+		anzMitarbeiterBahnhofField.setBounds(340, 405, 30, 20);
+		
+		//Rastplatz
+		add(neuKaufenRastplatz);
+		neuKaufenRastplatz.setBounds(10, 500, 200, 30);
+		add(verkaufeRastplatz);
+		verkaufeRastplatz.setBounds(10, 540, 200, 30);
+		add(anzRastplatzField);
+		anzRastplatzField.setBounds(220, 505, 30, 20);
+		/*add(preisSliderRast);		
+		preisSliderRast.setBounds(250, 500, 100, 20);
+		preisSliderRast.addChangeListener(this);*/
+		add(preisRastplatzField);
+		preisRastplatzField.setBounds(282, 505, 30, 20);
+		//preisRastplatzField.setEditable(false);
+		add(anzMitarbeiterRastplatzField);
+		anzMitarbeiterRastplatzField.setBounds(340, 505, 30, 20);
 		
 		
 		//Rechte Seite
 		add(kennzahlenArea);
 		kennzahlenArea.setBounds(500, 30, 270, 240);
-		
-		add(marketingAusgabenField);
-		marketingAusgabenField.setBounds(500,400,200, 30);
-		add(marketingBestätigen);
-		marketingBestätigen.setBounds(500, 350, 200, 30);	
-		add(marketingLabel);
-		marketingLabel.setBounds(500, 320, 200, 30);
-		
-		add(nächsteRunde);
-		nächsteRunde.setBounds(600,498,180,80);
+
 		
 		//oben links
+		add(bankLabel);
+		bankLabel.setBounds(10, 10, 100, 30);
+		add(bankField);
+		bankField.setBounds(110, 10, 60, 30);
+		
+		add(nächsteRunde);
+		nächsteRunde.setBackground(Color.GREEN);
+		nächsteRunde.setBounds(250,10,200,40);
+		
+		add(darlehenLabel);
+		darlehenLabel.setBounds(10, 50, 400, 30);
+		add(darlehenField);
+		darlehenField.setBounds(50, 80, 60, 30);
+		add(darlehenAufnehmenField);
+		darlehenAufnehmenField.setBounds(200, 80, 60, 30);
+		add(darlehenTilgungField);
+		darlehenTilgungField.setBounds(300, 80, 60, 30);
+		
+		add(marketingLabel);
+		marketingLabel.setBounds(10, 130, 100, 30);
+		add(marketingAusgabenField);
+		marketingAusgabenField.setBounds(110, 130, 60, 30);
+		
 		add(mitarbeiterEinstellen);
-		mitarbeiterEinstellen.setBounds(10, 10, 200, 30);
+		mitarbeiterEinstellen.setBounds(10, 180, 200, 30);
 		add(mitarbeiterEntlassen);
-		mitarbeiterEntlassen.setBounds(10, 50, 200, 30);
+		mitarbeiterEntlassen.setBounds(10, 220, 200, 30);
 		add(anzMitarbeiterGesField);
-		anzMitarbeiterGesField.setBounds(250, 30, 50, 30);
+		anzMitarbeiterGesField.setBounds(250, 200, 50, 30);
 		
 		
-		/*add(karte, null);
-		add(marketing, null);
-		karte.setBounds(0,0,800,800);
-		marketing.setBounds(800,0,300,800);*/
 
 
 	}
 	
-/*	private void buildMarketing() {
-		marketing.setBackground(Color.blue);
-		System.out.println("marketing");
-		
-		marketing.add(kennzahlen, null);
-		marketingAusgaben.setBounds(10, 10, 380, 200);
-		marketing.add(marketingAusgaben, null);
-		marketingAusgaben.setBounds(10, 10, 380, 200);
-		
-	}
-
-
-	private void buildKarte() {
-		System.out.println("Karte");
-		karte.setBackground(Color.YELLOW);
-		
-		
-		JPanel kartePanel = new JPanel();		
-		kartePanel.setBackground(Color.GREEN);		
-		kartePanel.setVisible(true);
-		
-		karte.add(kartePanel, null);
-		kartePanel.setBounds(10,310,780,480);
-		
-	}*/
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -233,15 +229,16 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener{
 	public void stateChanged(ChangeEvent arg0) {
 		// TODO Auto-generated method stub
 		// preis veränderung aktualisieren
-		if(arg0.getSource() == preisSliderBahn){
-			preisBahnhofField.setText(String.valueOf(preisSliderBahn.getValue()/100.0));
+		//nur mit slider relevant
+		/*if(arg0.getSource() == preisSliderBahn){
+			preisBahnhofField.setText(String.valueOf(preisSliderBahn.getValue()/10.0));
 		}
 		if(arg0.getSource() == preisSliderStadt){
-			preisStadtField.setText(String.valueOf(preisSliderStadt.getValue()/100.0));			
+			preisStadtField.setText(String.valueOf(preisSliderStadt.getValue()/10.0));			
 		}
 		if(arg0.getSource() == preisSliderRast){
-			preisRastplatzField.setText(String.valueOf(preisSliderRast.getValue()/100.0));
-		}
+			preisRastplatzField.setText(String.valueOf(preisSliderRast.getValue()/10.0));
+		}*/
 	}
 	
 
