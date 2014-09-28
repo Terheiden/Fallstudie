@@ -3,11 +3,18 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageFilter;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -22,9 +29,13 @@ import javax.swing.event.ChangeListener;
 
 public class TestGUI extends JFrame implements ChangeListener, ActionListener
 {
+	private Image karte;
+	private JLabel karteLabel;
+	
 	private JButton neuKaufenStadt, neuKaufenRastplatz, neuKaufenBahnhof;
 	private JButton verkaufeStadt, verkaufeRastplatz, verkaufeBahnhof;
 	private JButton mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
+	private JButton maFoBerichtKaufen;
 
 	private JTextArea kennzahlenArea;
 	private JTextField marketingAusgabenField, anzBahnhofField,
@@ -46,6 +57,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 
 	private String kennzahlenText;
 	private int anzMitarbeiterGes, anzBahnhof, anzRastplatz, anzStadt;
+	private int aenderungMitarbeiter, aenderungStadt, aenderungBahnhof, aenderungRastplatz;
 	private int anzMitarbeiterBahnhof, anzMitarbeiterRastplatz,
 			anzMitarbeiterStadt;
 	private double preisBahnhof, preisRastplatz, preisStadt;
@@ -53,30 +65,32 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 	/*
 	 * TODO: Werte einlesen und ausgeben 
 	 * Buttons mit simplen funktionen versehen
-	 * einbauen(was alles?)
-	 * 
 	 */
 
 	public TestGUI()
 	{
 		super("Klomanager");
-		setBounds(0, 0, 800, 620);
-
+		setBounds(0, 0, 1030, 660);
+		
 		// Variablen initialisieren
-		kennzahlenText = "Wichtige Daten";
-		anzMitarbeiterGes = 3;
+		kennzahlenText = "Hier steht die GUV und sonstige vom Spiel erstellte Ausgaben. ";
+		//klos
+		anzStadt = 1;
 		anzBahnhof = 1;
 		anzRastplatz = 1;
-		anzStadt = 1;
-
+		aenderungStadt = 0;
+		aenderungBahnhof = 0;
+		aenderungRastplatz = 0;
+		//Preise
 		preisBahnhof = 3;
 		preisRastplatz = 3;
 		preisStadt = 3;
-
+		//Mitarbeiter
 		anzMitarbeiterGes = 3;
 		anzMitarbeiterBahnhof = 1;
 		anzMitarbeiterRastplatz = 1;
-		anzMitarbeiterStadt = 1;
+		anzMitarbeiterStadt = 1;		
+		aenderungMitarbeiter = 0;
 
 		// Objekte erzeugen
 
@@ -88,7 +102,18 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		 * preisSliderStadt = new JSlider(0, 100, (int)preisStadt*10);
 		 * preisSliderRast = new JSlider(0, 100, (int)preisRastplatz*10);
 		 */
+		try
+		{
+			karte = ImageIO.read(new File("Arbeits-GUI.png"));
+		} catch (IOException e)
+		{			
+			System.err.println("Karte nicht gefunden :(");
+			e.printStackTrace();
+		}
+		karte =  karte.getScaledInstance(400, 300, Image.SCALE_SMOOTH);
 
+		karteLabel = new JLabel(new ImageIcon(karte));
+		
 		kennzahlenArea = new JTextArea(kennzahlenText);
 
 		marketingAusgabenField = new JTextField("");
@@ -142,15 +167,27 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		}
 
 		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
+		neuKaufenStadt.addActionListener(this);
 		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
+		neuKaufenRastplatz.addActionListener(this);
 		neuKaufenBahnhof = new JButton("Miete ein neues Bahnhofsklo");
+		neuKaufenBahnhof.addActionListener(this);
 		verkaufeStadt = new JButton("Gebe ein Stadtklo ab");
+		verkaufeStadt.addActionListener(this);
 		verkaufeRastplatz = new JButton("Gebe ein Rastplatzklo ab");
+		verkaufeRastplatz.addActionListener(this);
 		verkaufeBahnhof = new JButton("Gebe ein Bahnhofsklo ab");
+		verkaufeBahnhof.addActionListener(this);
+		
+		maFoBerichtKaufen = new JButton("MaFoBericht kaufen");
+		maFoBerichtKaufen.addActionListener(this);
 
 		mitarbeiterEinstellen = new JButton("Neuer Mitarbeiter");
+		mitarbeiterEinstellen.addActionListener(this);
 		mitarbeiterEntlassen = new JButton("Mitarbeiter feuern");
+		mitarbeiterEntlassen.addActionListener(this);
 		nächsteRunde = new JButton("Beende diese Runde");
+		nächsteRunde.addActionListener(this);
 
 		preisLabel = new JLabel("<html>Preis<br>festlegen</html>");
 		marketingLabel = new JLabel("Marketingbudget");
@@ -190,6 +227,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		verkaufeStadt.setBounds(10, 340, 200, 30);
 		add(anzStadtField);
 		anzStadtField.setBounds(220, 305, 30, 20);
+		anzStadtField.setEditable(false);
 		/*
 		 * add(preisSliderStadt); preisSliderStadt.setBounds(250, 300, 100, 20);
 		 * preisSliderStadt.addChangeListener(this);
@@ -214,6 +252,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		verkaufeBahnhof.setBounds(10, 440, 200, 30);
 		add(anzBahnhofField);
 		anzBahnhofField.setBounds(220, 405, 30, 20);
+		anzBahnhofField.setEditable(false);
 		/*
 		 * add(preisSliderBahn); preisSliderBahn.setBounds(250, 400, 100, 20);
 		 * preisSliderBahn.addChangeListener(this);
@@ -238,6 +277,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		verkaufeRastplatz.setBounds(10, 540, 200, 30);
 		add(anzRastplatzField);
 		anzRastplatzField.setBounds(220, 505, 30, 20);
+		anzRastplatzField.setEditable(false);
 		/*
 		 * add(preisSliderRast); preisSliderRast.setBounds(250, 500, 100, 20);
 		 * preisSliderRast.addChangeListener(this);
@@ -256,18 +296,22 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		}
 
 		// Rechte Seite
+		add(nächsteRunde);
+		nächsteRunde.setBackground(Color.GREEN);		
+		nächsteRunde.setBounds(800, 10, 200, 30);
+		
 		add(kennzahlenArea);
-		kennzahlenArea.setBounds(500, 30, 270, 240);
+		kennzahlenArea.setBounds(600, 50, 400, 240);
+		
+		add(karteLabel);
+		karteLabel.setBounds(600, 300, 400, 300);
+
 
 		// oben links
 		add(bankLabel);
 		bankLabel.setBounds(10, 10, 100, 30);
 		add(bankField);
 		bankField.setBounds(110, 10, 60, 30);
-
-		add(nächsteRunde);
-		nächsteRunde.setBackground(Color.GREEN);
-		nächsteRunde.setBounds(250, 10, 200, 40);
 
 		add(darlehenLabel);
 		darlehenLabel.setBounds(10, 50, 400, 30);
@@ -282,6 +326,8 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		marketingLabel.setBounds(10, 130, 100, 30);
 		add(marketingAusgabenField);
 		marketingAusgabenField.setBounds(110, 130, 60, 30);
+		add(maFoBerichtKaufen);
+		maFoBerichtKaufen.setBounds(200, 130, 150, 30);
 
 		add(mitarbeiterEinstellen);
 		mitarbeiterEinstellen.setBounds(10, 180, 200, 30);
@@ -289,12 +335,17 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		mitarbeiterEntlassen.setBounds(10, 220, 200, 30);
 		add(anzMitarbeiterGesField);
 		anzMitarbeiterGesField.setBounds(250, 200, 50, 30);
+		anzMitarbeiterGesField.setEditable(false);
 
 	}
 
 	public void wechselSpieler(){
 		// TODO 
 		// Methode mit aktualisieren implementieren
+		aenderungStadt = 0;
+		aenderungBahnhof = 0;
+		aenderungRastplatz = 0;
+		aenderungMitarbeiter = 0;
 		this.aktualisiereGUI();
 		
 	}
@@ -312,6 +363,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		// TODO 
 		// Button bestätigungen, auch nächste Runde beginnen, werte anzeigen
 		// usw.: Methoden aufrufen
+		
 		Object object = e.getSource();
 
 		// Regionen wählen
@@ -358,7 +410,49 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 				}
 			}
 		}
-
+		//Mitarbeiterzahl ändern
+		if(object == mitarbeiterEinstellen){
+			aenderungMitarbeiter++;
+			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
+		}
+		if(object == mitarbeiterEntlassen){
+			aenderungMitarbeiter--;
+			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
+		}
+		if(object == maFoBerichtKaufen){
+			System.out.println("Mafo-Bericht kaufen ...");
+			//TODO
+		}
+		if(object == nächsteRunde){
+			System.out.println("nächsteRunde ...");
+			//TODO 
+		}
+		
+		//Klohäuser anmieten/abgeben
+		if(object == neuKaufenStadt){
+			aenderungStadt++;
+			anzStadtField.setText(String.valueOf(anzStadt+aenderungStadt));
+		}
+		if(object == neuKaufenBahnhof){
+			aenderungBahnhof++;
+			anzBahnhofField.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
+		}
+		if(object == neuKaufenRastplatz){
+			aenderungRastplatz++;
+			anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
+		}
+		if(object == verkaufeStadt){
+			aenderungStadt--;
+			anzStadtField.setText(String.valueOf(anzStadt+aenderungStadt));
+		}
+		if(object == verkaufeBahnhof){
+			aenderungBahnhof--;
+			anzBahnhofField.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
+		}
+		if(object == verkaufeRastplatz){
+			aenderungRastplatz--;
+			anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
+		}
 	}
 
 	@Override
