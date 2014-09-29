@@ -14,6 +14,7 @@ public class Simulation
 	//--> klos[0] = Stadtklos von diesem Spieler
 
 	//Anzahl der am Spiel teilnehmenden Spüler
+	//TODO: Hier später ein echtes Array, das die Spieler enthält
 	Spieler[] spieler = {new Spieler("1"), new Spieler("2"), new Spieler("3")};
 
 	public void verteileKunden(int region)
