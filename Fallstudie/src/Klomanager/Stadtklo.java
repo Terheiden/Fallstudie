@@ -9,12 +9,7 @@ public class Stadtklo extends Klohaus
 		anschaffungskosten = 850000; //8.500 €
 		verschmutzungsfaktor = 0.001625;
 		fixkosten = 355000; //3.550 €
+		kapazitaetsstamm = 15000;
 	}
 
-	@Override
-	public int berechneKapazitaet()
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

@@ -10,13 +10,7 @@ public class Rastplatzklo extends Klohaus
 		anschaffungskosten = 900000; //9.000 €
 		verschmutzungsfaktor = 0.00138667;
 		fixkosten = 175000; //1.750 €
-	}
-
-	@Override
-	public int berechneKapazitaet()
-	{
-		// TODO Auto-generated method stub
-		return 0;
+		kapazitaetsstamm = 9000;
 	}
 
 }

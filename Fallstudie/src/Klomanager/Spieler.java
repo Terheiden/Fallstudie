@@ -7,7 +7,7 @@ public class Spieler
 	private int verwaltungskosten;
 	private int marketingbudget;
 	private String kennzahlen;
-	private Klohaus stadt, bahnhof, rastplatz;
+	private Klohaus[] klos;
 	private Darlehen darlehenkonto;
 	private Personal personal;
 	
@@ -15,9 +15,10 @@ public class Spieler
 	{
 		this.name = name;
 		
-		stadt = new Stadtklo(this);
-		bahnhof = new Bahnhofsklo(this);
-		rastplatz = new Rastplatzklo(this);
+		klos = new Klohaus[3];
+		klos[0] = new Stadtklo(this);
+		klos[1] = new Bahnhofsklo(this);
+		klos[2] = new Rastplatzklo(this);
 		darlehenkonto = new Darlehen(this);
 		personal = new Personal(this);
 	}

@@ -9,6 +9,7 @@ public abstract class Klohaus
 	protected double verschmutzungsfaktor;
 	protected int kunden;
 	protected int fixkosten;
+	protected int kapazitaetsstamm;
 	protected double kvStrom;
 	protected double kvWasser;
 	protected double kvPapier;
@@ -40,5 +41,8 @@ public abstract class Klohaus
 		
 	}
 	
-	public abstract int berechneKapazitaet();
+	public int getKapazitaet()
+	{
+		return kapazitaetsstamm * anzahl;
+	}
 }
