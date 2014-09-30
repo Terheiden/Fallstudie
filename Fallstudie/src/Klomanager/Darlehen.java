@@ -16,4 +16,38 @@ public class Darlehen
 	{
 		return (int) (darlehen * zinssatz);
 	}
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
+	public int getDarlehen()
+	{
+		return darlehen;
+	}
+
+	public void setDarlehen(int darlehen)
+	{
+		this.darlehen = darlehen;
+	}
+
+	public double getZinssatz()
+	{
+		return zinssatz;
+	}
+
+	public void setZinssatz(double zinssatz)
+	{
+		this.zinssatz = zinssatz;
+	}
+
+	public Spieler getBesitzer()
+	{
+		return besitzer;
+	}
+
+	public void setBesitzer(Spieler besitzer)
+	{
+		this.besitzer = besitzer;
+	}
 }

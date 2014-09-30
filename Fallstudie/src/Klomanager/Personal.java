@@ -36,4 +36,68 @@ public class Personal
 			return false;
 		}
 	}
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
+	public int getGesamtAnzahl()
+	{
+		return gesamtAnzahl;
+	}
+
+	public void setGesamtAnzahl(int gesamtAnzahl)
+	{
+		this.gesamtAnzahl = gesamtAnzahl;
+	}
+
+	public int[] getVerteilung()
+	{
+		return verteilung;
+	}
+
+	public void setVerteilung(int[] verteilung)
+	{
+		this.verteilung = verteilung;
+	}
+
+	public int getGehalt()
+	{
+		return gehalt;
+	}
+
+	public void setGehalt(int gehalt)
+	{
+		this.gehalt = gehalt;
+	}
+
+	public int getEinstellungskosten()
+	{
+		return einstellungskosten;
+	}
+
+	public void setEinstellungskosten(int einstellungskosten)
+	{
+		this.einstellungskosten = einstellungskosten;
+	}
+
+	public int getKuendigungskosten()
+	{
+		return kuendigungskosten;
+	}
+
+	public void setKuendigungskosten(int kuendigungskosten)
+	{
+		this.kuendigungskosten = kuendigungskosten;
+	}
+
+	public Spieler getBesitzer()
+	{
+		return besitzer;
+	}
+
+	public void setBesitzer(Spieler besitzer)
+	{
+		this.besitzer = besitzer;
+	}
 }

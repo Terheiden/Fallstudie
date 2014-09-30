@@ -57,4 +57,88 @@ public class Spieler
 	{
 		
 	}
+	
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public int getKontostand()
+	{
+		return kontostand;
+	}
+
+	public void setKontostand(int kontostand)
+	{
+		this.kontostand = kontostand;
+	}
+
+	public int getVerwaltungskosten()
+	{
+		return verwaltungskosten;
+	}
+
+	public void setVerwaltungskosten(int verwaltungskosten)
+	{
+		this.verwaltungskosten = verwaltungskosten;
+	}
+
+	public int getMarketingbudget()
+	{
+		return marketingbudget;
+	}
+
+	public void setMarketingbudget(int marketingbudget)
+	{
+		this.marketingbudget = marketingbudget;
+	}
+
+	public String getKennzahlen()
+	{
+		return kennzahlen;
+	}
+
+	public void setKennzahlen(String kennzahlen)
+	{
+		this.kennzahlen = kennzahlen;
+	}
+
+	public Klohaus[] getKlos()
+	{
+		return klos;
+	}
+
+	public void setKlos(Klohaus[] klos)
+	{
+		this.klos = klos;
+	}
+
+	public Darlehen getDarlehenkonto()
+	{
+		return darlehenkonto;
+	}
+
+	public void setDarlehenkonto(Darlehen darlehenkonto)
+	{
+		this.darlehenkonto = darlehenkonto;
+	}
+
+	public Personal getPersonal()
+	{
+		return personal;
+	}
+
+	public void setPersonal(Personal personal)
+	{
+		this.personal = personal;
+	}
 }

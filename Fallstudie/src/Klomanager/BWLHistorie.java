@@ -43,4 +43,9 @@ public class BWLHistorie
 		//Hier einen schönen String bauen
 		return "Ich bin ein Dummy";
 	}
+	
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
 }

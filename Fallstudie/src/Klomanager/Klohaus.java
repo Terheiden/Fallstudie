@@ -31,18 +31,172 @@ public abstract class Klohaus
 		this.besitzer = besitzer;
 	}
 	
-	public int berechneAttraktivitaet()
-	{
-		return 0;
-	}
-	
 	public void installiereSonderausstattung(int ausstattung)
 	{
 		
 	}
 	
+	//Keine klassischer Getter, berechnen Werte
 	public int getKapazitaet()
 	{
 		return kapazitaetsstamm * anzahl;
+	}
+	public int getAttraktivitaet()
+	{
+		return 0;
+	}
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
+	public boolean[] getSonderausstattungen()
+	{
+		return sonderausstattungen;
+	}
+
+	public void setSonderausstattungen(boolean[] sonderausstattungen)
+	{
+		this.sonderausstattungen = sonderausstattungen;
+	}
+
+	public int getPreis()
+	{
+		return preis;
+	}
+
+	public void setPreis(int preis)
+	{
+		this.preis = preis;
+	}
+
+	public int getHygiene()
+	{
+		return hygiene;
+	}
+
+	public void setHygiene(int hygiene)
+	{
+		this.hygiene = hygiene;
+	}
+
+	public int getAnschaffungskosten()
+	{
+		return anschaffungskosten;
+	}
+
+	public void setAnschaffungskosten(int anschaffungskosten)
+	{
+		this.anschaffungskosten = anschaffungskosten;
+	}
+
+	public int getAnzahl()
+	{
+		return anzahl;
+	}
+
+	public void setAnzahl(int anzahl)
+	{
+		this.anzahl = anzahl;
+	}
+
+	public double getVerschmutzungsfaktor()
+	{
+		return verschmutzungsfaktor;
+	}
+
+	public void setVerschmutzungsfaktor(double verschmutzungsfaktor)
+	{
+		this.verschmutzungsfaktor = verschmutzungsfaktor;
+	}
+
+	public int getKunden()
+	{
+		return kunden;
+	}
+
+	public void setKunden(int kunden)
+	{
+		this.kunden = kunden;
+	}
+
+	public int getFixkosten()
+	{
+		return fixkosten;
+	}
+
+	public void setFixkosten(int fixkosten)
+	{
+		this.fixkosten = fixkosten;
+	}
+
+	public int getKapazitaetsstamm()
+	{
+		return kapazitaetsstamm;
+	}
+
+	public void setKapazitaetsstamm(int kapazitaetsstamm)
+	{
+		this.kapazitaetsstamm = kapazitaetsstamm;
+	}
+
+	public double getKvStrom()
+	{
+		return kvStrom;
+	}
+
+	public void setKvStrom(double kvStrom)
+	{
+		this.kvStrom = kvStrom;
+	}
+
+	public double getKvWasser()
+	{
+		return kvWasser;
+	}
+
+	public void setKvWasser(double kvWasser)
+	{
+		this.kvWasser = kvWasser;
+	}
+
+	public double getKvPapier()
+	{
+		return kvPapier;
+	}
+
+	public void setKvPapier(double kvPapier)
+	{
+		this.kvPapier = kvPapier;
+	}
+
+	public double getKvKlopapier()
+	{
+		return kvKlopapier;
+	}
+
+	public void setKvKlopapier(double kvKlopapier)
+	{
+		this.kvKlopapier = kvKlopapier;
+	}
+
+	public double getKvSeife()
+	{
+		return kvSeife;
+	}
+
+	public void setKvSeife(double kvSeife)
+	{
+		this.kvSeife = kvSeife;
+	}
+
+	public Spieler getBesitzer()
+	{
+		return besitzer;
+	}
+
+	public void setBesitzer(Spieler besitzer)
+	{
+		this.besitzer = besitzer;
 	}
 }
