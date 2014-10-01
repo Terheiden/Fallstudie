@@ -26,6 +26,7 @@ public class Simulation
 		int attraktivitaetssumme = 0;
 		int gesamtkunden = this.errechneKundenstamm(region);
 		
+		//Berechne die Gesamtsumme von Preis, Hygiene und Marketing bei allen Spielern
 		for (int i = 0; i < spieler.length; i++)
 		{
 			Klohaus[] alleKlos = spieler[i].getKlos();
@@ -35,10 +36,14 @@ public class Simulation
 			attraktivitaetssumme += alleKlos[region].getAttraktivitaet();	
 		}
 		
+		//Kunden, die aufgrund von Kapazitätsüberschreitungen übrig bleiben und neu verteilt werden
 		int kundenueberlauf = 0;
+		//true = Spieler hat seine Kapazitätsgrenze erreicht und wird bei der zweiten Verteilungsrunde nicht mehr berücksichtigt
 		boolean[] betroffenerSpieler = new boolean[spieler.length];
 		int anzahlbetroffenerSpieler = 0;
 		
+		//Verteile die Kunden bei allen Spielern gemäß der Formeln in der Spezifikation
+		//(Division durch 0 ist möglich und führt zufällig auch zum richtigen Ergebnis)
 		for (int i = 0; i < spieler.length; i++)
 		{
 			Klohaus[] alleKlos = spieler[i].getKlos();
@@ -60,6 +65,8 @@ public class Simulation
 			
 			int alleKunden = preiskunden + hygienekunden + attraktivitaetskunden;
 			
+			//Übersteigt die Summe aller Kunden für diesen Spieler dessen Kapazität, bekommt er so viele Kunden, wie er Kapazitäten hat
+			//Im boolean-Array wird gespeichert, dass der Spieler bei der Folgeverteilung nicht mehr berücksichtigt wird
 			if(alleKunden > alleKlos[region].getKapazitaet())
 			{
 				alleKlos[region].setKunden(alleKlos[region].getKapazitaet());
@@ -74,6 +81,7 @@ public class Simulation
 			}			
 		}
 		
+		//Wenn Kunden übrig sind, werden diese auf die übrigen Spieler neu verteilt
 		if(kundenueberlauf > 0)
 		{
 			
@@ -121,6 +129,8 @@ public class Simulation
 
 					int alleKunden = alleKlos[region].getKunden() + preiskunden + hygienekunden + attraktivitaetskunden;
 	
+					//Übersteigt jetzt die Summe aller Kunden für einen Spieler dessen Kapazität, bekommt er so viele Kunden, wie er Kapazitäten frei hat
+					//Übrige Kunden werden nicht mehr weiter verteilt
 					if(alleKunden > alleKlos[region].getKapazitaet())
 					{
 						alleKlos[region].setKunden(alleKlos[region].getKapazitaet());
