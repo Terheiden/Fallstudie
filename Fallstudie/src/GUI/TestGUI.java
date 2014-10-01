@@ -63,10 +63,10 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		aenderungStadt = 0;
 		aenderungBahnhof = 0;
 		aenderungRastplatz = 0;
-		//Preise
-		preisBahnhof = 3;
-		preisRastplatz = 3;
-		preisStadt = 3;
+		//TODO: Preise
+		preisBahnhof = 0.5;
+		preisRastplatz = 0.5;
+		preisStadt = 0.5;
 		//Mitarbeiter
 		anzMitarbeiterGes = 3;
 		anzMitarbeiterBahnhof = 1;
@@ -123,6 +123,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		for (int i = 0; i < 3; i++)
 		{
 			sonderausstattungen[i][0] = new JCheckBox("<html>Handtrockner</html>");
+			//TODO: sonderausstattungen[i][0].setToolTipText("Text");
 			sonderausstattungen[i][1] = new JCheckBox(
 					"<html>wassersparende<br>Klospülung</html>");
 			sonderausstattungen[i][2] = new JCheckBox(
@@ -149,6 +150,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		}
 
 		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
+		//TODO: Infos einbauen neuKaufenStadt.setToolTipText("Teext");
 		neuKaufenStadt.addActionListener(this);
 		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
 		neuKaufenRastplatz.addActionListener(this);

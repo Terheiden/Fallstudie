@@ -18,6 +18,31 @@ public class Simulation
 	Spieler[] spieler = {new Spieler("1"), new Spieler("2"), new Spieler("3")};
 
 	
+	
+	/**
+	 * TODO: Prüfmethode:
+	 * Mehr Darlehen tilgen als aufgenommen?
+	 * Mehr Darlehen aufnehmen als Limit?
+	 * Mehr Personal verteilt als verfügbar?
+	 * Preis außerhalb des zulässigen Wertebereichs?
+	 */
+	
+	/**
+	 * TODO: Ablauf: Nach Eingabe prüfen, bei Nonsens zur Neueingabe auffordern
+	 * Berechnen, Werte setzen
+	 * In GUV Werte setzen (z.T.)
+	 * Alle anderen Spieler (dasselbe)
+	 * Endrundensimulation
+	 * Restwerte GUV
+	 * Dem Spieler die GUV ausgeben, wenn er wieder dran ist (und evtl. Mafo-Bericht)
+	 */
+	
+	/**
+	 * TODO: Bei Darlehensaufnahme
+	 * In GUV Zinsen berechnen BEVOR der Betrag im DL-Objekt neu gesetzt wird
+	 * @param region
+	 */
+	
 	//TODO: Syso's entfernen
 	public void verteileKunden(int region)
 	{
