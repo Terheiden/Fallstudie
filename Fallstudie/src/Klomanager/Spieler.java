@@ -4,12 +4,13 @@ public class Spieler
 {
 	private String name;
 	private int kontostand;
-	private int verwaltungskosten;
 	private int marketingbudget;
 	private String kennzahlen;
+	private boolean mafobericht;
 	private Klohaus[] klos;
 	private Darlehen darlehenkonto;
 	private Personal personal;
+	private GuV guv;
 	
 	public Spieler(String name)
 	{
@@ -21,21 +22,69 @@ public class Spieler
 		klos[2] = new Rastplatzklo(this);
 		darlehenkonto = new Darlehen(this);
 		personal = new Personal(this);
+		
+		//TODO: Wird hier schon ein GuV-Objekt erzeugt?
+		guv = new GuV(this);
 	}
 	
-	public void kaufeKlohaus(int region)
+	//Diese Methoden werden erst ausgeführt, wenn der Spieler seine Runde beendet hat
+	public void kaufeKlohaus(int region, int anzahl)
 	{
+		klos[region].setAnzahl(klos[region].getAnzahl() + anzahl);
+		kontostand = kontostand - (klos[region].getAnschaffungskosten() * anzahl);
 		
+		guv.setFixkosten(klos[region].getFixkosten() * klos[region].getAnzahl(), region);
+		guv.setAnschaffungskostenKlo(guv.getAnschaffungskostenKlo(region) + (klos[region].getAnschaffungskosten() * anzahl), region);
 	}
 	
-	public void verkaufeKlohaus(int region)
+	public void verkaufeKlohaus(int region, int anzahl)
 	{
+		klos[region].setAnzahl(klos[region].getAnzahl() - anzahl);
+		kontostand = kontostand - (klos[region].ABSCHAFFUNGSKOSTEN * anzahl);
 		
+		guv.setFixkosten(klos[region].getFixkosten() * klos[region].getAnzahl(), region);
+		//TODO: FRAGE: Was sind Abschaffungskosten? Sonderkosten oder Anschaffungskosten??
+		//guv.setAnschaffungskostenKlo(guv.getAnschaffungskostenKlo(region) + (klos[region].getAnschaffungskosten() * anzahl), region);
 	}
 	
 	public void kaufeSonderausstattung(int region, int ausstattung)
 	{
+		klos[region].installiereSonderausstattung(ausstattung);
 		
+		int anschaffungskosten = 0;
+		switch (ausstattung)
+		{
+		//Händetrockner
+		case 0:
+			anschaffungskosten = 90000; //900,00 €
+			break;
+		//Wassersparende Klospülung
+		case 1:
+			anschaffungskosten = 300000; //3.000,00 €
+			break;
+		//Selbstreinigende Klos
+		case 2:
+			anschaffungskosten = 500000; //5.000,00 €
+			break;
+		//Berührungslose Wasserhähne
+		case 3:
+			anschaffungskosten = 60000; //600,00 €
+			break;
+		//Kondomautomat
+		case 5:
+			anschaffungskosten = 110000; //1.100,00 €
+			break;
+		//Kaugummiautomat
+		case 6:
+			anschaffungskosten = 50000; //500,00 €
+			break;
+		//Münzpressautomat
+		case 7:
+			anschaffungskosten = 90000; //900,00 €
+			break;
+		}
+		
+		guv.setAnschaffungskostenSonder(guv.getAnschaffungskostenSonder(region) + anschaffungskosten, region);
 	}
 	
 	public void stelleMitarbeiterEin()
@@ -80,16 +129,6 @@ public class Spieler
 	public void setKontostand(int kontostand)
 	{
 		this.kontostand = kontostand;
-	}
-
-	public int getVerwaltungskosten()
-	{
-		return verwaltungskosten;
-	}
-
-	public void setVerwaltungskosten(int verwaltungskosten)
-	{
-		this.verwaltungskosten = verwaltungskosten;
 	}
 
 	public int getMarketingbudget()

@@ -1,5 +1,11 @@
 package Klomanager;
 
+/**
+ * KLASSE WIRD VORAUSSICHTLICH NICHT MEHR BENÖTIGT!!
+ * @author Florian
+ *
+ */
+
 public class BWL
 {
 	public static int berechneFixkosten(int region)

@@ -1,6 +1,8 @@
 package Klomanager;
 public abstract class Klohaus
 {
+	static final int ABSCHAFFUNGSKOSTEN = 200000; //2.000 €
+	
 	protected boolean[] sonderausstattungen;
 	protected int preis;
 	protected int hygiene;
@@ -8,8 +10,8 @@ public abstract class Klohaus
 	protected int anzahl;
 	protected double verschmutzungsfaktor;
 	protected int kunden;
-	protected int fixkosten;
 	protected int kapazitaetsstamm;
+	protected int fixkosten;
 	protected double kvStrom;
 	protected double kvWasser;
 	protected double kvPapier;
@@ -25,14 +27,44 @@ public abstract class Klohaus
 		anzahl = 1;
 		kvStrom = 0.0; //0,00 €
 		kvWasser = 4.42125; //~0,04 €
-		kvPapier = 1.092857142857142857; //~0,01 €
-		kvKlopapier = 0.781818181818181818; //~ 0.008 €
+		kvPapier = 1.092857142857; //~0,01 €
+		kvKlopapier = 0.781818181818; //~ 0.008 €
 		kvSeife = 0.567; // 0.006 €
 		this.besitzer = besitzer;
 	}
 	
+	//Kümmert sich nur um die Installation der Sonderausstattungen, für die Anschaffungskosten ist der Spieler zuständig
 	public void installiereSonderausstattung(int ausstattung)
 	{
+		sonderausstattungen[ausstattung] = true;
+		
+		//Variable Kosten anpassen
+		switch (ausstattung)
+		{
+		//Händetrockner
+		case 0:
+			kvPapier = 0.0; //0,00 €
+			kvStrom = kvStrom + 0.646425; //~ 0,006 €
+			break;
+		//Wassersparende Klospülung
+		case 1:
+			kvWasser = kvWasser - 1.572; //~ 0,02 €
+			break;
+		//Selbstreinigende Klos
+		case 2:
+			kvStrom = kvStrom + 0.021666666658; //~ 0,0002 €
+			//TODO: Hygiene erhöhen
+			break;
+		//Berührungslose Wasserhähne
+		case 3:
+			kvWasser = kvWasser - 0.17685; //~ 0,002 €
+			//TODO: Hygiene erhöhen
+			break;
+		//Dickeres Klopapier
+		case 4:
+			kvKlopapier = kvKlopapier + 0.404388714734; //~ 0,004 €
+			break;
+		}
 		
 	}
 	
