@@ -2,6 +2,8 @@ package Klomanager;
 
 public class Spieler
 {
+	static final double DISPOZINS = 0.17;
+	
 	private String name;
 	private int kontostand;
 	private int marketingbudget;
@@ -24,27 +26,36 @@ public class Spieler
 		personal = new Personal(this);
 		
 		//TODO: Wird hier schon ein GuV-Objekt erzeugt?
-		guv = new GuV(this);
+		guv = new GuV(this, null);
 	}
 	
 	//Diese Methoden werden erst ausgeführt, wenn der Spieler seine Runde beendet hat
 	public void kaufeKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() + anzahl);
+		//TODO: Hier wird wahrscheinlich nicht der Kontostand verändert!
 		kontostand = kontostand - (klos[region].getAnschaffungskosten() * anzahl);
 		
-		guv.setFixkosten(klos[region].getFixkosten() * klos[region].getAnzahl(), region);
-		guv.setAnschaffungskostenKlo(guv.getAnschaffungskostenKlo(region) + (klos[region].getAnschaffungskosten() * anzahl), region);
+		int[] tmp = guv.getFixkosten();
+		tmp[region] = klos[region].getFixkosten() * klos[region].getAnzahl();
+		guv.setFixkosten(tmp);
+		
+		tmp = guv.getAnschaffungskostenKlo();
+		tmp[region] = tmp[region] + (klos[region].getAnschaffungskosten() * anzahl);
+		guv.setAnschaffungskostenKlo(tmp);
 	}
 	
 	public void verkaufeKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() - anzahl);
-		kontostand = kontostand - (klos[region].ABSCHAFFUNGSKOSTEN * anzahl);
+		//TODO: Hier wird wahrscheinlich nicht der Kontostand verändert!
+		kontostand = kontostand - (Klohaus.ABSCHAFFUNGSKOSTEN * anzahl);
 		
-		guv.setFixkosten(klos[region].getFixkosten() * klos[region].getAnzahl(), region);
-		//TODO: FRAGE: Was sind Abschaffungskosten? Sonderkosten oder Anschaffungskosten??
-		//guv.setAnschaffungskostenKlo(guv.getAnschaffungskostenKlo(region) + (klos[region].getAnschaffungskosten() * anzahl), region);
+		int[] tmp = guv.getFixkosten();
+		tmp[region] = klos[region].getFixkosten() * klos[region].getAnzahl();
+		guv.setFixkosten(tmp);
+		
+		guv.setSonderkosten(guv.getSonderkosten() + (Klohaus.ABSCHAFFUNGSKOSTEN * anzahl));
 	}
 	
 	public void kaufeSonderausstattung(int region, int ausstattung)
@@ -84,7 +95,9 @@ public class Spieler
 			break;
 		}
 		
-		guv.setAnschaffungskostenSonder(guv.getAnschaffungskostenSonder(region) + anschaffungskosten, region);
+		int[] tmp = guv.getAnschaffungskostenSonder();
+		tmp[region] = tmp[region] + anschaffungskosten;
+		guv.setAnschaffungskostenSonder(tmp);
 	}
 	
 	public void stelleMitarbeiterEin()

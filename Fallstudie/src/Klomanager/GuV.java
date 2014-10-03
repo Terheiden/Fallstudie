@@ -22,12 +22,37 @@ public class GuV
 	
 	private Spieler besitzer;
 	
-	public GuV(Spieler besitzer)
+	public GuV(Spieler besitzer, GuV vorperiode)
 	{
 		//Nur die (voraussichtlich konstanten) Verwaltungskosten werden festgelegt, alle anderen Kosten können sich ändern
 		verwaltungskosten = 150000; //1.500 €
 		
 		this.besitzer = besitzer;
+		
+		if(vorperiode != null)
+		{
+			this.fixkosten = vorperiode.getFixkosten();
+			this.lohnkosten = vorperiode.getLohnkosten();
+			this.zinsaufwendungenDarlehen = vorperiode.getBesitzer().getDarlehenkonto().berechneZinsen();
+			int kontostandSpieler = vorperiode.getBesitzer().getKontostand();
+			if(kontostandSpieler < 0)
+			{
+				this.zinsaufwendungenDispo = (int) (Math.abs(kontostandSpieler) * Spieler.DISPOZINS);
+			}
+		}
+		else
+		{
+			Klohaus[] klos = this.besitzer.getKlos();
+			for (int i = 0; i < klos.length; i++)
+			{
+				this.fixkosten[i] = klos[i].getFixkosten();
+				int[] tmp = this.besitzer.getPersonal().getVerteilung();
+				this.lohnkosten[i] = tmp[i] * this.besitzer.getPersonal().getGehalt();
+				this.zinsaufwendungenDarlehen = this.besitzer.getDarlehenkonto().berechneZinsen();
+			}
+			
+			
+		}
 	}
 	
 	public String erstelleGuV()
@@ -87,81 +112,79 @@ public class GuV
 	{
 		return 0;
 	}
-
+	
 	/**
 	 * Ab hier: Getter & Setter
-	 * Getter liefern nur den Wert für eine Region zurück
-	 * Setter lassen das Ändern einer einzigen Variable zu
 	 */
-	
-	public int getFixkosten(int region)
+
+	public int[] getFixkosten()
 	{
-		return fixkosten[region];
+		return fixkosten;
 	}
 
-	public void setFixkosten(int fixkosten, int region)
+	public void setFixkosten(int[] fixkosten)
 	{
-		this.fixkosten[region] = fixkosten;
+		this.fixkosten = fixkosten;
 	}
 
-	public int getMaterialkosten(int region)
+	public int[] getMaterialkosten()
 	{
-		return materialkosten[region];
+		return materialkosten;
 	}
 
-	public void setMaterialkosten(int materialkosten, int region)
+	public void setMaterialkosten(int[] materialkosten)
 	{
-		this.materialkosten[region] = materialkosten;
+		this.materialkosten = materialkosten;
 	}
 
-	public int getWasserkosten(int region)
+	public int[] getWasserkosten()
 	{
-		return wasserkosten[region];
+		return wasserkosten;
 	}
 
-	public void setWasserkosten(int wasserkosten, int region)
+	public void setWasserkosten(int[] wasserkosten)
 	{
-		this.wasserkosten[region] = wasserkosten;
+		this.wasserkosten = wasserkosten;
 	}
 
-	public int getStromkosten(int region)
+	public int[] getStromkosten()
 	{
-		return stromkosten[region];
+		return stromkosten;
 	}
 
-	public void setStromkosten(int stromkosten, int region)
+	public void setStromkosten(int[] stromkosten)
 	{
-		this.stromkosten[region] = stromkosten;
+		this.stromkosten = stromkosten;
 	}
 
-	public int getAnschaffungskostenKlo(int region)
+	public int[] getAnschaffungskostenKlo()
 	{
-		return anschaffungskostenKlo[region];
+		return anschaffungskostenKlo;
 	}
 
-	public void setAnschaffungskostenKlo(int anschaffungskostenKlo, int region)
+	public void setAnschaffungskostenKlo(int[] anschaffungskostenKlo)
 	{
-		this.anschaffungskostenKlo[region] = anschaffungskostenKlo;
+		this.anschaffungskostenKlo = anschaffungskostenKlo;
 	}
 
-	public int getAnschaffungskostenSonder(int region)
+	public int[] getAnschaffungskostenSonder()
 	{
-		return anschaffungskostenSonder[region];
+		return anschaffungskostenSonder;
 	}
 
-	public void setAnschaffungskostenSonder(int anschaffungskostenSonder, int region)
+	public void setAnschaffungskostenSonder(int[] anschaffungskostenSonder)
 	{
-		this.anschaffungskostenSonder[region] = anschaffungskostenSonder;
+		this.anschaffungskostenSonder = anschaffungskostenSonder;
 	}
 
-	public int getLohnkosten(int region)
+	public int[] getLohnkosten()
 	{
-		return lohnkosten[region];
+		return lohnkosten;
 	}
 
-	public void setLohnkosten(int lohnkosten, int region)
+	public void setLohnkosten(int[] lohnkosten)
 	{
-		this.lohnkosten[region] = lohnkosten;
+		this.lohnkosten = lohnkosten;
 	}
 
 	public int getVerwaltungskosten()
@@ -214,44 +237,44 @@ public class GuV
 		this.sonderkosten = sonderkosten;
 	}
 
-	public int getKloumsatz(int region)
+	public int[] getKloumsatz()
 	{
-		return kloumsatz[region];
+		return kloumsatz;
 	}
 
-	public void setKloumsatz(int kloumsatz, int region)
+	public void setKloumsatz(int[] kloumsatz)
 	{
-		this.kloumsatz[region] = kloumsatz;
+		this.kloumsatz = kloumsatz;
 	}
 
-	public int getAutomatenumsatzKondom(int region)
+	public int[] getAutomatenumsatzKondom()
 	{
-		return automatenumsatzKondom[region];
+		return automatenumsatzKondom;
 	}
 
-	public void setAutomatenumsatzKondom(int automatenumsatzKondom, int region)
+	public void setAutomatenumsatzKondom(int[] automatenumsatzKondom)
 	{
-		this.automatenumsatzKondom[region] = automatenumsatzKondom;
+		this.automatenumsatzKondom = automatenumsatzKondom;
 	}
 
-	public int getAutomatenumsatzKaugummi(int region)
+	public int[] getAutomatenumsatzKaugummi()
 	{
-		return automatenumsatzKaugummi[region];
+		return automatenumsatzKaugummi;
 	}
 
-	public void setAutomatenumsatzKaugummi(int automatenumsatzKaugummi, int region)
+	public void setAutomatenumsatzKaugummi(int[] automatenumsatzKaugummi)
 	{
-		this.automatenumsatzKaugummi[region] = automatenumsatzKaugummi;
+		this.automatenumsatzKaugummi = automatenumsatzKaugummi;
 	}
 
-	public int getAutomatenumsatzMuenzen(int region)
+	public int[] getAutomatenumsatzMuenzen()
 	{
-		return automatenumsatzMuenzen[region];
+		return automatenumsatzMuenzen;
 	}
 
-	public void setAutomatenumsatzMuenzen(int automatenumsatzMuenzen, int region)
+	public void setAutomatenumsatzMuenzen(int[] automatenumsatzMuenzen)
 	{
-		this.automatenumsatzMuenzen[region] = automatenumsatzMuenzen;
+		this.automatenumsatzMuenzen = automatenumsatzMuenzen;
 	}
 
 	public int getSonderertraege()
