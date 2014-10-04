@@ -2,11 +2,14 @@ package Klomanager;
 
 public class Spieler
 {
+	static final double DISPOZINS = 0.17;
+	
 	private String name;
 	private int kontostand;
 	private int marketingbudget;
 	private String kennzahlen;
-	private boolean mafobericht;
+	private String mafobericht;
+	private boolean mafoberichtGefordert;
 	private Klohaus[] klos;
 	private Darlehen darlehenkonto;
 	private Personal personal;
@@ -24,27 +27,36 @@ public class Spieler
 		personal = new Personal(this);
 		
 		//TODO: Wird hier schon ein GuV-Objekt erzeugt?
-		guv = new GuV(this);
+		guv = new GuV(this, null);
 	}
 	
 	//Diese Methoden werden erst ausgeführt, wenn der Spieler seine Runde beendet hat
 	public void kaufeKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() + anzahl);
+		//TODO: Hier wird wahrscheinlich nicht der Kontostand verändert!
 		kontostand = kontostand - (klos[region].getAnschaffungskosten() * anzahl);
 		
-		guv.setFixkosten(klos[region].getFixkosten() * klos[region].getAnzahl(), region);
-		guv.setAnschaffungskostenKlo(guv.getAnschaffungskostenKlo(region) + (klos[region].getAnschaffungskosten() * anzahl), region);
+		int[] tmp = guv.getFixkosten();
+		tmp[region] = klos[region].getFixkosten() * klos[region].getAnzahl();
+		guv.setFixkosten(tmp);
+		
+		tmp = guv.getAnschaffungskostenKlo();
+		tmp[region] = tmp[region] + (klos[region].getAnschaffungskosten() * anzahl);
+		guv.setAnschaffungskostenKlo(tmp);
 	}
 	
 	public void verkaufeKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() - anzahl);
-		kontostand = kontostand - (klos[region].ABSCHAFFUNGSKOSTEN * anzahl);
+		//TODO: Hier wird wahrscheinlich nicht der Kontostand verändert!
+		kontostand = kontostand - (Klohaus.ABSCHAFFUNGSKOSTEN * anzahl);
 		
-		guv.setFixkosten(klos[region].getFixkosten() * klos[region].getAnzahl(), region);
-		//TODO: FRAGE: Was sind Abschaffungskosten? Sonderkosten oder Anschaffungskosten??
-		//guv.setAnschaffungskostenKlo(guv.getAnschaffungskostenKlo(region) + (klos[region].getAnschaffungskosten() * anzahl), region);
+		int[] tmp = guv.getFixkosten();
+		tmp[region] = klos[region].getFixkosten() * klos[region].getAnzahl();
+		guv.setFixkosten(tmp);
+		
+		guv.setSonderkosten(guv.getSonderkosten() + (Klohaus.ABSCHAFFUNGSKOSTEN * anzahl));
 	}
 	
 	public void kaufeSonderausstattung(int region, int ausstattung)
@@ -84,7 +96,9 @@ public class Spieler
 			break;
 		}
 		
-		guv.setAnschaffungskostenSonder(guv.getAnschaffungskostenSonder(region) + anschaffungskosten, region);
+		int[] tmp = guv.getAnschaffungskostenSonder();
+		tmp[region] = tmp[region] + anschaffungskosten;
+		guv.setAnschaffungskostenSonder(tmp);
 	}
 	
 	public void stelleMitarbeiterEin()
@@ -99,12 +113,12 @@ public class Spieler
 	
 	public void nehmeDarlehenAuf(int betrag)
 	{
-		
+		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
 	}
 	
 	public void tilgeDarlehen(int betrag)
 	{
-		
+		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
 	}
 	
 	/**
@@ -114,6 +128,36 @@ public class Spieler
 	public String getName()
 	{
 		return name;
+	}
+
+	public String getMafobericht()
+	{
+		return mafobericht;
+	}
+
+	public void setMafobericht(String mafobericht)
+	{
+		this.mafobericht = mafobericht;
+	}
+
+	public boolean isMafoberichtGefordert()
+	{
+		return mafoberichtGefordert;
+	}
+
+	public void setMafoberichtGefordert(boolean mafoberichtGefordert)
+	{
+		this.mafoberichtGefordert = mafoberichtGefordert;
+	}
+
+	public GuV getGuv()
+	{
+		return guv;
+	}
+
+	public void setGuv(GuV guv)
+	{
+		this.guv = guv;
 	}
 
 	public void setName(String name)

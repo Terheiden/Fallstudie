@@ -1,7 +1,7 @@
 package Klomanager;
 
 public class Darlehen
-{
+{	
 	private int darlehen;
 	private double zinssatz;
 	private Spieler besitzer;
