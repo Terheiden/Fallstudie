@@ -24,7 +24,8 @@ public class GuV
 	
 	public GuV(Spieler besitzer)
 	{
-		//Nur die (voraussichtlich konstanten) Verwaltungskosten werden festgelegt, alle anderen Kosten können sich ändern
+		//Nur die (voraussichtlich konstanten) Verwaltungskosten werden festgelegt, 
+		//alle anderen Kosten können sich ändern
 		verwaltungskosten = 150000; //1.500 €
 		
 		this.besitzer = besitzer;

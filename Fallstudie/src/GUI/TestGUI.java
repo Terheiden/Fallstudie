@@ -84,6 +84,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		 * preisSliderStadt = new JSlider(0, 100, (int)preisStadt*10);
 		 * preisSliderRast = new JSlider(0, 100, (int)preisRastplatz*10);
 		 */
+		//Karte laden
 		try
 		{
 			karte = ImageIO.read(new File("Arbeits-GUI.png"));
@@ -93,8 +94,8 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 			e.printStackTrace();
 		}
 		karte =  karte.getScaledInstance(400, 300, Image.SCALE_SMOOTH);
-
 		karteLabel = new JLabel(new ImageIcon(karte));
+		
 		
 		kennzahlenArea = new JTextArea(kennzahlenText);
 
@@ -149,10 +150,12 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 			regionsauswahl.add(region[i]);
 		}
 
-		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
 		//TODO: Infos einbauen neuKaufenStadt.setToolTipText("Teext");
+		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
 		neuKaufenStadt.addActionListener(this);
+		neuKaufenStadt.setToolTipText("<html>Ein HTML Text<br> über zwei Zeilen</html>");		
 		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
+		//neuKaufenrastplatz.setToolTipText("Teext");
 		neuKaufenRastplatz.addActionListener(this);
 		neuKaufenBahnhof = new JButton("Miete ein neues Bahnhofsklo");
 		neuKaufenBahnhof.addActionListener(this);
@@ -442,7 +445,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 	@Override
 	public void stateChanged(ChangeEvent arg0)
 	{
-//hallo hier bin ich sven
+
 	}
 
 	public static void main(String[] args)
