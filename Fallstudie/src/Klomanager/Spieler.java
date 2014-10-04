@@ -34,8 +34,6 @@ public class Spieler
 	public void kaufeKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() + anzahl);
-		//TODO: Hier wird wahrscheinlich nicht der Kontostand verändert!
-		kontostand = kontostand - (klos[region].getAnschaffungskosten() * anzahl);
 		
 		int[] tmp = guv.getFixkosten();
 		tmp[region] = klos[region].getFixkosten() * klos[region].getAnzahl();
@@ -49,8 +47,6 @@ public class Spieler
 	public void verkaufeKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() - anzahl);
-		//TODO: Hier wird wahrscheinlich nicht der Kontostand verändert!
-		kontostand = kontostand - (Klohaus.ABSCHAFFUNGSKOSTEN * anzahl);
 		
 		int[] tmp = guv.getFixkosten();
 		tmp[region] = klos[region].getFixkosten() * klos[region].getAnzahl();
@@ -101,14 +97,18 @@ public class Spieler
 		guv.setAnschaffungskostenSonder(tmp);
 	}
 	
-	public void stelleMitarbeiterEin()
+	public void stelleMitarbeiterEin(int anzahl)
 	{
+		personal.setGesamtAnzahl(personal.getGesamtAnzahl() + anzahl);
 		
+		guv.setSonderkosten(guv.getSonderkosten() + (personal.getEinstellungskosten() * anzahl));
 	}
 	
-	public void entlasseMitarbeiter()
+	public void entlasseMitarbeiter(int anzahl)
 	{
+		personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
 		
+		guv.setSonderkosten(guv.getSonderkosten() + (personal.getKuendigungskosten() * anzahl));
 	}
 	
 	public void nehmeDarlehenAuf(int betrag)

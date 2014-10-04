@@ -117,11 +117,11 @@ public class Simulation
 			if(spieler[i].isMafoberichtGefordert())
 			{
 				//TODO: String für Mafobericht erzeugen
+				spieler[i].setMafoberichtGefordert(false);
 			}
 			else
 			{
 				spieler[i].setMafobericht("Für diese Runde wurde kein Marktforschungsbericht angefordert.");
-				spieler[i].setMafoberichtGefordert(false);
 			}
 		}
 	}

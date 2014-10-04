@@ -75,11 +75,29 @@ public class GuV
 	}
 	private int berechneGesamtkosten()
 	{
-		return 0;
+		int gesamtkosten = 0;
+		
+		for (int i = 0; i < fixkosten.length; i++)
+		{
+			gesamtkosten = gesamtkosten + fixkosten[i] + materialkosten[i] + wasserkosten[i] + stromkosten[i] + anschaffungskostenKlo[i] + anschaffungskostenSonder[i] + lohnkosten[i];
+		}
+		
+		gesamtkosten = gesamtkosten + verwaltungskosten + zinsaufwendungenDarlehen + zinsaufwendungenDispo + marketingkosten + sonderkosten;
+		
+		return gesamtkosten;
 	}
 	private int berechneGesamtumsatz()
 	{
-		return 0;
+		int gesamtumsatz = 0;
+		
+		for (int i = 0; i < kloumsatz.length; i++)
+		{
+			gesamtumsatz = gesamtumsatz + kloumsatz[i] + automatenumsatzKondom[i] + automatenumsatzKaugummi[i] + automatenumsatzMuenzen[i];
+		}
+		
+		gesamtumsatz = gesamtumsatz + sonderertraege;
+		
+		return gesamtumsatz;
 	}
 	
 	/**

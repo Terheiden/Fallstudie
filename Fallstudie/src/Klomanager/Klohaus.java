@@ -4,6 +4,7 @@ public abstract class Klohaus
 	static final int ABSCHAFFUNGSKOSTEN = 200000; //2.000 €
 	
 	protected boolean[] sonderausstattungen;
+	protected int[] attraktivitaetsboni;
 	protected int preis;
 	protected int hygiene;
 	protected int anschaffungskosten;
@@ -22,6 +23,7 @@ public abstract class Klohaus
 	public Klohaus(Spieler besitzer)
 	{
 		sonderausstattungen = new boolean[8];
+		attraktivitaetsboni = new int[8];
 		//TODO: Preis setzen? Mit Startwert von GUI??
 		hygiene = 100;
 		anzahl = 1;
@@ -33,7 +35,8 @@ public abstract class Klohaus
 		this.besitzer = besitzer;
 	}
 	
-	//Kümmert sich nur um die Installation der Sonderausstattungen, für die Anschaffungskosten ist der Spieler zuständig
+	//Kümmert sich nur um die Installation der Sonderausstattungen und deren Auswirkungen auf die Klos
+	//Für die Anschaffungskosten und deren Verbuchung ist der Spieler zuständig
 	public void installiereSonderausstattung(int ausstattung)
 	{
 		sonderausstattungen[ausstattung] = true;
@@ -45,6 +48,7 @@ public abstract class Klohaus
 		case 0:
 			kvPapier = 0.0; //0,00 €
 			kvStrom = kvStrom + 0.646425; //~ 0,006 €
+			attraktivitaetsboni[0] = 9000; //90,00 €
 			break;
 		//Wassersparende Klospülung
 		case 1:
@@ -54,16 +58,28 @@ public abstract class Klohaus
 		case 2:
 			kvStrom = kvStrom + 0.021666666658; //~ 0,0002 €
 			//TODO: Hygiene erhöhen
+			attraktivitaetsboni[2] = 50000; //500,00 €
 			break;
 		//Berührungslose Wasserhähne
 		case 3:
 			kvWasser = kvWasser - 0.17685; //~ 0,002 €
 			//TODO: Hygiene erhöhen
+			attraktivitaetsboni[3] = 6000; //60,00 €
 			break;
 		//Dickeres Klopapier
 		case 4:
 			kvKlopapier = kvKlopapier + 0.404388714734; //~ 0,004 €
+			attraktivitaetsboni[4] = 5000; //50,00 €
 			break;
+		//Kondomautomat
+		case 5:
+			attraktivitaetsboni[5] = 7000; //70,00 €
+		//Kaugummiautomat
+		case 6:
+			attraktivitaetsboni[6] = 5000; //50,00 €
+		//Münzpressautomat
+		case 7:
+			attraktivitaetsboni[7] = 6000; //60,00 €
 		}
 		
 	}
@@ -75,7 +91,16 @@ public abstract class Klohaus
 	}
 	public int getAttraktivitaet()
 	{
-		return 0;
+		int summe = 0;
+		
+		for (int i = 0; i < attraktivitaetsboni.length; i++)
+		{
+			summe += attraktivitaetsboni[i];
+		}
+		
+		summe += besitzer.getMarketingbudget();
+		
+		return summe;
 	}
 
 	/**
