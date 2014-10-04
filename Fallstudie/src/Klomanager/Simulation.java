@@ -190,7 +190,7 @@ public class Simulation
 			Klohaus[] klos = spieler[i].getKlos();
 			
 			int[] personal = spieler[i].getPersonal().getVerteilung();
-			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[i] * 13);
+			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[i] * 52);
 			
 			klos[region].setHygiene(hygieneNeu);
 		}

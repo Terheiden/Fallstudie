@@ -8,7 +8,7 @@ public class Bahnhofsklo extends Klohaus
 		super(besitzer);
 		//Startwert der Kosten ist gleich, da noch keine Sonderausstattungen vorhanden
 		anschaffungskosten = 1000000; //10.000 €
-		verschmutzungsfaktor = 0.0026;
+		verschmutzungsfaktor = 0.0104;
 		fixkosten = 280000; //2.800 €
 		kapazitaetsstamm = 12000;
 	}
