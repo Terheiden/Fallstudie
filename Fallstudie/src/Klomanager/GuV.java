@@ -60,35 +60,15 @@ public class GuV
 		return "Hier eine GuV";
 	}
 	
-	private int berechneFixkosten(int region)
+	public void passeKontostandAn()
 	{
-		return 0;
+		int gesamtkosten = berechneGesamtkosten();
+		int gesamtumsatz = berechneGesamtumsatz();
+		
+		besitzer.setKontostand(besitzer.getKontostand() + gesamtumsatz - gesamtkosten);
 	}
-	private int berechneMaterialkosten(int region)
-	{
-		return 0;
-	}
-	private int berechneWasserkosten(int region)
-	{
-		return 0;
-	}
-	private int berechneStromkosten(int region)
-	{
-		return 0;
-	}
+
 	private int berechneVariablekosten(int region)
-	{
-		return 0;
-	}
-	private int berechneLohnkosten(int region)
-	{
-		return 0;
-	}
-	private int berechneDispozinsen()
-	{
-		return 0;
-	}
-	private int berechneGesamtzinsen()
 	{
 		return 0;
 	}
@@ -96,19 +76,7 @@ public class GuV
 	{
 		return 0;
 	}
-	private int berechneKloumsatz(int region)
-	{
-		return 0;
-	}
-	private int berechneAutomatenumsatzKondom(int region)
-	{
-		return 0;
-	}
-	private int berechneAutomatenumsatzKaugummi(int region)
-	{
-		return 0;
-	}
-	private int berechneAutomatenumsatzMuenzen(int region)
+	private int berechneGesamtumsatz()
 	{
 		return 0;
 	}

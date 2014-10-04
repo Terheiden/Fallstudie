@@ -8,7 +8,8 @@ public class Spieler
 	private int kontostand;
 	private int marketingbudget;
 	private String kennzahlen;
-	private boolean mafobericht;
+	private String mafobericht;
+	private boolean mafoberichtGefordert;
 	private Klohaus[] klos;
 	private Darlehen darlehenkonto;
 	private Personal personal;
@@ -112,12 +113,12 @@ public class Spieler
 	
 	public void nehmeDarlehenAuf(int betrag)
 	{
-		
+		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
 	}
 	
 	public void tilgeDarlehen(int betrag)
 	{
-		
+		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
 	}
 	
 	/**
@@ -127,6 +128,36 @@ public class Spieler
 	public String getName()
 	{
 		return name;
+	}
+
+	public String getMafobericht()
+	{
+		return mafobericht;
+	}
+
+	public void setMafobericht(String mafobericht)
+	{
+		this.mafobericht = mafobericht;
+	}
+
+	public boolean isMafoberichtGefordert()
+	{
+		return mafoberichtGefordert;
+	}
+
+	public void setMafoberichtGefordert(boolean mafoberichtGefordert)
+	{
+		this.mafoberichtGefordert = mafoberichtGefordert;
+	}
+
+	public GuV getGuv()
+	{
+		return guv;
+	}
+
+	public void setGuv(GuV guv)
+	{
+		this.guv = guv;
 	}
 
 	public void setName(String name)

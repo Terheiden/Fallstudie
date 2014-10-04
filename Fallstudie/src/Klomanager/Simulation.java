@@ -2,21 +2,31 @@ package Klomanager;
 
 public class Simulation
 {
-	/**
-	 * ACHTUNG! NUR ENTWURF BISHER!
-	 */
 
 	private static final double PKANTEIL = 0.5;
 	private static final double HKANTEIL = 0.4;
 	private static final double AKANTEIL = 0.1;
+	private static final double KOAANTEIL = 0.009;
+	private static final int KOAERLOES = 300; //3,00 €
+	private static final double KAAANTEIL = 0.01;
+	private static final int KAAERLOES = 100; //1,00 €
+	private static final double MUAANTEIL = 0.02;
+	private static final int MUAERLOES = 200; //2,00 €
+	
+	private int runde;
+	//TODO: Dummy später entfernen
+	private Spieler[] spieler = {new Spieler("1"), new Spieler("2"), new Spieler("3")};
+	private byte[] schuldenfrei;
+	
+	public Simulation()
+	{
+		runde = 1;
+		//TODO: Hier die Spieler erstellen
+		schuldenfrei = new byte[spieler.length];
+	}
 
 	//0 = Stadt, 1 = Bahnhof, 2 = Rastplatz
 	//--> klos[0] = Stadtklos von diesem Spieler
-
-	//Anzahl der am Spiel teilnehmenden Spüler
-	//TODO: Hier später ein echtes Array, das die Spieler enthält
-	Spieler[] spieler = {new Spieler("1"), new Spieler("2"), new Spieler("3")};
-
 	
 	
 	/**
@@ -43,8 +53,151 @@ public class Simulation
 	 * @param region
 	 */
 	
+	public void simuliere()
+	{
+		berechneHygiene(0);
+		berechneHygiene(1);
+		berechneHygiene(2);
+		
+		verteileKunden(0);
+		verteileKunden(1);
+		verteileKunden(2);
+		
+		vervollstaendigeGuV();
+		
+		//TODO: BWLHistorie erstellen?
+		
+		uebergebeMafoBericht();
+		
+		//Wenn ein Spieler gewonnen hat, breche die Simulation ab
+		if(pruefeGewinnbedingung() != null)
+		{
+			return;
+		}
+		
+		erzeugeEreignis();
+	}
+	
+	private void erzeugeEreignis()
+	{
+		//TODO: Hier verschiedene Zufallsevents anstoßen
+	}
+	
+	private Spieler pruefeGewinnbedingung()
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			//Hat der Spieler noch Darlehen aufgenommen oder ist im Minus, setze den Rundenzähler wieder auf 0
+			//Sonst erhöhe den Zähler um 1
+			if(spieler[i].getKontostand() < 0 || spieler[i].getDarlehenkonto().getDarlehen() > 0)
+			{
+				schuldenfrei[i] = 0;
+			}
+			else
+			{
+				schuldenfrei[i]++;
+			}
+			
+			//Hat der Zähler durch die Erhöhung 2 überschritten, hat der Spieler seit 2 Runden keine Schulden mehr
+			//Damit hat er das Spiel gewonnen
+			if(schuldenfrei[i] > 2)
+			{
+				//TODO: Was wird hier auf der GUI getan?
+				return spieler[i];
+			}
+		}
+		
+		return null;
+	}
+	
+	private void uebergebeMafoBericht()
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			if(spieler[i].isMafoberichtGefordert())
+			{
+				//TODO: String für Mafobericht erzeugen
+			}
+			else
+			{
+				spieler[i].setMafobericht("Für diese Runde wurde kein Marktforschungsbericht angefordert.");
+				spieler[i].setMafoberichtGefordert(false);
+			}
+		}
+	}
+	
+	private void vervollstaendigeGuV()
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			//TODO: Echtes Call by Reference?
+			GuV guv = spieler[i].getGuv();
+			Klohaus[] klos = spieler[i].getKlos();
+			
+			//Variable Kosten
+			int[] material = new int[klos.length];
+			int[] wasser = new int[klos.length];
+			int[] strom = new int[klos.length];
+			int[] kloumsatz = new int[klos.length];
+			int[] autoKondom = new int[klos.length];
+			int[] autoKaugummi = new int[klos.length];
+			int[] autoMuenzen = new int[klos.length];
+			
+			for (int j = 0; j < klos.length; j++)
+			{
+				int kunden = klos[j].getKunden();
+				
+				//Variable Kosten
+				material[j] = (int) ((klos[j].getKvKlopapier() + klos[j].getKvPapier() + klos[j].getKvSeife()) * kunden);
+				wasser[j]  = (int) (klos[j].getKvWasser() * kunden);
+				strom[j] = (int) (klos[j].getKvStrom() * kunden);
+				
+				//Umsatzerlöse
+				kloumsatz[j] = klos[j].getPreis() * kunden;
+				boolean[] installierteAutomaten = klos[j].getSonderausstattungen();
+				
+				//Umsatzerlöse aus Automaten werden nur eingebucht, wenn überhaupt Automaten installiert sind
+				if(installierteAutomaten[5])
+				{
+					autoKondom[j] = (int) (KOAANTEIL * KOAERLOES * kunden);
+				}
+				if(installierteAutomaten[6])
+				{
+					autoKaugummi[j] = (int) (KAAANTEIL * KAAERLOES * kunden);
+				}
+				if(installierteAutomaten[7])
+				{
+					autoMuenzen[j] = (int) (MUAANTEIL * MUAERLOES * kunden);
+				}
+			}
+			
+			guv.setMaterialkosten(material);
+			guv.setWasserkosten(wasser);
+			guv.setStromkosten(strom);
+			guv.setKloumsatz(kloumsatz);
+			guv.setAutomatenumsatzKondom(autoKondom);
+			guv.setAutomatenumsatzKaugummi(autoKaugummi);
+			guv.setAutomatenumsatzMuenzen(autoMuenzen);
+			
+			guv.passeKontostandAn();
+		}
+	}
+	
+	private void berechneHygiene(int region)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			Klohaus[] klos = spieler[i].getKlos();
+			
+			int[] personal = spieler[i].getPersonal().getVerteilung();
+			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[i] * 13);
+			
+			klos[region].setHygiene(hygieneNeu);
+		}
+	}
+	
 	//TODO: Syso's entfernen
-	public void verteileKunden(int region)
+	private void verteileKunden(int region)
 	{
 		int preissumme = 0;
 		int hygienesumme = 0;
@@ -213,6 +366,14 @@ public class Simulation
 		}
 
 		return klosGesamt * multiplikator;
+	}
+	
+	//TESTMETHODE
+	public static void main(String args[])
+	{
+		Simulation s = new Simulation();
+		
+		s.berechneHygiene(1);
 	}
 
 }
