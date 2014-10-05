@@ -69,10 +69,6 @@ public class GuV
 		besitzer.setKontostand(besitzer.getKontostand() + gesamtumsatz - gesamtkosten);
 	}
 
-	private int berechneVariablekosten(int region)
-	{
-		return 0;
-	}
 	private int berechneGesamtkosten()
 	{
 		int gesamtkosten = 0;

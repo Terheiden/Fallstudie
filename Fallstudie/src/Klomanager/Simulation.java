@@ -65,17 +65,62 @@ public class Simulation
 		
 		vervollstaendigeGuV();
 		
-		//TODO: BWLHistorie erstellen?
+		erstelleHistorie();
 		
 		uebergebeMafoBericht();
 		
 		//Wenn ein Spieler gewonnen hat, breche die Simulation ab
 		if(pruefeGewinnbedingung() != null)
 		{
+			//TODO: Sonst noch was zu tun hier?
 			return;
 		}
 		
 		erzeugeEreignis();
+	}
+	
+	private void erstelleHistorie()
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			int kontostand = spieler[i].getKontostand();
+			int darlehen = spieler[i].getDarlehenkonto().getDarlehen();
+			double darlehenszinssatz = spieler[i].getDarlehenkonto().getZinssatz();
+			int marketingbudget = spieler[i].getMarketingbudget();
+			
+			Klohaus[] klos = spieler[i].getKlos();
+			int[] personalVerteilung = spieler[i].getPersonal().getVerteilung();
+			int[] anzahlKlos, preis, hygiene, attraktivitaet, kunden, personalanzahl;
+			anzahlKlos = new int[klos.length];
+			preis = new int[klos.length];
+			hygiene = new int[klos.length];
+			attraktivitaet = new int[klos.length];
+			kunden = new int[klos.length];
+			personalanzahl = new int[klos.length];
+			boolean[][] sonderausstattungen = new boolean[klos.length][klos[0].getSonderausstattungen().length];
+			
+			for (int j = 0; j < klos.length; j++)
+			{
+				anzahlKlos[j] = klos[j].getAnzahl();
+				preis[j] = klos[j].getPreis();
+				hygiene[j] = klos[j].getHygiene();
+				attraktivitaet[j] = klos[j].getAttraktivitaet();
+				kunden[j] = klos[j].getKunden();
+				personalanzahl[j] = personalVerteilung[j];
+				
+				boolean[] sonderausstattungeDiesesKlos = klos[j].getSonderausstattungen();
+				
+				for (int k = 0; k < sonderausstattungeDiesesKlos.length; k++)
+				{
+					sonderausstattungen[j][k] = sonderausstattungeDiesesKlos[k];
+				}
+			}
+			
+			BWLHistorie h = new BWLHistorie(runde, kontostand, darlehen, darlehenszinssatz,
+					marketingbudget, anzahlKlos, preis, hygiene, attraktivitaet, kunden,
+					personalanzahl, sonderausstattungen, spieler[i]);
+			spieler[i].neueHistorie(h);
+		}
 	}
 	
 	private void erzeugeEreignis()

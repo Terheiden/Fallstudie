@@ -14,6 +14,7 @@ public class Spieler
 	private Darlehen darlehenkonto;
 	private Personal personal;
 	private GuV guv;
+	private BWLHistorie letzteRunde;
 	
 	public Spieler(String name)
 	{
@@ -119,6 +120,16 @@ public class Spieler
 	public void tilgeDarlehen(int betrag)
 	{
 		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
+	}
+	
+	public void neueHistorie(BWLHistorie neu)
+	{
+		if(letzteRunde != null)
+		{
+			neu.setVorherigeRunde(letzteRunde);
+		}
+		
+		letzteRunde = neu;
 	}
 	
 	/**
