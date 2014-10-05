@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class TestGUI extends JFrame implements ChangeListener, ActionListener
+public class TestGUI extends JFrame implements ActionListener
 {
 	private Image karte;
 	private JLabel karteLabel;
@@ -124,18 +124,55 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		for (int i = 0; i < 3; i++)
 		{
 			sonderausstattungen[i][0] = new JCheckBox("<html>Handtrockner</html>");
-			//TODO: sonderausstattungen[i][0].setToolTipText("Text");
+			sonderausstattungen[i][0].setToolTipText("<html><b>Handtrockner:</b>"
+					+ "<br><u>Kosten:</u> 900€ pro Klohaus"
+					+ "<br>Es wird kein Papier mehr verbraucht,"
+					+ "<br>um die Hände zu trocknen."
+					+ "<br>Dafür jedoch mehr Strom.</html>");
+			
 			sonderausstattungen[i][1] = new JCheckBox(
 					"<html>wassersparende<br>Klospülung</html>");
+			sonderausstattungen[i][1].setToolTipText("<html><b>Wassersparende Spülung:</b>"
+					+ "<br><u>Kosten:</u> 3.000€ pro Klohaus"
+					+ "<br>Verringert den Wasserverbauch.</html>");
+			
 			sonderausstattungen[i][2] = new JCheckBox(
 					"<html>selbstreinigende<br>Toiletten</html>");
+			sonderausstattungen[i][2].setToolTipText("<html><b>Selbstreinigende Toiletten:</b>"
+					+ "<br><u>Kosten:</u> 5.000€ pro Klohaus"
+					+ "<br>Erhöht zwar leicht den Stromverbrauch,"
+					+ "<br>doch die Besucher und Putzkräfte"
+					+ "<br>wissen dies zu schätzen.</html>");
+			
 			sonderausstattungen[i][3] = new JCheckBox(
 					"<html>berührungslose<br>Wasserhähne</html>");
+			sonderausstattungen[i][3].setToolTipText("<html><b>Berührungslose Wasserhähne:</b>"
+					+ "<br><u>Kosten:</u> 600€ pro Klohaus"
+					+ "<br>Spart Wasser und ist für die Besucher angenehmer.</html>");
+			
 			sonderausstattungen[i][4] = new JCheckBox(
 					"<html>dickeres<br>Klopapier</html>");
+			sonderausstattungen[i][4].setToolTipText("<html><b>Dickeres Toilettenpapier:</b>"
+					+ "<br><u>Kosten:</u> abhängig von der Kundenanzahl"
+					+ "<br>Viele Kunden wissen dies zu schätzen.</html>");
+			
 			sonderausstattungen[i][5] = new JCheckBox("<html>Kondomautomat</html>");
+			sonderausstattungen[i][5].setToolTipText("<html><b>Kondomautomat:</b>"
+					+ "<br><u>Kosten:</u> 1.100€ pro Klohaus"
+					+ "<br>Ein Service für Kunden und vielleicht"
+					+ "<br>auch ein lohnendes Geschäft.</html>");
+			
 			sonderausstattungen[i][6] = new JCheckBox("<html>Kaugummiautomat</html>");
+			sonderausstattungen[i][6].setToolTipText("<html><b>Kaugummiautomat:</b>"
+					+ "<br><u>Kosten:</u> 500€ pro Klohaus"
+					+ "<br>Ein Service für Kunden und vielleicht"
+					+ "<br>auch ein lohnendes Geschäft.</html>");
+			
 			sonderausstattungen[i][7] = new JCheckBox("<html>Münzpressautomat</html>");
+			sonderausstattungen[i][7].setToolTipText("<html><b>Münzpressautomat:</b>"
+					+ "<br><u>Kosten:</u> 900€ pro Klohaus"
+					+ "<br>Ein Service für Kunden und vielleicht"
+					+ "<br>auch ein lohnendes Geschäft.</html>");
 		}
 
 		region = new JRadioButton[3];
@@ -150,32 +187,69 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 			regionsauswahl.add(region[i]);
 		}
 
-		//TODO: Infos einbauen neuKaufenStadt.setToolTipText("Teext");
+		// Knöpfe initialisieren, Tooltips setzen
 		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
 		neuKaufenStadt.addActionListener(this);
-		neuKaufenStadt.setToolTipText("<html>Ein HTML Text<br> über zwei Zeilen</html>");		
-		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
-		//neuKaufenrastplatz.setToolTipText("Teext");
-		neuKaufenRastplatz.addActionListener(this);
+		neuKaufenStadt.setToolTipText("<html><b>Stadtklohaus:</b>"
+				+ "<br>Kapazität: 15.000 Kunden"
+				+ "<br>Anschaffungskosten: 8.500€"
+				+ "<br>Fixkosten pro Periode: 3.550€</html>");		
 		neuKaufenBahnhof = new JButton("Miete ein neues Bahnhofsklo");
 		neuKaufenBahnhof.addActionListener(this);
+		neuKaufenBahnhof.setToolTipText("<html><b>Bahnhofsklohaus:</b>"
+				+ "<br>Kapazität: 12.000 Kunden"
+				+ "<br>Anschaffungskosten: 10.000€"
+				+ "<br>Fixkosten pro Periode: 2.800€</html>");	
+		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
+		neuKaufenRastplatz.addActionListener(this);
+		neuKaufenRastplatz.setToolTipText("<html><b>Rastplatzklohaus:</b>"
+				+ "<br>Kapazität: 9.000 Kunden"
+				+ "<br>Anschaffungskosten: 6.000€"
+				+ "<br>Fixkosten pro Periode: 1.750€</html>");	
+		
 		verkaufeStadt = new JButton("Gebe ein Stadtklo ab");
 		verkaufeStadt.addActionListener(this);
-		verkaufeRastplatz = new JButton("Gebe ein Rastplatzklo ab");
-		verkaufeRastplatz.addActionListener(this);
+		verkaufeStadt.setToolTipText("<html><b>Achtung!</b>"
+				+ "<br>Beim Abgeben eines Klohauses"
+				+ "<br>entstehen Kosten von 2000€</html>");
 		verkaufeBahnhof = new JButton("Gebe ein Bahnhofsklo ab");
 		verkaufeBahnhof.addActionListener(this);
+		verkaufeBahnhof.setToolTipText("<html><b>Achtung!</b>"
+				+ "<br>Beim Abgeben eines Klohauses"
+				+ "<br>entstehen Kosten von 2000€</html>");
+		verkaufeRastplatz = new JButton("Gebe ein Rastplatzklo ab");
+		verkaufeRastplatz.addActionListener(this);
+		verkaufeRastplatz.setToolTipText("<html><b>Achtung!</b>"
+				+ "<br>Beim Abgeben eines Klohauses"
+				+ "<br>entstehen Kosten von 2000€</html>");
 		
 		maFoBerichtKaufen = new JButton("MaFoBericht kaufen");
 		maFoBerichtKaufen.addActionListener(this);
+		maFoBerichtKaufen.setToolTipText("<html><b>Marktforschung:</b>"
+				+ "<br><u>Kosten:</u> 5.000€ "//TODO mafo ändern zu checkbox
+				+ "<br>In der nächsten Runde wird ein Bericht erstellt,"
+				+ "<br>der einen Überblick über den Markt verschafft.</html>");
+		
 
 		mitarbeiterEinstellen = new JButton("Neuer Mitarbeiter");
 		mitarbeiterEinstellen.addActionListener(this);
+		mitarbeiterEinstellen.setToolTipText("<html><b>Neuer Mitarbeiter:</b>"
+				+ "<br><u>Einstellungskosten:</u> 2.000€"
+				+ "<br><u>Lohnkosten:</u> 950€"
+				+ "<br>Arbeitskräfte werden benötigt, "
+				+ "<br>um die Klohäuser zu reinigen.</html>");
+
 		mitarbeiterEntlassen = new JButton("Mitarbeiter feuern");
 		mitarbeiterEntlassen.addActionListener(this);
+		mitarbeiterEntlassen.setToolTipText("<html><b>Mitarbeiter entlassen:</b>"
+				+ "<br><u>Abfindungskosten:</u> 1.500€"
+				+ "<br>Verringere die Anzahl deiner Mitarbeiter, "
+				+ "<br>um Kosten einzusparen.</html>");
 		nächsteRunde = new JButton("Beende diese Runde");
 		nächsteRunde.addActionListener(this);
+		
 
+		//Beschriftungslabel
 		preisLabel = new JLabel("<html>Preis<br>festlegen</html>");
 		marketingLabel = new JLabel("Marketingbudget");
 		mitarbeiterZuweisenLabel = new JLabel(
@@ -335,6 +409,26 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		aenderungMitarbeiter = 0;
 		this.aktualisiereGUI();
 		
+		// Sonderausstattungen ausgewählt
+		for (int i = 0; i < 3; i++)// nach region (mit if region gewählt evtl schneller?)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (sonderausstattungen[i][j].isSelected())
+				{
+					if (j != 4)
+					{ // dickeres Klopapier(4) kann auch wieder abgewählt werden
+
+						// System.out.println(region[i].getText() + " " +
+						// sonderausstattungen[i][j].getText());
+						sonderausstattungen[i][j].setEnabled(false);
+						sonderausstattungen[i][j]
+								.setToolTipText("Bereits gekauft.");
+					}
+				}
+			}
+		}
+		
 	}
 	
 	private void aktualisiereGUI()
@@ -385,18 +479,7 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 			}
 		}
 
-		// Sonderausstattungen auswählen
-		for (int i = 0; i < 3; i++)//nach region (mit if region gewählt evtl schneller?)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				if (object == sonderausstattungen[i][j])
-				{
-					//System.out.println(region[i].getText() + " " + sonderausstattungen[i][j].getText());
-					sonderausstattungen[i][j].setEnabled(false);
-				}
-			}
-		}
+
 		//Mitarbeiterzahl ändern
 		if(object == mitarbeiterEinstellen){
 			aenderungMitarbeiter++;
@@ -442,11 +525,6 @@ public class TestGUI extends JFrame implements ChangeListener, ActionListener
 		}
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent arg0)
-	{
-
-	}
 
 	public static void main(String[] args)
 	{
