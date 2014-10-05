@@ -11,7 +11,10 @@ public class Personal
 
 	public Personal(Spieler besitzer)
 	{
-		//TODO: Anzahl bzw. Verteilung setzen? Mit Startwert von GUI??
+		//TODO: Anzahl bzw. Verteilung setzen? Mit Startwert von GUI - ist notwendig, da die GuV es benötigt!
+		gesamtAnzahl = 3;
+		int[] tmp = {1,1,1};
+		verteilung = tmp;
 		gehalt = 95000; //950 €
 		einstellungskosten = 200000; // 2.000 €
 		kuendigungskosten = 150000; // 1.500 €

@@ -49,22 +49,26 @@ public abstract class Klohaus
 			kvPapier = 0.0; //0,00 €
 			kvStrom = kvStrom + 0.646425; //~ 0,006 €
 			attraktivitaetsboni[0] = 9000; //90,00 €
+			anschaffungskosten += 90000; //900,00 €
 			break;
 		//Wassersparende Klospülung
 		case 1:
 			kvWasser = kvWasser - 1.572; //~ 0,02 €
+			anschaffungskosten += 300000; //3000,00 €
 			break;
 		//Selbstreinigende Klos
 		case 2:
 			kvStrom = kvStrom + 0.021666666658; //~ 0,0002 €
 			//TODO: Hygiene erhöhen
 			attraktivitaetsboni[2] = 50000; //500,00 €
+			anschaffungskosten += 500000; //5000,00 €
 			break;
 		//Berührungslose Wasserhähne
 		case 3:
 			kvWasser = kvWasser - 0.17685; //~ 0,002 €
 			//TODO: Hygiene erhöhen
 			attraktivitaetsboni[3] = 6000; //60,00 €
+			anschaffungskosten += 60000; //600,00 €
 			break;
 		//Dickeres Klopapier
 		case 4:
@@ -74,12 +78,15 @@ public abstract class Klohaus
 		//Kondomautomat
 		case 5:
 			attraktivitaetsboni[5] = 7000; //70,00 €
+			anschaffungskosten += 110000; //1100,00 €
 		//Kaugummiautomat
 		case 6:
 			attraktivitaetsboni[6] = 5000; //50,00 €
+			anschaffungskosten += 50000; //500,00 €
 		//Münzpressautomat
 		case 7:
 			attraktivitaetsboni[7] = 6000; //60,00 €
+			anschaffungskosten += 90000; //900,00 €
 		}
 		
 	}

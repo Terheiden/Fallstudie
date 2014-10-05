@@ -128,6 +128,7 @@ public class Simulation
 		//TODO: Hier verschiedene Zufallsevents anstoßen
 	}
 	
+	//TODO: Methode prüfen
 	private Spieler pruefeGewinnbedingung()
 	{
 		for (int i = 0; i < spieler.length; i++)
@@ -171,6 +172,7 @@ public class Simulation
 		}
 	}
 	
+	//TODO: Methode prüfen
 	private void vervollstaendigeGuV()
 	{
 		for (int i = 0; i < spieler.length; i++)
@@ -237,7 +239,14 @@ public class Simulation
 			int[] personal = spieler[i].getPersonal().getVerteilung();
 			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[i] * 52);
 			
+			if (hygieneNeu < 0)
+			{
+				hygieneNeu = 0;
+			}
+			
 			klos[region].setHygiene(hygieneNeu);
+			//TODO: Syso entfernen
+			System.out.println("Hygiene festgesetzt auf " + hygieneNeu);
 		}
 	}
 	
@@ -417,6 +426,10 @@ public class Simulation
 	public static void main(String args[])
 	{
 		Simulation s = new Simulation();
+		
+		s.spieler[0].getKlos()[1].setKunden(200);
+		s.spieler[1].getKlos()[1].setKunden(2000);
+		s.spieler[2].getKlos()[1].setKunden(20000);
 		
 		s.berechneHygiene(1);
 	}
