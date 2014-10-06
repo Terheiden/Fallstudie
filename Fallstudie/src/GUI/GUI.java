@@ -9,11 +9,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class TestGUI extends JFrame implements ActionListener
+public class GUI extends JFrame implements ActionListener
 {
 	private Image karte;
 	private JLabel karteLabel;
-	
+	private JPanel stadtPanel, bahnhofPanel, rastplatzPanel;
+	private JTabbedPane tabbedPane;
 	private JButton neuKaufenStadt, neuKaufenRastplatz, neuKaufenBahnhof;
 	private JButton verkaufeStadt, verkaufeRastplatz, verkaufeBahnhof;
 	private JButton mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
@@ -30,8 +31,7 @@ public class TestGUI extends JFrame implements ActionListener
 			darlehenAufnehmenField, bankField;
 
 	private JCheckBox sonderausstattungen[][];
-	private JRadioButton region[];
-	private ButtonGroup regionsauswahl;
+
 
 	// private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
 	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel;
@@ -49,12 +49,25 @@ public class TestGUI extends JFrame implements ActionListener
 	 * Buttons mit simplen funktionen versehen
 	 */
 
-	public TestGUI()
+	public GUI()
 	{
 		super("Klomanager");
 		setBounds(0, 0, 1030, 660);
 		
+		//TODO: null layout?
+		stadtPanel = new JPanel();
+		bahnhofPanel = new JPanel();
+		rastplatzPanel = new JPanel();
+		tabbedPane = new JTabbedPane();
+		tabbedPane.add("Stadt", stadtPanel);
+		tabbedPane.add("Bahnhof", bahnhofPanel);
+		tabbedPane.add("Rastplatz", rastplatzPanel);
+		
+
+
+		
 		// Variablen initialisieren
+		//TODO: variablen rauswerfen
 		kennzahlenText = "Hier steht die GUV und sonstige vom Spiel erstellte Ausgaben. ";
 		//klos
 		anzStadt = 1;
@@ -63,7 +76,6 @@ public class TestGUI extends JFrame implements ActionListener
 		aenderungStadt = 0;
 		aenderungBahnhof = 0;
 		aenderungRastplatz = 0;
-		//TODO: Preise
 		preisBahnhof = 0.5;
 		preisRastplatz = 0.5;
 		preisStadt = 0.5;
@@ -76,14 +88,6 @@ public class TestGUI extends JFrame implements ActionListener
 
 		// Objekte erzeugen
 
-		// Slider ändern -> können nur int liefern bzw. wie fein soll preis
-		// verstellbar sein?
-		// Slider sind draußen
-		/*
-		 * preisSliderBahn = new JSlider(0, 100, (int)preisBahnhof*10);
-		 * preisSliderStadt = new JSlider(0, 100, (int)preisStadt*10);
-		 * preisSliderRast = new JSlider(0, 100, (int)preisRastplatz*10);
-		 */
 		//Karte laden
 		try
 		{
@@ -175,17 +179,7 @@ public class TestGUI extends JFrame implements ActionListener
 					+ "<br>auch ein lohnendes Geschäft.</html>");
 		}
 
-		region = new JRadioButton[3];
-		region[0] = new JRadioButton("Stadt");
-		region[0].setSelected(true);
-		region[1] = new JRadioButton("Bahnhof");
-		region[2] = new JRadioButton("Rastplatz");
 
-		regionsauswahl = new ButtonGroup();
-		for (int i = 0; i < region.length; i++)
-		{
-			regionsauswahl.add(region[i]);
-		}
 
 		// Knöpfe initialisieren, Tooltips setzen
 		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
@@ -267,44 +261,13 @@ public class TestGUI extends JFrame implements ActionListener
 		setLayout(null);
 
 		// Toiletten nach Region
-		add(kloAnzahlLabel);
-		kloAnzahlLabel.setBounds(215, 270, 40, 20);
-		add(preisLabel);
-		preisLabel.setBounds(265, 260, 70, 40);
-		add(mitarbeiterZuweisenLabel);
-		mitarbeiterZuweisenLabel.setBounds(330, 260, 70, 40);
+		add(tabbedPane);
+		tabbedPane.setBounds(10, 300, 600, 300);
 
-		for (int i = 0; i < region.length; i++)
-		{
-			add(region[i]);
-			region[i].setBounds(400, 150 + i * 35, 100, 30);
-			region[i].addActionListener(this);
-		}
 
 		// Stadt
-		add(neuKaufenStadt);
-		neuKaufenStadt.setBounds(10, 300, 200, 30);
-		add(verkaufeStadt);
-		verkaufeStadt.setBounds(10, 340, 200, 30);
-		add(anzStadtField);
-		anzStadtField.setBounds(220, 305, 30, 20);
-		anzStadtField.setEditable(false);
-		/*
-		 * add(preisSliderStadt); preisSliderStadt.setBounds(250, 300, 100, 20);
-		 * preisSliderStadt.addChangeListener(this);
-		 */
-		add(preisStadtField);
-		preisStadtField.setBounds(282, 305, 30, 20);
-		// preisStadtField.setEditable(false);
-		add(anzMitarbeiterStadtField);
-		anzMitarbeiterStadtField.setBounds(340, 305, 30, 20);
-		for (int i = 0; i < 8; i++)
-		{
-			add(sonderausstattungen[0][i]);
-			sonderausstattungen[0][i].setBounds(380, i * 35 + 300, 150, 30);
-			sonderausstattungen[0][i].setVisible(true);
-			sonderausstattungen[0][i].addActionListener(this);
-		}
+		this.stadtPanel();
+
 
 		// Bahnhof
 		add(neuKaufenBahnhof);
@@ -400,6 +363,64 @@ public class TestGUI extends JFrame implements ActionListener
 
 	}
 
+	private void stadtPanel()
+	{
+		GridBagLayout gbl = new GridBagLayout();
+	    stadtPanel.setLayout( gbl );
+	    
+	    JPanel panel = new JPanel();
+	    //                                   x  y  w  h  wx wy 
+	    addComponent(stadtPanel, gbl, panel, 0, 0, 3, 1, 0, 0);
+		addComponent(stadtPanel, gbl, kloAnzahlLabel, 4, 0, 2, 1, 1.0, 0);
+		addComponent(stadtPanel, gbl, preisLabel, 6, 0, 2, 1, 1.0, 0);
+		addComponent(stadtPanel, gbl, mitarbeiterZuweisenLabel, 8, 0 , 2, 1, 1.0, 0);
+		addComponent(stadtPanel, gbl, neuKaufenStadt , 0, 1, 3, 2, 1.0, 0);
+		addComponent(stadtPanel, gbl, verkaufeStadt , 0, 3, 3, 2, 0, 0);
+		addComponent(stadtPanel, gbl, anzStadtField , 4, 1, 2, 2, 0, 0);
+		addComponent(stadtPanel, gbl, preisStadtField , 6, 1, 2, 2, 0, 0);
+		addComponent(stadtPanel, gbl, anzMitarbeiterStadtField , 8, 1, 2, 2, 0, 0);
+		
+		
+		
+
+		/*stadtPanel.add(neuKaufenStadt, BorderLayout.LINE_START);
+		stadtPanel.add(verkaufeStadt, BorderLayout.LINE_START);
+		stadtPanel.add(anzStadtField);
+		anzStadtField.setBounds(220, 305, 30, 20);
+		anzStadtField.setEditable(false);
+		
+		 
+		stadtPanel.add(preisStadtField);
+		preisStadtField.setBounds(282, 305, 30, 20);
+		// preisStadtField.setEditable(false);
+		stadtPanel.add(anzMitarbeiterStadtField);
+		anzMitarbeiterStadtField.setBounds(340, 305, 30, 20);
+		for (int i = 0; i < 8; i++)
+		{
+			stadtPanel.add(sonderausstattungen[0][i]);
+			sonderausstattungen[0][i].setBounds(380, i * 35 + 300, 150, 30);
+			sonderausstattungen[0][i].setVisible(true);
+			sonderausstattungen[0][i].addActionListener(this);
+		}*/
+		
+	}
+	
+	static void addComponent(Container cont, GridBagLayout gbl, Component c,
+			int x, int y, int width, int height, double weightx, double weighty)
+	{
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = x;
+		gbc.gridy = y;
+		gbc.gridwidth = width;
+		gbc.gridheight = height;
+		gbc.weightx = weightx;
+		gbc.weighty = weighty;
+		gbl.setConstraints(c, gbc);
+		cont.add(c);
+	}
+
+
 	public void wechselSpieler(){
 		// TODO 
 		// Methode mit aktualisieren implementieren
@@ -446,42 +467,7 @@ public class TestGUI extends JFrame implements ActionListener
 		// usw.: Methoden aufrufen
 		
 		Object object = e.getSource();
-
-		// Regionen wählen
-		if (object == region[0])
-		{
-			// Stadt gewählt
-			for (int i = 0; i < 8; i++)
-			{
-				sonderausstattungen[0][i].setVisible(true);// Stadt
-				sonderausstattungen[1][i].setVisible(false);
-				sonderausstattungen[2][i].setVisible(false);
-			}
-			neuKaufenStadt.setVisible(true);
-			neuKaufenBahnhof.setVisible(false);
-			neuKaufenRastplatz.setVisible(false);
-		}
-		if (object == region[1])
-		{
-			// Bahnhof gewählt
-			for (int i = 0; i < 8; i++)
-			{
-				sonderausstattungen[0][i].setVisible(false);
-				sonderausstattungen[1][i].setVisible(true);// Bahnhof
-				sonderausstattungen[2][i].setVisible(false);
-			}
-		}
-		if (object == region[2])
-		{
-			// Rastplatz gewählt
-			for (int i = 0; i < 8; i++)
-			{
-				sonderausstattungen[0][i].setVisible(false);
-				sonderausstattungen[1][i].setVisible(false);
-				sonderausstattungen[2][i].setVisible(true);// Rastplatz
-			}
-		}
-
+	
 
 		//Mitarbeiterzahl ändern
 		if(object == mitarbeiterEinstellen){
@@ -531,7 +517,7 @@ public class TestGUI extends JFrame implements ActionListener
 
 	public static void main(String[] args)
 	{
-		TestGUI win = new TestGUI();
+		GUI win = new GUI();
 		win.setVisible(true);
 		win.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
