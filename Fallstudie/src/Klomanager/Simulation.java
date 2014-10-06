@@ -432,6 +432,8 @@ public class Simulation
 		s.spieler[2].getKlos()[1].setKunden(20000);
 		
 		s.berechneHygiene(1);
+		
+		System.out.println((int) 3000/1000 + 1);
 	}
 
 }

@@ -36,7 +36,7 @@ public class GuV
 			this.lohnkosten = vorperiode.getLohnkosten();
 			this.zinsaufwendungenDarlehen = vorperiode.getBesitzer().getDarlehenkonto().berechneZinsen();
 			int kontostandSpieler = vorperiode.getBesitzer().getKontostand();
-			if(kontostandSpieler < 0)
+			if(kontostandSpieler < 0) //0,00 €
 			{
 				this.zinsaufwendungenDispo = (int) (Math.abs(kontostandSpieler) * Spieler.DISPOZINS);
 			}
@@ -53,6 +53,25 @@ public class GuV
 			}
 			
 			
+		}
+	}
+
+	//Diese Methode MUSS nach dem Konstruktor aufgerufen werden!
+	//Sie wurde erstellt, da ein Konstruktor keinen return-Wert besitzt
+	public int pruefeUeberschreitung()
+	{
+		int kontostandSpieler = besitzer.getKontostand();
+		
+		if (kontostandSpieler < -5000000) //-50.000,00 €
+		{
+			int tmp = Math.abs(kontostandSpieler) - 5000000;
+			int mitarbeiterGehen = (tmp / 100000) + 1; // /1000,00 €
+			
+			return mitarbeiterGehen;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 	
