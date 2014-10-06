@@ -59,14 +59,14 @@ public abstract class Klohaus
 		//Selbstreinigende Klos
 		case 2:
 			kvStrom = kvStrom + 0.021666666658; //~ 0,0002 €
-			//TODO: Hygiene erhöhen
+			//TODO: Hygiene erhöhen - ERLEDIGT
+			verschmutzungsfaktor = verschmutzungsfaktor * 0.9;
 			attraktivitaetsboni[2] = 50000; //500,00 €
 			anschaffungskosten += 500000; //5000,00 €
 			break;
 		//Berührungslose Wasserhähne
 		case 3:
 			kvWasser = kvWasser - 0.17685; //~ 0,002 €
-			//TODO: Hygiene erhöhen
 			attraktivitaetsboni[3] = 6000; //60,00 €
 			anschaffungskosten += 60000; //600,00 €
 			break;

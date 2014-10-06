@@ -27,6 +27,7 @@ public class GuV
 		//Nur die (voraussichtlich konstanten) Verwaltungskosten werden festgelegt, 
 		//alle anderen Kosten können sich ändern
 		verwaltungskosten = 150000; //1.500 €
+		this.zinsaufwendungenDarlehen = this.besitzer.getDarlehenkonto().berechneZinsen();
 		
 		this.besitzer = besitzer;
 		
@@ -34,9 +35,8 @@ public class GuV
 		{
 			this.fixkosten = vorperiode.getFixkosten();
 			this.lohnkosten = vorperiode.getLohnkosten();
-			this.zinsaufwendungenDarlehen = vorperiode.getBesitzer().getDarlehenkonto().berechneZinsen();
 			int kontostandSpieler = vorperiode.getBesitzer().getKontostand();
-			if(kontostandSpieler < 0)
+			if(kontostandSpieler < 0) //0,00 €
 			{
 				this.zinsaufwendungenDispo = (int) (Math.abs(kontostandSpieler) * Spieler.DISPOZINS);
 			}
@@ -44,15 +44,32 @@ public class GuV
 		else
 		{
 			Klohaus[] klos = this.besitzer.getKlos();
+			int[] verteilung = this.besitzer.getPersonal().getVerteilung();
+			
 			for (int i = 0; i < klos.length; i++)
 			{
 				this.fixkosten[i] = klos[i].getFixkosten();
-				int[] tmp = this.besitzer.getPersonal().getVerteilung();
-				this.lohnkosten[i] = tmp[i] * this.besitzer.getPersonal().getGehalt();
-				this.zinsaufwendungenDarlehen = this.besitzer.getDarlehenkonto().berechneZinsen();
+				this.lohnkosten[i] = verteilung[i] * this.besitzer.getPersonal().getGehalt();
 			}
+		}
+	}
+
+	//Diese Methode MUSS nach dem Konstruktor aufgerufen werden!
+	//Sie wurde erstellt, da ein Konstruktor keinen return-Wert besitzt
+	public int pruefeUeberschreitung()
+	{
+		int kontostandSpieler = besitzer.getKontostand();
+		
+		if (kontostandSpieler < -5000000) //-50.000,00 €
+		{
+			int tmp = Math.abs(kontostandSpieler) - 5000000;
+			int mitarbeiterGehen = (tmp / 100000) + 1; // /1000,00 €
 			
-			
+			return mitarbeiterGehen;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 	
