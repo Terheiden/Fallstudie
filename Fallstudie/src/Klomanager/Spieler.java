@@ -115,11 +115,17 @@ public class Spieler
 	public void nehmeDarlehenAuf(int betrag)
 	{
 		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
+		kontostand += betrag;
+		darlehenkonto.setDarlehen(darlehenkonto.getDarlehen() + betrag);
+		//Es erfolgt KEINE GuV-Einbuchung! Zinsbelastung erfolgt erst in der Folgerunde!
 	}
 	
 	public void tilgeDarlehen(int betrag)
 	{
 		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
+		kontostand -= betrag;
+		darlehenkonto.setDarlehen(darlehenkonto.getDarlehen() - betrag);
+		//Es erfolgt KEINE GuV-Einbuchung! Zinsbelastung erfolgt erst in der Folgerunde!
 	}
 	
 	public void neueHistorie(BWLHistorie neu)

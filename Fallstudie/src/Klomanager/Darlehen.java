@@ -2,6 +2,8 @@ package Klomanager;
 
 public class Darlehen
 {	
+	static final int limit = 15000000; //150.000,00 €
+	
 	private int darlehen;
 	private double zinssatz;
 	private Spieler besitzer;
