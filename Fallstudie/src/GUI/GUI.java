@@ -7,35 +7,41 @@ import java.io.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 
 public class GUI extends JFrame implements ActionListener
 {
 	private Image karte;
 	private JLabel karteLabel;
-	private JPanel stadtPanel, bahnhofPanel, rastplatzPanel;
-	private JTabbedPane tabbedPane;
+	private JPanel stadtPanel, bahnhofPanel, rastplatzPanel, allgemeinPanel;
+	private JPanel kennzahlenPanel, guvPanel, mafoBerichtPanel;
+	private JTabbedPane regionenTabbedPane, anzeigenTabbedPane;
 	private JButton neuKaufenStadt, neuKaufenRastplatz, neuKaufenBahnhof;
 	private JButton verkaufeStadt, verkaufeRastplatz, verkaufeBahnhof;
 	private JButton mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
 	private JButton maFoBerichtKaufen;
 
 	private JTextArea kennzahlenArea;
-	private JTextField marketingAusgabenField, anzBahnhofField,
-			anzRastplatzField, anzStadtField;
-	private JTextField anzMitarbeiterBahnhofField,
-			anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
-	private JTextField anzMitarbeiterGesField, preisStadtField,
+	//Ausgabelabel 
+	//TODO: field in label umtaufen
+	private JLabel anzBahnhofField, anzRastplatzField, anzStadtField, bankField, darlehenField;
+	private JLabel anzMitarbeiterGesField;
+	
+	private JTextField  marketingAusgabenField, preisStadtField,
 			preisRastplatzField, preisBahnhofField;
-	private JTextField darlehenField, darlehenTilgungField,
-			darlehenAufnehmenField, bankField;
+	private JTextField darlehenTilgungField,
+			darlehenAufnehmenField, anzMitarbeiterBahnhofField,
+			anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
 
 	private JCheckBox sonderausstattungen[][];
 
-
-	// private JSlider preisSliderBahn, preisSliderStadt, preisSliderRast;
-	private JLabel preisLabel, marketingLabel, mitarbeiterZuweisenLabel;
-	private JLabel kloAnzahlLabel, darlehenLabel, bankLabel;
+	//Beschriftungslabel - Arrays nach regionen
+	private JLabel preisLabel[], marketingLabel, mitarbeiterZuweisenLabel[], sonderausstattungenLabel[];
+	private JLabel kloAnzahlLabel[], darlehenAufnehmenLabel,darlehenTilgenLabel;
+	private JLabel mitarbeiterAnzLabel;
 
 	private String kennzahlenText;
 	private int anzMitarbeiterGes, anzBahnhof, anzRastplatz, anzStadt;
@@ -52,19 +58,39 @@ public class GUI extends JFrame implements ActionListener
 	public GUI()
 	{
 		super("Klomanager");
-		setBounds(0, 0, 1030, 660);
+		setBounds(0, 0, 1008, 620);
 		
-		//TODO: null layout?
+		//links
+		allgemeinPanel = new JPanel();
+				
 		stadtPanel = new JPanel();
 		bahnhofPanel = new JPanel();
 		rastplatzPanel = new JPanel();
-		tabbedPane = new JTabbedPane();
-		tabbedPane.add("Stadt", stadtPanel);
-		tabbedPane.add("Bahnhof", bahnhofPanel);
-		tabbedPane.add("Rastplatz", rastplatzPanel);
+		regionenTabbedPane = new JTabbedPane();
+		regionenTabbedPane.add("Stadt", stadtPanel);
+		regionenTabbedPane.add("Bahnhof", bahnhofPanel);
+		regionenTabbedPane.add("Rastplatz", rastplatzPanel);
 		
+		//rechts
+		kennzahlenPanel = new JPanel();
+		guvPanel = new JPanel();
+		mafoBerichtPanel = new JPanel();
+		anzeigenTabbedPane = new JTabbedPane();
+		anzeigenTabbedPane.add("Kennzahlen", kennzahlenPanel);
+		anzeigenTabbedPane.add("GuV", guvPanel);
+		anzeigenTabbedPane.add("MaFo-Bericht", mafoBerichtPanel);
 
-
+		//Karte laden
+		try
+		{
+			karte = ImageIO.read(new File("Arbeits-GUI.png"));
+		} catch (IOException e)
+		{			
+			System.err.println("Karte nicht gefunden :(");
+			e.printStackTrace();
+		}
+		karte =  karte.getScaledInstance(480, 270, Image.SCALE_SMOOTH);
+		karteLabel = new JLabel(new ImageIcon(karte));
 		
 		// Variablen initialisieren
 		//TODO: variablen rauswerfen
@@ -88,40 +114,25 @@ public class GUI extends JFrame implements ActionListener
 
 		// Objekte erzeugen
 
-		//Karte laden
-		try
-		{
-			karte = ImageIO.read(new File("Arbeits-GUI.png"));
-		} catch (IOException e)
-		{			
-			System.err.println("Karte nicht gefunden :(");
-			e.printStackTrace();
-		}
-		karte =  karte.getScaledInstance(400, 300, Image.SCALE_SMOOTH);
-		karteLabel = new JLabel(new ImageIcon(karte));
-		
-		
-		kennzahlenArea = new JTextArea(kennzahlenText);
-
 		marketingAusgabenField = new JTextField("");
-		anzBahnhofField = new JTextField(String.valueOf(anzBahnhof));
-		anzRastplatzField = new JTextField(String.valueOf(anzRastplatz));
-		anzStadtField = new JTextField(String.valueOf(anzStadt));
+		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
+		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
+		anzStadtField = new JLabel(String.valueOf(anzStadt));
 		anzMitarbeiterBahnhofField = new JTextField(
 				String.valueOf(anzMitarbeiterBahnhof));
 		anzMitarbeiterRastplatzField = new JTextField(
 				String.valueOf(anzMitarbeiterRastplatz));
 		anzMitarbeiterStadtField = new JTextField(
 				String.valueOf(anzMitarbeiterStadt));
-		anzMitarbeiterGesField = new JTextField(
+		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
 		preisStadtField = new JTextField(String.valueOf(preisStadt));
 		preisBahnhofField = new JTextField(String.valueOf(preisBahnhof));
 		preisRastplatzField = new JTextField(String.valueOf(preisRastplatz));
-		darlehenField = new JTextField("50.000");
+		darlehenField = new JLabel("50.000");
 		darlehenAufnehmenField = new JTextField("");
 		darlehenTilgungField = new JTextField("");
-		bankField = new JTextField("15.000");
+		bankField = new JLabel("15.000");
 
 		// Sonderausstattungen initialisieren
 		sonderausstattungen = new JCheckBox[3][8];
@@ -244,14 +255,22 @@ public class GUI extends JFrame implements ActionListener
 		
 
 		//Beschriftungslabel
-		preisLabel = new JLabel("<html>Preis<br>festlegen</html>");
-		marketingLabel = new JLabel("Marketingbudget");
-		mitarbeiterZuweisenLabel = new JLabel(
-				"<html>Mitarbeiter<br>zuweisen</html>");
-		kloAnzahlLabel = new JLabel("Anzahl");
-		darlehenLabel = new JLabel(
-				"Aufgenommene Darlehen  |  In Höhe von aufnehmen  |  Tilgen");
-		bankLabel = new JLabel("Bankguthaben");
+		preisLabel = new JLabel[3];
+		mitarbeiterZuweisenLabel = new JLabel[3];
+		sonderausstattungenLabel = new JLabel[3];
+		kloAnzahlLabel = new JLabel[3];
+		for(int i= 0; i<3; i++){
+			preisLabel[i] = new JLabel("<html>Preis<br>festlegen</html>");
+			mitarbeiterZuweisenLabel[i] = new JLabel("<html>Mitarbeiter<br>zuweisen</html>");
+			sonderausstattungenLabel[i] = new JLabel("Sonderausstattungen kaufen:");
+			kloAnzahlLabel[i] = new JLabel("Anzahl");
+		}
+		
+		marketingLabel = new JLabel("Marketingbudget:");		
+		darlehenAufnehmenLabel = new JLabel("Darlehen aufnehmen:");
+		darlehenTilgenLabel = new JLabel("Darlehen tilgen:");
+		mitarbeiterAnzLabel = new JLabel("Anzahl Mitarbeiter:");
+
 
 		buildWindow();
 	}
@@ -260,149 +279,195 @@ public class GUI extends JFrame implements ActionListener
 	{
 		setLayout(null);
 
+		// oben links
+		add(allgemeinPanel);
+		this.allgemeinPanel();
+		allgemeinPanel.setBounds(10, 10, 480, 270);
+		
 		// Toiletten nach Region
-		add(tabbedPane);
-		tabbedPane.setBounds(10, 300, 600, 300);
+		add(regionenTabbedPane);
+		regionenTabbedPane.setBounds(10, 300, 480, 270);		
 
-
-		// Stadt
-		this.stadtPanel();
-
-
-		// Bahnhof
-		add(neuKaufenBahnhof);
-		neuKaufenBahnhof.setBounds(10, 400, 200, 30);
-		add(verkaufeBahnhof);
-		verkaufeBahnhof.setBounds(10, 440, 200, 30);
-		add(anzBahnhofField);
-		anzBahnhofField.setBounds(220, 405, 30, 20);
-		anzBahnhofField.setEditable(false);
-		/*
-		 * add(preisSliderBahn); preisSliderBahn.setBounds(250, 400, 100, 20);
-		 * preisSliderBahn.addChangeListener(this);
-		 */
-		add(preisBahnhofField);
-		preisBahnhofField.setBounds(282, 405, 30, 20);
-		// preisBahnhofField.setEditable(false);
-		add(anzMitarbeiterBahnhofField);
-		anzMitarbeiterBahnhofField.setBounds(340, 405, 30, 20);
-		for (int i = 0; i < 8; i++)
-		{
-			add(sonderausstattungen[1][i]);
-			sonderausstattungen[1][i].setBounds(380, i * 35 + 300, 150, 30);
-			sonderausstattungen[1][i].setVisible(false);
-			sonderausstattungen[1][i].addActionListener(this);
-		}
-
-		// Rastplatz
-		add(neuKaufenRastplatz);
-		neuKaufenRastplatz.setBounds(10, 500, 200, 30);
-		add(verkaufeRastplatz);
-		verkaufeRastplatz.setBounds(10, 540, 200, 30);
-		add(anzRastplatzField);
-		anzRastplatzField.setBounds(220, 505, 30, 20);
-		anzRastplatzField.setEditable(false);
-		/*
-		 * add(preisSliderRast); preisSliderRast.setBounds(250, 500, 100, 20);
-		 * preisSliderRast.addChangeListener(this);
-		 */
-		add(preisRastplatzField);
-		preisRastplatzField.setBounds(282, 505, 30, 20);
-		// preisRastplatzField.setEditable(false);
-		add(anzMitarbeiterRastplatzField);
-		anzMitarbeiterRastplatzField.setBounds(340, 505, 30, 20);
-		for (int i = 0; i < 8; i++)
-		{
-			add(sonderausstattungen[2][i]);
-			sonderausstattungen[2][i].setBounds(380, i * 35 + 300, 150, 30);
-			sonderausstattungen[2][i].setVisible(false);
-			sonderausstattungen[2][i].addActionListener(this);
-		}
+		this.buildStadtPanel();
+		this.buildBahnhofPanel();
+		this.buildRastplatzPanel();
+		
+		
 
 		// Rechte Seite
-		add(nächsteRunde);
-		nächsteRunde.setBackground(Color.GREEN);		
-		nächsteRunde.setBounds(800, 10, 200, 30);
+		add(anzeigenTabbedPane);
+		anzeigenTabbedPane.setBounds(500, 10, 480, 270);
 		
-		add(kennzahlenArea);
-		kennzahlenArea.setBounds(600, 50, 400, 240);
+		this.buildKennzahlenPanel();
+		this.buildGuVPanel();
+		this.buildMaFoPanel();
 		
 		add(karteLabel);
-		karteLabel.setBounds(600, 300, 400, 300);
+		karteLabel.setBounds(500, 300, 480, 270);
+		karteLabel.setBorder(new CompoundBorder(karteLabel.getBorder(), new LineBorder(Color.LIGHT_GRAY,2)));
 
-
-		// oben links
-		add(bankLabel);
-		bankLabel.setBounds(10, 10, 100, 30);
-		add(bankField);
-		bankField.setBounds(110, 10, 60, 30);
-
-		add(darlehenLabel);
-		darlehenLabel.setBounds(10, 50, 400, 30);
-		add(darlehenField);
-		darlehenField.setBounds(50, 80, 60, 30);
-		add(darlehenAufnehmenField);
-		darlehenAufnehmenField.setBounds(200, 80, 60, 30);
-		add(darlehenTilgungField);
-		darlehenTilgungField.setBounds(300, 80, 60, 30);
-
-		add(marketingLabel);
-		marketingLabel.setBounds(10, 130, 100, 30);
-		add(marketingAusgabenField);
-		marketingAusgabenField.setBounds(110, 130, 60, 30);
-		add(maFoBerichtKaufen);
-		maFoBerichtKaufen.setBounds(200, 130, 150, 30);
-
-		add(mitarbeiterEinstellen);
-		mitarbeiterEinstellen.setBounds(10, 180, 200, 30);
-		add(mitarbeiterEntlassen);
-		mitarbeiterEntlassen.setBounds(10, 220, 200, 30);
-		add(anzMitarbeiterGesField);
-		anzMitarbeiterGesField.setBounds(250, 200, 50, 30);
-		anzMitarbeiterGesField.setEditable(false);
-
+	
+		
 	}
 
-	private void stadtPanel()
-	{
-		GridBagLayout gbl = new GridBagLayout();
-	    stadtPanel.setLayout( gbl );
-	    
-	    JPanel panel = new JPanel();
-	    //                                   x  y  w  h  wx wy 
-	    addComponent(stadtPanel, gbl, panel, 0, 0, 3, 1, 0, 0);
-		addComponent(stadtPanel, gbl, kloAnzahlLabel, 4, 0, 2, 1, 1.0, 0);
-		addComponent(stadtPanel, gbl, preisLabel, 6, 0, 2, 1, 1.0, 0);
-		addComponent(stadtPanel, gbl, mitarbeiterZuweisenLabel, 8, 0 , 2, 1, 1.0, 0);
-		addComponent(stadtPanel, gbl, neuKaufenStadt , 0, 1, 3, 2, 1.0, 0);
-		addComponent(stadtPanel, gbl, verkaufeStadt , 0, 3, 3, 2, 0, 0);
-		addComponent(stadtPanel, gbl, anzStadtField , 4, 1, 2, 2, 0, 0);
-		addComponent(stadtPanel, gbl, preisStadtField , 6, 1, 2, 2, 0, 0);
-		addComponent(stadtPanel, gbl, anzMitarbeiterStadtField , 8, 1, 2, 2, 0, 0);
-		
-		
-		
 
-		/*stadtPanel.add(neuKaufenStadt, BorderLayout.LINE_START);
-		stadtPanel.add(verkaufeStadt, BorderLayout.LINE_START);
-		stadtPanel.add(anzStadtField);
-		anzStadtField.setBounds(220, 305, 30, 20);
-		anzStadtField.setEditable(false);
+	private void buildMaFoPanel()
+	{
+		// TODO Auto-generated method stub
 		
-		 
+	}
+
+	private void buildGuVPanel()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void buildKennzahlenPanel()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	// w: 500 h: 280
+	private void allgemeinPanel()
+	{
+		
+		allgemeinPanel.setLayout(null);
+		allgemeinPanel.setBorder(new TitledBorder("Allgemeine Verwaltung"));
+		//allgemeinPanel.setBorder(new CompoundBorder(allgemeinPanel.getBorder(), new LineBorder(Color.LIGHT_GRAY,2)));		
+		
+		
+		allgemeinPanel.add(darlehenAufnehmenLabel);
+		darlehenAufnehmenLabel.setBounds(10, 40, 150, 20);
+		allgemeinPanel.add(darlehenAufnehmenField);
+		darlehenAufnehmenField.setBounds(140, 40, 60, 20);
+		allgemeinPanel.add(darlehenTilgenLabel);
+		darlehenTilgenLabel.setBounds(10, 80, 150, 20);
+		allgemeinPanel.add(darlehenTilgungField);
+		darlehenTilgungField.setBounds(140, 80, 60, 20);
+
+		allgemeinPanel.add(marketingLabel);
+		marketingLabel.setBounds(10, 150, 100, 20);
+		allgemeinPanel.add(marketingAusgabenField);
+		marketingAusgabenField.setBounds(140, 150, 60, 20);
+		allgemeinPanel.add(maFoBerichtKaufen);
+		maFoBerichtKaufen.setBounds(10, 180, 190, 30);
+
+		allgemeinPanel.add(mitarbeiterAnzLabel);
+		mitarbeiterAnzLabel.setBounds(300, 40, 120, 20);
+		allgemeinPanel.add(anzMitarbeiterGesField);
+		anzMitarbeiterGesField.setBounds(440, 40, 20, 20);		
+		allgemeinPanel.add(mitarbeiterEinstellen);
+		mitarbeiterEinstellen.setBounds(300, 70, 150, 30);
+		allgemeinPanel.add(mitarbeiterEntlassen);
+		mitarbeiterEntlassen.setBounds(300, 110, 150, 30);
+		
+		
+		allgemeinPanel.add(nächsteRunde);
+		nächsteRunde.setBackground(Color.GREEN);		
+		nächsteRunde.setBounds(260, 210, 200, 40);
+	}
+
+	private void buildStadtPanel()
+	{
+		stadtPanel.add(kloAnzahlLabel[0]);
+		kloAnzahlLabel[0].setBounds(215, 20, 40, 20);
+		stadtPanel.add(preisLabel[0]);
+		preisLabel[0].setBounds(265, 10, 70, 40);
+		stadtPanel.add(mitarbeiterZuweisenLabel[0]);
+		mitarbeiterZuweisenLabel[0].setBounds(330, 10, 70, 40);		
+		
+		stadtPanel.setLayout(null);
+		stadtPanel.add(neuKaufenStadt);
+		neuKaufenStadt.setBounds(10, 10, 200, 30);
+		stadtPanel.add(verkaufeStadt);
+		verkaufeStadt.setBounds(10, 50, 200, 30);
+		
+		stadtPanel.add(anzStadtField);
+		anzStadtField.setBounds(220, 50, 30, 20);		
 		stadtPanel.add(preisStadtField);
-		preisStadtField.setBounds(282, 305, 30, 20);
-		// preisStadtField.setEditable(false);
+		preisStadtField.setBounds(275, 50, 30, 20);
 		stadtPanel.add(anzMitarbeiterStadtField);
-		anzMitarbeiterStadtField.setBounds(340, 305, 30, 20);
+		anzMitarbeiterStadtField.setBounds(340, 50, 30, 20);
+		
+		stadtPanel.add(sonderausstattungenLabel[0]);
+		sonderausstattungenLabel[0].setBounds(10, 100, 200, 20);
 		for (int i = 0; i < 8; i++)
 		{
 			stadtPanel.add(sonderausstattungen[0][i]);
-			sonderausstattungen[0][i].setBounds(380, i * 35 + 300, 150, 30);
+			sonderausstattungen[0][i].setBounds(10 + i* 150 - (i/3 * 450) , i/3 * 30 + 130, 150, 30);
 			sonderausstattungen[0][i].setVisible(true);
 			sonderausstattungen[0][i].addActionListener(this);
-		}*/
+		}
+
+	}
+	private void buildBahnhofPanel()
+	{
+		bahnhofPanel.add(kloAnzahlLabel[1]);
+		kloAnzahlLabel[1].setBounds(215, 20, 40, 20);
+		bahnhofPanel.add(preisLabel[1]);
+		preisLabel[1].setBounds(265, 10, 70, 40);
+		bahnhofPanel.add(mitarbeiterZuweisenLabel[1]);
+		mitarbeiterZuweisenLabel[1].setBounds(330, 10, 70, 40);		
 		
+		bahnhofPanel.setLayout(null);
+		bahnhofPanel.add(neuKaufenBahnhof);
+		neuKaufenBahnhof.setBounds(10, 10, 200, 30);
+		bahnhofPanel.add(verkaufeBahnhof);
+		verkaufeBahnhof.setBounds(10, 50, 200, 30);
+		
+		bahnhofPanel.add(anzBahnhofField);
+		anzBahnhofField.setBounds(220, 50, 30, 20);		
+		bahnhofPanel.add(preisBahnhofField);
+		preisBahnhofField.setBounds(275, 50, 30, 20);
+		bahnhofPanel.add(anzMitarbeiterBahnhofField);
+		anzMitarbeiterBahnhofField.setBounds(340, 50, 30, 20);
+		
+		bahnhofPanel.add(sonderausstattungenLabel[1]);
+		sonderausstattungenLabel[1].setBounds(10, 100, 200, 20);
+		for (int i = 0; i < 8; i++)
+		{
+			bahnhofPanel.add(sonderausstattungen[1][i]);
+			sonderausstattungen[1][i].setBounds(10 + i* 150 - (i/3 * 450) , i/3 * 30 + 130, 150, 30);
+			sonderausstattungen[1][i].setVisible(true);
+			sonderausstattungen[1][i].addActionListener(this);
+		}
+
+	}
+	
+	private void buildRastplatzPanel()
+	{
+		rastplatzPanel.add(kloAnzahlLabel[2]);
+		kloAnzahlLabel[2].setBounds(215, 20, 40, 20);
+		rastplatzPanel.add(preisLabel[2]);
+		preisLabel[2].setBounds(265, 10, 70, 40);
+		rastplatzPanel.add(mitarbeiterZuweisenLabel[2]);
+		mitarbeiterZuweisenLabel[2].setBounds(330, 10, 70, 40);		
+		
+		rastplatzPanel.setLayout(null);
+		rastplatzPanel.add(neuKaufenRastplatz);
+		neuKaufenRastplatz.setBounds(10, 10, 200, 30);
+		rastplatzPanel.add(verkaufeRastplatz);
+		verkaufeRastplatz.setBounds(10, 50, 200, 30);
+		
+		rastplatzPanel.add(anzRastplatzField);
+		anzRastplatzField.setBounds(220, 50, 30, 20);		
+		rastplatzPanel.add(preisRastplatzField);
+		preisRastplatzField.setBounds(275, 50, 30, 20);
+		rastplatzPanel.add(anzMitarbeiterRastplatzField);
+		anzMitarbeiterRastplatzField.setBounds(340, 50, 30, 20);
+		
+		rastplatzPanel.add(sonderausstattungenLabel[2]);
+		sonderausstattungenLabel[2].setBounds(10, 100, 200, 20);
+		for (int i = 0; i < 8; i++)
+		{
+			rastplatzPanel.add(sonderausstattungen[2][i]);
+			sonderausstattungen[2][i].setBounds(10 + i* 150 - (i/3 * 450) , i/3 * 30 + 130, 150, 30);
+			sonderausstattungen[2][i].setVisible(true);
+			sonderausstattungen[2][i].addActionListener(this);
+		}
+
 	}
 	
 	static void addComponent(Container cont, GridBagLayout gbl, Component c,
