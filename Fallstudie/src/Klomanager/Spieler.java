@@ -3,6 +3,7 @@ package Klomanager;
 public class Spieler
 {
 	static final double DISPOZINS = 0.17;
+	static final int MAFOKOSTEN = 500000; //5.000,00 €
 	
 	private String name;
 	private int kontostand;
@@ -96,6 +97,17 @@ public class Spieler
 		int[] tmp = guv.getAnschaffungskostenSonder();
 		tmp[region] = tmp[region] + anschaffungskosten;
 		guv.setAnschaffungskostenSonder(tmp);
+	}
+	
+	public void dickeresKlopapierAbschaffen(int region)
+	{
+		boolean[] tmp1 = klos[region].getSonderausstattungen();
+		tmp1[4] = false;
+		klos[region].setSonderausstattungen(tmp1);
+		klos[region].setKvKlopapier(klos[region].getKvKlopapier() - 0.404388714734); //~ 0,004 €
+		int[] tmp2 = klos[region].getAttraktivitaetsboni();
+		tmp2[4] = 0; //0,00 €
+		klos[region].setAttraktivitaetsboni(tmp2);
 	}
 	
 	public void stelleMitarbeiterEin(int anzahl)

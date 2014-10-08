@@ -24,17 +24,16 @@ public class GuV
 	
 	public GuV(Spieler besitzer, GuV vorperiode)
 	{
+		this.besitzer = besitzer;
+		
 		//Nur die (voraussichtlich konstanten) Verwaltungskosten werden festgelegt, 
 		//alle anderen Kosten können sich ändern
 		verwaltungskosten = 150000; //1.500 €
 		this.zinsaufwendungenDarlehen = this.besitzer.getDarlehenkonto().berechneZinsen();
 		
-		this.besitzer = besitzer;
-		
 		if(vorperiode != null)
 		{
 			this.fixkosten = vorperiode.getFixkosten();
-			this.lohnkosten = vorperiode.getLohnkosten();
 			int kontostandSpieler = vorperiode.getBesitzer().getKontostand();
 			if(kontostandSpieler < 0) //0,00 €
 			{
@@ -49,7 +48,6 @@ public class GuV
 			for (int i = 0; i < klos.length; i++)
 			{
 				this.fixkosten[i] = klos[i].getFixkosten();
-				this.lohnkosten[i] = verteilung[i] * this.besitzer.getPersonal().getGehalt();
 			}
 		}
 	}

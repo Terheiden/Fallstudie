@@ -16,12 +16,14 @@ public class Simulation
 	private int runde;
 	//TODO: Dummy später entfernen
 	private Spieler[] spieler = {new Spieler("1"), new Spieler("2"), new Spieler("3")};
+	private Spieler aktuellerSpieler;
 	private byte[] schuldenfrei;
 	
 	public Simulation()
 	{
 		runde = 1;
 		//TODO: Hier die Spieler erstellen
+		aktuellerSpieler = spieler[0];
 		schuldenfrei = new byte[spieler.length];
 	}
 
@@ -52,6 +54,111 @@ public class Simulation
 	 * In GUV Zinsen berechnen BEVOR der Betrag im DL-Objekt neu gesetzt wird
 	 * @param region
 	 */
+	
+	/**
+	 * Nimm alle Preise *100!!!
+	 * String mit Fehlertext
+	 */
+	public String spielerRundeBeendet(int darlehenAufnehmen, int darlehenTilgen, int mitarbeiterAaenderung,
+			boolean mafoBericht, int marketingbudget, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
+			int preisRastplatz, int aenderungStadt, int aenderungBahnhof, int aenderungRastplatz, boolean[][] neueSonderausstattungen)
+	{
+		//Prüfe Daten
+		//TODO: Strings auf HTML umstellen
+		String fehler = "";
+		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
+		{
+			fehler += "Es kann nicht mehr Darlehen getilgt werden als aufgenommen wurde!";
+		}
+		if(aktuellerSpieler.getDarlehenkonto().getDarlehen() + darlehenAufnehmen - darlehenTilgen > Darlehen.LIMIT)
+		{
+			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €!";
+		}
+		aktuellerSpieler.getPersonal().setVerteilung(mitarbeiterVerteilung);
+		if(!aktuellerSpieler.getPersonal().pruefeVerteilung())
+		{
+			fehler += "Es kann nicht mehr Personal auf die Klos verteilt werden als insgesamt zur Verfügung steht!";
+		}
+		if(!fehler.equals(""))
+		{
+			return fehler;
+		}
+		
+		aktuellerSpieler.nehmeDarlehenAuf(darlehenAufnehmen);
+		aktuellerSpieler.tilgeDarlehen(darlehenTilgen);
+		if(mitarbeiterAaenderung < 0)
+		{
+			aktuellerSpieler.entlasseMitarbeiter(Math.abs(mitarbeiterAaenderung));
+		}
+		else
+		{
+			aktuellerSpieler.stelleMitarbeiterEin(mitarbeiterAaenderung);
+		}
+		
+		aktuellerSpieler.setMafoberichtGefordert(mafoBericht);
+		aktuellerSpieler.setMarketingbudget(marketingbudget);
+		int marketingkosten = marketingbudget;
+		if(mafoBericht)
+		{
+			marketingkosten += Spieler.MAFOKOSTEN;
+		}
+		aktuellerSpieler.getGuv().setMarketingkosten(marketingkosten);
+		for (int i = 0; i < mitarbeiterVerteilung.length; i++)
+		{
+			mitarbeiterVerteilung[i] = mitarbeiterVerteilung[i] * aktuellerSpieler.getPersonal().getGehalt();
+		}
+		aktuellerSpieler.getGuv().setLohnkosten(mitarbeiterVerteilung);
+		
+		aktuellerSpieler.getKlos()[0].setPreis(preisStadt);
+		aktuellerSpieler.getKlos()[1].setPreis(preisBahnhof);
+		aktuellerSpieler.getKlos()[2].setPreis(preisRastplatz);
+		
+		if (aenderungStadt < 0)
+		{
+			aktuellerSpieler.verkaufeKlohaus(0, Math.abs(aenderungStadt));
+		}
+		else
+		{
+			aktuellerSpieler.kaufeKlohaus(0, aenderungStadt);
+		}
+		if (aenderungBahnhof < 0)
+		{
+			aktuellerSpieler.verkaufeKlohaus(1, Math.abs(aenderungBahnhof));
+		}
+		else
+		{
+			aktuellerSpieler.kaufeKlohaus(1, aenderungBahnhof);
+		}
+		if (aenderungRastplatz < 0)
+		{
+			aktuellerSpieler.verkaufeKlohaus(2, Math.abs(aenderungRastplatz));
+		}
+		else
+		{
+			aktuellerSpieler.kaufeKlohaus(2, aenderungRastplatz);
+		}
+		
+		for (int i = 0; i < aktuellerSpieler.getKlos().length; i++)
+		{
+			for (int j = 0; j < neueSonderausstattungen[i].length; j++)
+			{
+				if (neueSonderausstattungen[i][j])
+				{
+					//Dickeres Klopapier
+					if(j == 4 && aktuellerSpieler.getKlos()[i].getSonderausstattungen()[4])
+					{
+						aktuellerSpieler.dickeresKlopapierAbschaffen(i);
+					}
+					else
+					{
+						aktuellerSpieler.kaufeSonderausstattung(i, j);
+					}
+				}
+			}
+		}		
+		
+		return null;
+	}
 	
 	public void simuliere()
 	{
@@ -434,6 +541,9 @@ public class Simulation
 		s.berechneHygiene(1);
 		
 		System.out.println((int) 3000/1000 + 1);
+		
+		int[] array = {1,2,1};
+		System.out.println(s.spielerRundeBeendet(999999999, 0, 0, false, 2000, array, 50, 50, 50, 0, 0, 0, null));
 	}
 
 }

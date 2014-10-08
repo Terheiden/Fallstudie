@@ -119,6 +119,16 @@ public abstract class Klohaus
 		return sonderausstattungen;
 	}
 
+	public int[] getAttraktivitaetsboni()
+	{
+		return attraktivitaetsboni;
+	}
+
+	public void setAttraktivitaetsboni(int[] attraktivitaetsboni)
+	{
+		this.attraktivitaetsboni = attraktivitaetsboni;
+	}
+
 	public void setSonderausstattungen(boolean[] sonderausstattungen)
 	{
 		this.sonderausstattungen = sonderausstattungen;
