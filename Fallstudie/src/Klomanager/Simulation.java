@@ -36,7 +36,8 @@ public class Simulation
 	 * Mehr Darlehen tilgen als aufgenommen?
 	 * Mehr Darlehen aufnehmen als Limit?
 	 * Mehr Personal verteilt als verfügbar?
-	 * Preis außerhalb des zulässigen Wertebereichs?
+	 * Preis außerhalb des zulässigen Wertebereichs? --> Wird in GUI geprüft!
+	 * --> DONE
 	 */
 	
 	/**
@@ -52,7 +53,7 @@ public class Simulation
 	/**
 	 * TODO: Bei Darlehensaufnahme
 	 * In GUV Zinsen berechnen BEVOR der Betrag im DL-Objekt neu gesetzt wird
-	 * @param region
+	 * --> DONE
 	 */
 	
 	/**
@@ -63,7 +64,7 @@ public class Simulation
 			boolean mafoBericht, int marketingbudget, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
 			int preisRastplatz, int aenderungStadt, int aenderungBahnhof, int aenderungRastplatz, boolean[][] neueSonderausstattungen)
 	{
-		//Prüfe Daten
+		//Prüfe, ob die Daten sinnvoll sind - falls nicht, gebe als String den Fehlertext zurück
 		//TODO: Strings auf HTML umstellen
 		String fehler = "";
 		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
@@ -84,6 +85,7 @@ public class Simulation
 			return fehler;
 		}
 		
+		//Führe alle Aktionen durch, die der Spieler auf der GUI eingestellt hat
 		aktuellerSpieler.nehmeDarlehenAuf(darlehenAufnehmen);
 		aktuellerSpieler.tilgeDarlehen(darlehenTilgen);
 		if(mitarbeiterAaenderung < 0)
@@ -138,13 +140,16 @@ public class Simulation
 			aktuellerSpieler.kaufeKlohaus(2, aenderungRastplatz);
 		}
 		
+		//Behandlung evtl. zugekaufter Sonderausstattungen
+		//Das boolean-Array enthält true für alle Sonderausstattungen, die in dieser Runde neu gekauft wurden
+		//Es enthält außerdem true, wenn das bereits gekaufte dickere Klopapier wieder abgeschafft werden soll
 		for (int i = 0; i < aktuellerSpieler.getKlos().length; i++)
 		{
 			for (int j = 0; j < neueSonderausstattungen[i].length; j++)
 			{
 				if (neueSonderausstattungen[i][j])
 				{
-					//Dickeres Klopapier
+					//Sonderfall: Dickeres Klopapier (j=4) soll wieder abgeschafft werden
 					if(j == 4 && aktuellerSpieler.getKlos()[i].getSonderausstattungen()[4])
 					{
 						aktuellerSpieler.dickeresKlopapierAbschaffen(i);
@@ -157,6 +162,7 @@ public class Simulation
 			}
 		}		
 		
+		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
 		return null;
 	}
 	
