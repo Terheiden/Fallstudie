@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
+import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
+import javax.swing.text.NumberFormatter;
 import javax.xml.stream.events.EndElement;
 
 import Klomanager.Simulation;
@@ -52,7 +54,7 @@ public class GUI extends JFrame implements ActionListener
 	private double preisBahnhof, preisRastplatz, preisStadt;
 	private boolean maFoBericht;
 	
-	private Simulation sim;
+	private static Simulation sim;
 
 
 	public GUI(String spielername)
@@ -62,7 +64,7 @@ public class GUI extends JFrame implements ActionListener
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(0, 0, 1008, 620);
 		
-		sim = new Simulation();
+
 		
 		//links
 		allgemeinPanel = new JPanel();
@@ -114,21 +116,43 @@ public class GUI extends JFrame implements ActionListener
 		maFoBericht = false;
 
 		// Objekte erzeugen
-
-		marketingAusgabenField = new JTextField("");
+		
+		//Formate für Felder
+		//TODO: Formatter nochmal druchtesten
+		NumberFormatter positiveInt = new NumberFormatter(); 
+		positiveInt.setMinimum(new Integer(0));
+		positiveInt.setAllowsInvalid(false);
+		
+		DecimalFormat format = new DecimalFormat("#0.00");
+		NumberFormatter positiveDouble = new NumberFormatter(format); 
+		positiveDouble.setMinimum(new Double(0));
+		positiveDouble.setMaximum(new Double(10.0));
+		//positiveDouble.setAllowsInvalid(false);
+		
 		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
 		anzStadtField = new JLabel(String.valueOf(anzStadt));
-		anzMitarbeiterBahnhofField = new JTextField("1");
-		anzMitarbeiterRastplatzField = new JTextField("1");
-		anzMitarbeiterStadtField = new JTextField("1");
+		anzMitarbeiterStadtField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterStadtField.setText("1");
+		anzMitarbeiterBahnhofField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterBahnhofField.setText("1");
+		anzMitarbeiterRastplatzField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterRastplatzField.setText("1");
+		
 		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
-		preisStadtField = new JTextField(String.valueOf(preisStadt));
-		preisBahnhofField = new JTextField(String.valueOf(preisBahnhof));
-		preisRastplatzField = new JTextField(String.valueOf(preisRastplatz));
-		darlehenAufnehmenField = new JTextField("0");
-		darlehenTilgungField = new JTextField("0");
+		preisStadtField = new JFormattedTextField(positiveDouble);
+		preisStadtField.setText(String.valueOf(preisStadt));
+		preisBahnhofField = new JFormattedTextField(positiveDouble);
+		preisBahnhofField.setText(String.valueOf(preisBahnhof));
+		preisRastplatzField = new JFormattedTextField(positiveDouble);
+		preisRastplatzField.setText(String.valueOf(preisRastplatz));
+		darlehenAufnehmenField = new JFormattedTextField(positiveInt);
+		darlehenAufnehmenField.setText("0");
+		darlehenTilgungField = new JFormattedTextField(positiveInt);
+		darlehenTilgungField.setText("0");
+		marketingAusgabenField = new JFormattedTextField(positiveInt);
+		marketingAusgabenField.setText("0");
 
 
 		// Sonderausstattungen initialisieren
@@ -149,67 +173,39 @@ public class GUI extends JFrame implements ActionListener
 
 
 
-		// Knöpfe initialisieren, Tooltips setzen
+		// Knöpfe initialisieren
 		neuKaufenStadt = new JButton("Miete ein neues Stadtklo");
 		neuKaufenStadt.addActionListener(this);
-		neuKaufenStadt.setToolTipText("<html><b>Stadtklohaus:</b>"
-				+ "<br>Kapazität: 15.000 Kunden"
-				+ "<br>Anschaffungskosten: 8.500€"
-				+ "<br>Fixkosten pro Periode: 3.550€</html>");		
+		
 		neuKaufenBahnhof = new JButton("Miete ein neues Bahnhofsklo");
 		neuKaufenBahnhof.addActionListener(this);
-		neuKaufenBahnhof.setToolTipText("<html><b>Bahnhofsklohaus:</b>"
-				+ "<br>Kapazität: 12.000 Kunden"
-				+ "<br>Anschaffungskosten: 10.000€"
-				+ "<br>Fixkosten pro Periode: 2.800€</html>");	
+
 		neuKaufenRastplatz = new JButton("Miete ein neues Rastplatzklo");
 		neuKaufenRastplatz.addActionListener(this);
-		neuKaufenRastplatz.setToolTipText("<html><b>Rastplatzklohaus:</b>"
-				+ "<br>Kapazität: 9.000 Kunden"
-				+ "<br>Anschaffungskosten: 6.000€"
-				+ "<br>Fixkosten pro Periode: 1.750€</html>");	
 		
 		verkaufeStadt = new JButton("Gebe ein Stadtklo ab");
 		verkaufeStadt.addActionListener(this);
-		verkaufeStadt.setToolTipText("<html><b>Achtung!</b>"
-				+ "<br>Beim Abgeben eines Klohauses"
-				+ "<br>entstehen Kosten von 2000€</html>");
+
 		verkaufeBahnhof = new JButton("Gebe ein Bahnhofsklo ab");
 		verkaufeBahnhof.addActionListener(this);
-		verkaufeBahnhof.setToolTipText("<html><b>Achtung!</b>"
-				+ "<br>Beim Abgeben eines Klohauses"
-				+ "<br>entstehen Kosten von 2000€</html>");
+
 		verkaufeRastplatz = new JButton("Gebe ein Rastplatzklo ab");
 		verkaufeRastplatz.addActionListener(this);
-		verkaufeRastplatz.setToolTipText("<html><b>Achtung!</b>"
-				+ "<br>Beim Abgeben eines Klohauses"
-				+ "<br>entstehen Kosten von 2000€</html>");
+
 		
 		maFoBerichtKaufen = new JButton("MaFoBericht kaufen");
 		maFoBerichtKaufen.addActionListener(this);
-		maFoBerichtKaufen.setToolTipText("<html><b>Marktforschung:</b>"
-				+ "<br><u>Kosten:</u> 5.000€ "//TODO mafo ändern zu checkbox
-				+ "<br>In der nächsten Runde wird ein Bericht erstellt,"
-				+ "<br>der einen Überblick über den Markt verschafft.</html>");
-		
 
 		mitarbeiterEinstellen = new JButton("Neuer Mitarbeiter");
 		mitarbeiterEinstellen.addActionListener(this);
-		mitarbeiterEinstellen.setToolTipText("<html><b>Neuer Mitarbeiter:</b>"
-				+ "<br><u>Einstellungskosten:</u> 2.000€"
-				+ "<br><u>Lohnkosten:</u> 950€"
-				+ "<br>Arbeitskräfte werden benötigt, "
-				+ "<br>um die Klohäuser zu reinigen.</html>");
 
 		mitarbeiterEntlassen = new JButton("Mitarbeiter feuern");
 		mitarbeiterEntlassen.addActionListener(this);
-		mitarbeiterEntlassen.setToolTipText("<html><b>Mitarbeiter entlassen:</b>"
-				+ "<br><u>Abfindungskosten:</u> 1.500€"
-				+ "<br>Verringere die Anzahl deiner Mitarbeiter, "
-				+ "<br>um Kosten einzusparen.</html>");
+
 		nächsteRunde = new JButton("Beende diese Runde");
 		nächsteRunde.addActionListener(this);
 		
+		setTooltippsButtons();
 
 		//Beschriftungslabel
 		preisLabel = new JLabel[3];
@@ -230,6 +226,47 @@ public class GUI extends JFrame implements ActionListener
 
 
 		buildWindow();
+	}
+
+	private void setTooltippsButtons()
+	{
+		neuKaufenStadt.setToolTipText("<html><b>Stadtklohaus:</b>"
+				+ "<br>Kapazität: 15.000 Kunden"
+				+ "<br>Anschaffungskosten: 8.500€"
+				+ "<br>Fixkosten pro Periode: 3.550€</html>");
+		neuKaufenBahnhof.setToolTipText("<html><b>Bahnhofsklohaus:</b>"
+				+ "<br>Kapazität: 12.000 Kunden"
+				+ "<br>Anschaffungskosten: 10.000€"
+				+ "<br>Fixkosten pro Periode: 2.800€</html>");	
+		neuKaufenRastplatz.setToolTipText("<html><b>Rastplatzklohaus:</b>"
+				+ "<br>Kapazität: 9.000 Kunden"
+				+ "<br>Anschaffungskosten: 6.000€"
+				+ "<br>Fixkosten pro Periode: 1.750€</html>");	
+		
+		verkaufeStadt.setToolTipText("<html><b>Achtung!</b>"
+				+ "<br>Beim Abgeben eines Klohauses"
+				+ "<br>entstehen Kosten von 2000€</html>");
+		verkaufeBahnhof.setToolTipText("<html><b>Achtung!</b>"
+				+ "<br>Beim Abgeben eines Klohauses"
+				+ "<br>entstehen Kosten von 2000€</html>");
+		verkaufeRastplatz.setToolTipText("<html><b>Achtung!</b>"
+				+ "<br>Beim Abgeben eines Klohauses"
+				+ "<br>entstehen Kosten von 2000€</html>");
+		
+		maFoBerichtKaufen.setToolTipText("<html><b>Marktforschung:</b>"
+				+ "<br><u>Kosten:</u> 5.000€ "//TODO mafo ändern zu checkbox
+				+ "<br>In der nächsten Runde wird ein Bericht erstellt,"
+				+ "<br>der einen Überblick über den Markt verschafft.</html>");
+		
+		mitarbeiterEinstellen.setToolTipText("<html><b>Neuer Mitarbeiter:</b>"
+				+ "<br><u>Einstellungskosten:</u> 2.000€"
+				+ "<br><u>Lohnkosten:</u> 950€"
+				+ "<br>Arbeitskräfte werden benötigt, "
+				+ "<br>um die Klohäuser zu reinigen.</html>");
+		mitarbeiterEntlassen.setToolTipText("<html><b>Mitarbeiter entlassen:</b>"
+				+ "<br><u>Abfindungskosten:</u> 1.500€"
+				+ "<br>Verringere die Anzahl deiner Mitarbeiter, "
+				+ "<br>um Kosten einzusparen.</html>");
 	}
 
 	private void setTooltippsSonder()
@@ -524,8 +561,6 @@ public class GUI extends JFrame implements ActionListener
 	}
 	
 	
-	
-	
 	private void beendeSpielerRunde(){
 		int[] tmpVerteilung = {Integer.parseInt(anzMitarbeiterStadtField.getText()),
 				Integer.parseInt(anzMitarbeiterBahnhofField.getText()),
@@ -552,17 +587,11 @@ public class GUI extends JFrame implements ActionListener
 		}
 	}
 	
-
-
+	//TODO: Prüfen, ob kleiner Null
 	@Override
 	public void actionPerformed(ActionEvent e)
-	{
-		// TODO 
-		// Button bestätigungen, auch nächste Runde beginnen, werte anzeigen
-		// usw.: Methoden aufrufen
-		
-		Object object = e.getSource();
-	
+	{		
+		Object object = e.getSource();	
 
 		//Mitarbeiterzahl ändern
 		if(object == mitarbeiterEinstellen){
@@ -579,8 +608,7 @@ public class GUI extends JFrame implements ActionListener
 				maFoBerichtKaufen.setText("MafoBericht nicht kaufen");
 			}else{
 				maFoBerichtKaufen.setText("MafoBericht kaufen");
-			}
-			
+			}		
 		}
 		if(object == nächsteRunde){
 			System.out.println("nächsteRunde ...");
@@ -613,7 +641,54 @@ public class GUI extends JFrame implements ActionListener
 			anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
 		}
 	}
-
-
+	//Auch Anfang des Spiels untergebracht
+	public static void main(String[] args)
+	{	
+		
+		//Fehler abfangen, evtl auch Wahlmöglichkeiten vorgeben(dropdown oder radioButton)
+		String eingabe = JOptionPane.showInputDialog(null,"Geben Sie die Anzahl der Spieler ein.",
+                "Klomanager - Spielbeginn",
+                JOptionPane.PLAIN_MESSAGE);
+		
+		if(eingabe==null) System.exit(0);	
+		int spielerZahl = Integer.parseInt(eingabe);
+		
+		// Erstellung Array vom Datentyp Object, Hinzufügen der Komponenten		
+		JTextField[] name = new JTextField[spielerZahl];
+		for(int i=0; i<spielerZahl;i++){
+			name[i] = new JTextField();
+		}
+        Object[] message = {"Geben Sie die Namen der Spieler ein.", name};
+ 
+        JOptionPane pane = new JOptionPane( message, 
+                                                JOptionPane.PLAIN_MESSAGE, 
+                                                JOptionPane.OK_OPTION);
+        pane.createDialog(null, "Klomanager - Namen geben").setVisible(true);
+        
+        //Spieler erzeugen
+        Spieler[] spieler = new Spieler[spielerZahl];
+		for (int i = 0; i < spielerZahl; i++)
+		{
+			spieler[i] = new Spieler(name[i].getText());
+			System.out.println(spieler[i].getName());
+		}
+		//Simulation
+		sim = new Simulation(spieler);
+        
+        //GUI erzeugen
+		GUI win = new GUI(spieler[0].getName());	
+		
+		
+		//TESTS
+		//int[] tmpA = {3,3,4};
+		boolean[][] tmpB = {{false,false,false,false,false,false,false,false},
+				{false,true,false,true,false,true,false,true},
+				{true,true,true,true,true,true,true,true}};
+		
+		
+		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
+				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
+				100, 100, 50, 2, 2, 3, tmpB);
+	}
 	
 }

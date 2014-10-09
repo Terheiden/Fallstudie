@@ -15,14 +15,14 @@ public class Simulation
 	
 	private int runde;
 	//TODO: Dummy später entfernen
-	private Spieler[] spieler = {new Spieler("1"), new Spieler("2"), new Spieler("3")};
+	private Spieler[] spieler ;
 	private Spieler aktuellerSpieler;
 	private byte[] schuldenfrei;
 	
-	public Simulation()
+	public Simulation(Spieler[] spieler)
 	{
 		runde = 1;
-		//TODO: Hier die Spieler erstellen
+		this.spieler = spieler;
 		aktuellerSpieler = spieler[0];
 		schuldenfrei = new byte[spieler.length];
 	}
@@ -539,7 +539,7 @@ public class Simulation
 	}
 	
 	//TESTMETHODE
-	public static void main(String args[])
+	/*public static void main(String args[])
 	{
 		Simulation s = new Simulation();
 		
@@ -553,6 +553,6 @@ public class Simulation
 		
 		int[] array = {1,2,1};
 		System.out.println(s.spielerRundeBeendet(999999999, 0, 0, false, 2000, array, 50, 50, 50, 0, 0, 0, null));
-	}
+	}*/
 
 }
