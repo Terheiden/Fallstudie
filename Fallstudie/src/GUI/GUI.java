@@ -11,6 +11,10 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
+import javax.xml.stream.events.EndElement;
+
+import Klomanager.Simulation;
+import Klomanager.Spieler;
 
 public class GUI extends JFrame implements ActionListener
 {
@@ -24,7 +28,6 @@ public class GUI extends JFrame implements ActionListener
 	private JButton mitarbeiterEinstellen, mitarbeiterEntlassen, nächsteRunde;
 	private JButton maFoBerichtKaufen;
 
-	private JTextArea kennzahlenArea;
 	//Ausgabelabel 
 	//TODO: field in label umtaufen
 	private JLabel anzBahnhofField, anzRastplatzField, anzStadtField, bankField, darlehenField;
@@ -43,22 +46,23 @@ public class GUI extends JFrame implements ActionListener
 	private JLabel kloAnzahlLabel[], darlehenAufnehmenLabel,darlehenTilgenLabel;
 	private JLabel mitarbeiterAnzLabel;
 
-	private String kennzahlenText;
 	private int anzMitarbeiterGes, anzBahnhof, anzRastplatz, anzStadt;
 	private int aenderungMitarbeiter, aenderungStadt, aenderungBahnhof, aenderungRastplatz;
-	private int anzMitarbeiterBahnhof, anzMitarbeiterRastplatz,
-			anzMitarbeiterStadt;
+
 	private double preisBahnhof, preisRastplatz, preisStadt;
+	private boolean maFoBericht;
+	
+	private Simulation sim;
 
-	/*
-	 * TODO: Werte einlesen und ausgeben 
-	 * Buttons mit simplen funktionen versehen
-	 */
 
-	public GUI()
-	{
-		super("Klomanager");
+	public GUI(String spielername)
+	{		
+		super("Klomanager - " + spielername);
+		setVisible(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(0, 0, 1008, 620);
+		
+		sim = new Simulation();
 		
 		//links
 		allgemeinPanel = new JPanel();
@@ -93,8 +97,6 @@ public class GUI extends JFrame implements ActionListener
 		karteLabel = new JLabel(new ImageIcon(karte));
 		
 		// Variablen initialisieren
-		//TODO: variablen rauswerfen
-		kennzahlenText = "Hier steht die GUV und sonstige vom Spiel erstellte Ausgaben. ";
 		//klos
 		anzStadt = 1;
 		anzBahnhof = 1;
@@ -106,11 +108,10 @@ public class GUI extends JFrame implements ActionListener
 		preisRastplatz = 0.5;
 		preisStadt = 0.5;
 		//Mitarbeiter
-		anzMitarbeiterGes = 3;
-		anzMitarbeiterBahnhof = 1;
-		anzMitarbeiterRastplatz = 1;
-		anzMitarbeiterStadt = 1;		
+		anzMitarbeiterGes = 3;	
 		aenderungMitarbeiter = 0;
+		
+		maFoBericht = false;
 
 		// Objekte erzeugen
 
@@ -118,77 +119,33 @@ public class GUI extends JFrame implements ActionListener
 		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
 		anzStadtField = new JLabel(String.valueOf(anzStadt));
-		anzMitarbeiterBahnhofField = new JTextField(
-				String.valueOf(anzMitarbeiterBahnhof));
-		anzMitarbeiterRastplatzField = new JTextField(
-				String.valueOf(anzMitarbeiterRastplatz));
-		anzMitarbeiterStadtField = new JTextField(
-				String.valueOf(anzMitarbeiterStadt));
+		anzMitarbeiterBahnhofField = new JTextField("1");
+		anzMitarbeiterRastplatzField = new JTextField("1");
+		anzMitarbeiterStadtField = new JTextField("1");
 		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
 		preisStadtField = new JTextField(String.valueOf(preisStadt));
 		preisBahnhofField = new JTextField(String.valueOf(preisBahnhof));
 		preisRastplatzField = new JTextField(String.valueOf(preisRastplatz));
-		darlehenField = new JLabel("50.000");
-		darlehenAufnehmenField = new JTextField("");
-		darlehenTilgungField = new JTextField("");
-		bankField = new JLabel("15.000");
+		darlehenAufnehmenField = new JTextField("0");
+		darlehenTilgungField = new JTextField("0");
+
 
 		// Sonderausstattungen initialisieren
 		sonderausstattungen = new JCheckBox[3][8];
+		
 		for (int i = 0; i < 3; i++)
 		{
 			sonderausstattungen[i][0] = new JCheckBox("<html>Handtrockner</html>");
-			sonderausstattungen[i][0].setToolTipText("<html><b>Handtrockner:</b>"
-					+ "<br><u>Kosten:</u> 900€ pro Klohaus"
-					+ "<br>Es wird kein Papier mehr verbraucht,"
-					+ "<br>um die Hände zu trocknen."
-					+ "<br>Dafür jedoch mehr Strom.</html>");
-			
-			sonderausstattungen[i][1] = new JCheckBox(
-					"<html>wassersparende<br>Klospülung</html>");
-			sonderausstattungen[i][1].setToolTipText("<html><b>Wassersparende Spülung:</b>"
-					+ "<br><u>Kosten:</u> 3.000€ pro Klohaus"
-					+ "<br>Verringert den Wasserverbauch.</html>");
-			
-			sonderausstattungen[i][2] = new JCheckBox(
-					"<html>selbstreinigende<br>Toiletten</html>");
-			sonderausstattungen[i][2].setToolTipText("<html><b>Selbstreinigende Toiletten:</b>"
-					+ "<br><u>Kosten:</u> 5.000€ pro Klohaus"
-					+ "<br>Erhöht zwar leicht den Stromverbrauch,"
-					+ "<br>doch die Besucher und Putzkräfte"
-					+ "<br>wissen dies zu schätzen.</html>");
-			
-			sonderausstattungen[i][3] = new JCheckBox(
-					"<html>berührungslose<br>Wasserhähne</html>");
-			sonderausstattungen[i][3].setToolTipText("<html><b>Berührungslose Wasserhähne:</b>"
-					+ "<br><u>Kosten:</u> 600€ pro Klohaus"
-					+ "<br>Spart Wasser und ist für die Besucher angenehmer.</html>");
-			
-			sonderausstattungen[i][4] = new JCheckBox(
-					"<html>dickeres<br>Klopapier</html>");
-			sonderausstattungen[i][4].setToolTipText("<html><b>Dickeres Toilettenpapier:</b>"
-					+ "<br><u>Kosten:</u> abhängig von der Kundenanzahl"
-					+ "<br>Viele Kunden wissen dies zu schätzen.</html>");
-			
+			sonderausstattungen[i][1] = new JCheckBox("<html>wassersparende<br>Klospülung</html>");
+			sonderausstattungen[i][2] = new JCheckBox("<html>selbstreinigende<br>Toiletten</html>");			
+			sonderausstattungen[i][3] = new JCheckBox("<html>berührungslose<br>Wasserhähne</html>");
+			sonderausstattungen[i][4] = new JCheckBox("<html>dickeres<br>Klopapier</html>");
 			sonderausstattungen[i][5] = new JCheckBox("<html>Kondomautomat</html>");
-			sonderausstattungen[i][5].setToolTipText("<html><b>Kondomautomat:</b>"
-					+ "<br><u>Kosten:</u> 1.100€ pro Klohaus"
-					+ "<br>Ein Service für Kunden und vielleicht"
-					+ "<br>auch ein lohnendes Geschäft.</html>");
-			
 			sonderausstattungen[i][6] = new JCheckBox("<html>Kaugummiautomat</html>");
-			sonderausstattungen[i][6].setToolTipText("<html><b>Kaugummiautomat:</b>"
-					+ "<br><u>Kosten:</u> 500€ pro Klohaus"
-					+ "<br>Ein Service für Kunden und vielleicht"
-					+ "<br>auch ein lohnendes Geschäft.</html>");
-			
 			sonderausstattungen[i][7] = new JCheckBox("<html>Münzpressautomat</html>");
-			sonderausstattungen[i][7].setToolTipText("<html><b>Münzpressautomat:</b>"
-					+ "<br><u>Kosten:</u> 900€ pro Klohaus"
-					+ "<br>Ein Service für Kunden und vielleicht"
-					+ "<br>auch ein lohnendes Geschäft.</html>");
 		}
+		setTooltippsSonder();
 
 
 
@@ -273,6 +230,44 @@ public class GUI extends JFrame implements ActionListener
 
 
 		buildWindow();
+	}
+
+	private void setTooltippsSonder()
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			sonderausstattungen[i][0].setToolTipText("<html><b>Handtrockner:</b>"
+					+ "<br><u>Kosten:</u> 900€ pro Klohaus"
+					+ "<br>Es wird kein Papier mehr verbraucht,"
+					+ "<br>um die Hände zu trocknen."
+					+ "<br>Dafür jedoch mehr Strom.</html>");
+			sonderausstattungen[i][1].setToolTipText("<html><b>Wassersparende Spülung:</b>"
+					+ "<br><u>Kosten:</u> 3.000€ pro Klohaus"
+					+ "<br>Verringert den Wasserverbauch.</html>");
+			sonderausstattungen[i][2].setToolTipText("<html><b>Selbstreinigende Toiletten:</b>"
+					+ "<br><u>Kosten:</u> 5.000€ pro Klohaus"
+					+ "<br>Erhöht zwar leicht den Stromverbrauch,"
+					+ "<br>doch die Besucher und Putzkräfte"
+					+ "<br>wissen dies zu schätzen.</html>");
+			sonderausstattungen[i][3].setToolTipText("<html><b>Berührungslose Wasserhähne:</b>"
+					+ "<br><u>Kosten:</u> 600€ pro Klohaus"
+					+ "<br>Spart Wasser und ist für die Besucher angenehmer.</html>");
+			sonderausstattungen[i][4].setToolTipText("<html><b>Dickeres Toilettenpapier:</b>"
+					+ "<br><u>Kosten:</u> abhängig von der Kundenanzahl"
+					+ "<br>Viele Kunden wissen dies zu schätzen.</html>");
+			sonderausstattungen[i][5].setToolTipText("<html><b>Kondomautomat:</b>"
+					+ "<br><u>Kosten:</u> 1.100€ pro Klohaus"
+					+ "<br>Ein Service für Kunden und vielleicht"
+					+ "<br>auch ein lohnendes Geschäft.</html>");
+			sonderausstattungen[i][6].setToolTipText("<html><b>Kaugummiautomat:</b>"
+					+ "<br><u>Kosten:</u> 500€ pro Klohaus"
+					+ "<br>Ein Service für Kunden und vielleicht"
+					+ "<br>auch ein lohnendes Geschäft.</html>");
+			sonderausstattungen[i][7].setToolTipText("<html><b>Münzpressautomat:</b>"
+					+ "<br><u>Kosten:</u> 900€ pro Klohaus"
+					+ "<br>Ein Service für Kunden und vielleicht"
+					+ "<br>auch ein lohnendes Geschäft.</html>");
+		}
 	}
 
 	private void buildWindow()
@@ -469,60 +464,95 @@ public class GUI extends JFrame implements ActionListener
 		}
 
 	}
-	
-	static void addComponent(Container cont, GridBagLayout gbl, Component c,
-			int x, int y, int width, int height, double weightx, double weighty)
-	{
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridx = x;
-		gbc.gridy = y;
-		gbc.gridwidth = width;
-		gbc.gridheight = height;
-		gbc.weightx = weightx;
-		gbc.weighty = weighty;
-		gbl.setConstraints(c, gbc);
-		cont.add(c);
-	}
 
 
-	public void wechselSpieler(){
-		// TODO 
-		// Methode mit aktualisieren implementieren
+	public void wechselSpieler(String spielerName, int marketingbudget, 
+			int mitarbeiterAnzahl, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
+			int preisRastplatz, int anzStadt, int anzBahnhof, int anzRastplatz, boolean[][] sonderausstattungen){
+		this.setTitle("Klomanager - " + spielerName);
+		
+		//Startbedingungen
 		aenderungStadt = 0;
 		aenderungBahnhof = 0;
 		aenderungRastplatz = 0;
-		aenderungMitarbeiter = 0;
-		this.aktualisiereGUI();
+		aenderungMitarbeiter = 0;				
+		setTooltippsSonder();//Setzt die Tooltipps auf Ausgangswerte
+		maFoBericht = false;
+		maFoBerichtKaufen.setText("MafoBericht kaufen");
+		darlehenAufnehmenField.setText("0");
+		darlehenTilgungField.setText("0");
 		
-		// Sonderausstattungen ausgewählt
-		for (int i = 0; i < 3; i++)// nach region (mit if region gewählt evtl schneller?)
+		anzMitarbeiterGes = mitarbeiterAnzahl;		
+		this.anzStadt = anzStadt;
+		this.anzBahnhof = anzBahnhof;
+		this.anzRastplatz = anzRastplatz;
+		
+		// Sonderausstattungen schon vorher gekauft
+		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
-				if (sonderausstattungen[i][j].isSelected())
+				if (sonderausstattungen[i][j])//falls schon gekauft
 				{
 					if (j != 4)
 					{ // dickeres Klopapier(4) kann auch wieder abgewählt werden
-
-						// System.out.println(region[i].getText() + " " +
-						// sonderausstattungen[i][j].getText());
-						sonderausstattungen[i][j].setEnabled(false);
-						sonderausstattungen[i][j]
-								.setToolTipText("Bereits gekauft.");
+						//this.sonderausstattungen[i][j].setSelected(true); nicht möglich, wegen Abfrage der neuen
+						this.sonderausstattungen[i][j].setEnabled(false);
+						this.sonderausstattungen[i][j].setToolTipText("Bereits gekauft.");
+					}else{//nur für Klopapier(4)
+						this.sonderausstattungen[i][j].setSelected(true);
 					}
+					
 				}
 			}
 		}
+		//alle Preise /100 (Umrechnung Cent in Euro)		
+		marketingAusgabenField.setText(String.valueOf(marketingbudget/100));
 		
+		preisStadtField.setText(String.valueOf(preisStadt/100.0));
+		preisBahnhofField.setText(String.valueOf(preisBahnhof/100.0));
+		preisRastplatzField.setText(String.valueOf(preisRastplatz/100.0));
+		
+		anzStadtField.setText(String.valueOf(this.anzStadt));
+		anzBahnhofField.setText(String.valueOf(this.anzBahnhof));
+		anzRastplatzField.setText(String.valueOf(this.anzRastplatz));
+		
+		anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes));
+		anzMitarbeiterStadtField.setText(String.valueOf(mitarbeiterVerteilung[0]));
+		anzMitarbeiterBahnhofField.setText(String.valueOf(mitarbeiterVerteilung[1]));
+		anzMitarbeiterRastplatzField.setText(String.valueOf(mitarbeiterVerteilung[2]));
 	}
 	
-	private void aktualisiereGUI()
-	{
-		// TODO 
-		// Welche Werte fehlen? ( noch alle :D ) 
-		
+	
+	
+	
+	private void beendeSpielerRunde(){
+		int[] tmpVerteilung = {Integer.parseInt(anzMitarbeiterStadtField.getText()),
+				Integer.parseInt(anzMitarbeiterBahnhofField.getText()),
+				Integer.parseInt(anzMitarbeiterRastplatzField.getText())};
+		boolean[][] tmpSonderausstattungen = new boolean[3][8];
+		for (int i = 0; i < 3; i++){
+			for (int j = 0; j < 8; j++){
+				if (sonderausstattungen[i][j].isSelected())//falls schon gekauft
+				{
+					tmpSonderausstattungen[i][j]= true;				
+				}
+			}
+		}
+		//alle Preise *100 wegen Centberechnung
+		String fehlerString = sim.spielerRundeBeendet(Integer.parseInt(darlehenAufnehmenField.getText())*100, 
+				Integer.parseInt(darlehenTilgungField.getText())*100, aenderungMitarbeiter, 
+				maFoBericht, Integer.parseInt(marketingAusgabenField.getText())*100, tmpVerteilung,
+				(int)(Double.parseDouble(preisStadtField.getText())*100), (int)(Double.parseDouble(preisBahnhofField.getText())*100), 
+				(int)(Double.parseDouble(preisRastplatzField.getText())*100), 
+				aenderungStadt, aenderungBahnhof, aenderungRastplatz, 
+				tmpSonderausstattungen); 
+		if(fehlerString != null){
+            JOptionPane.showMessageDialog(null,fehlerString,"Fehler",JOptionPane.WARNING_MESSAGE);	
+		}
 	}
+	
+
 
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -537,19 +567,24 @@ public class GUI extends JFrame implements ActionListener
 		//Mitarbeiterzahl ändern
 		if(object == mitarbeiterEinstellen){
 			aenderungMitarbeiter++;
-			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
+			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));			
 		}
 		if(object == mitarbeiterEntlassen){
 			aenderungMitarbeiter--;
 			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
 		}
-		if(object == maFoBerichtKaufen){
-			System.out.println("Mafo-Bericht kaufen ...");
-			//TODO
+		if(object == maFoBerichtKaufen){			
+			maFoBericht = !maFoBericht;
+			if(maFoBericht){
+				maFoBerichtKaufen.setText("MafoBericht nicht kaufen");
+			}else{
+				maFoBerichtKaufen.setText("MafoBericht kaufen");
+			}
+			
 		}
 		if(object == nächsteRunde){
 			System.out.println("nächsteRunde ...");
-			//TODO 
+			beendeSpielerRunde();
 		}
 		
 		//Klohäuser anmieten/abgeben
@@ -580,12 +615,5 @@ public class GUI extends JFrame implements ActionListener
 	}
 
 
-	public static void main(String[] args)
-	{
-		GUI win = new GUI();
-		win.setVisible(true);
-		win.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-	}
 	
 }

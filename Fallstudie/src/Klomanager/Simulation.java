@@ -75,6 +75,9 @@ public class Simulation
 		{
 			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €!";
 		}
+		//es müssten erst das Personal eingestellt werden ... sonst stimmt die Verteilung nie :D
+		// außer man sagt, dass die mitarbeiter erst eine Runde später zur Verfügung stehen
+		// aber dann brauch man veränderungsfelder in der gui und as ist mir zu viel Arbeit ;)
 		aktuellerSpieler.getPersonal().setVerteilung(mitarbeiterVerteilung);
 		if(!aktuellerSpieler.getPersonal().pruefeVerteilung())
 		{
