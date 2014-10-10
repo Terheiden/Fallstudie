@@ -18,7 +18,7 @@ public class Personal
 		this.besitzer = besitzer;
 	}
 	
-	public boolean pruefeVerteilung()
+	public static boolean pruefeVerteilung(int[] verteilung,  int gesamtAnzahl)
 	{
 		int insgesamtVerteilt = 0;
 		

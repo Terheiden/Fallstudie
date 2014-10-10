@@ -14,9 +14,10 @@ public class Simulation
 	private static final int MUAERLOES = 200; //2,00 €
 	
 	private int runde;
-	//TODO: Dummy später entfernen
 	private Spieler[] spieler ;
 	private Spieler aktuellerSpieler;
+	//Nummer des Spielers aktuellerSpieler
+	private int spielernummer;
 	private byte[] schuldenfrei;
 	
 	public Simulation(Spieler[] spieler)
@@ -24,6 +25,7 @@ public class Simulation
 		runde = 1;
 		this.spieler = spieler;
 		aktuellerSpieler = spieler[0];
+		spielernummer = 0;
 		schuldenfrei = new byte[spieler.length];
 	}
 
@@ -56,6 +58,13 @@ public class Simulation
 	 * --> DONE
 	 */
 	
+	public void spielerRundeStart()
+	{
+		spielernummer = (spielernummer + 1) % spieler.length;
+		
+		//TODO:
+	}
+	
 	/**
 	 * Nimm alle Preise *100!!!
 	 * String mit Fehlertext
@@ -75,11 +84,8 @@ public class Simulation
 		{
 			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €!";
 		}
-		//es müssten erst das Personal eingestellt werden ... sonst stimmt die Verteilung nie :D
-		// außer man sagt, dass die mitarbeiter erst eine Runde später zur Verfügung stehen
-		// aber dann brauch man veränderungsfelder in der gui und as ist mir zu viel Arbeit ;)
 		aktuellerSpieler.getPersonal().setVerteilung(mitarbeiterVerteilung);
-		if(!aktuellerSpieler.getPersonal().pruefeVerteilung())
+		if(!Personal.pruefeVerteilung(mitarbeiterVerteilung, aktuellerSpieler.getPersonal().getGesamtAnzahl() + mitarbeiterAaenderung))
 		{
 			fehler += "Es kann nicht mehr Personal auf die Klos verteilt werden als insgesamt zur Verfügung steht!";
 		}
@@ -193,6 +199,8 @@ public class Simulation
 		}
 		
 		erzeugeEreignis();
+		
+		runde++;
 	}
 	
 	private void erstelleHistorie()
