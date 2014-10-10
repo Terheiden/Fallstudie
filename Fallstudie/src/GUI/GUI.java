@@ -52,7 +52,7 @@ public class GUI extends JFrame implements ActionListener
 	private int aenderungMitarbeiter, aenderungStadt, aenderungBahnhof, aenderungRastplatz;
 
 	private double preisBahnhof, preisRastplatz, preisStadt;
-	private boolean maFoBericht;
+	private boolean maFoBerichtBool;
 	
 	private static Simulation sim;
 
@@ -113,12 +113,12 @@ public class GUI extends JFrame implements ActionListener
 		anzMitarbeiterGes = 3;	
 		aenderungMitarbeiter = 0;
 		
-		maFoBericht = false;
+		maFoBerichtBool = false;
 
 		// Objekte erzeugen
 		
 		//Formate für Felder
-		//TODO: Formatter nochmal druchtesten
+		//TODO: Formatter nochmal durchtesten
 		NumberFormatter positiveInt = new NumberFormatter(); 
 		positiveInt.setMinimum(new Integer(0));
 		positiveInt.setAllowsInvalid(false);
@@ -505,7 +505,8 @@ public class GUI extends JFrame implements ActionListener
 
 	public void wechselSpieler(String spielerName, int marketingbudget, 
 			int mitarbeiterAnzahl, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
-			int preisRastplatz, int anzStadt, int anzBahnhof, int anzRastplatz, boolean[][] sonderausstattungen){
+			int preisRastplatz, int anzStadt, int anzBahnhof, int anzRastplatz, 
+			boolean[][] sonderausstattungen, String kennzahlen, String GuV, String maFoBericht){
 		this.setTitle("Klomanager - " + spielerName);
 		
 		//Startbedingungen
@@ -514,7 +515,7 @@ public class GUI extends JFrame implements ActionListener
 		aenderungRastplatz = 0;
 		aenderungMitarbeiter = 0;				
 		setTooltippsSonder();//Setzt die Tooltipps auf Ausgangswerte
-		maFoBericht = false;
+		maFoBerichtBool = false;
 		maFoBerichtKaufen.setText("MafoBericht kaufen");
 		darlehenAufnehmenField.setText("0");
 		darlehenTilgungField.setText("0");
@@ -555,7 +556,7 @@ public class GUI extends JFrame implements ActionListener
 		anzRastplatzField.setText(String.valueOf(this.anzRastplatz));
 		
 		anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes));
-		anzMitarbeiterStadtField.setText(String.valueOf(mitarbeiterVerteilung[0]));
+		//anzMitarbeiterStadtField.setText(String.valueOf(mitarbeiterVerteilung[0]));
 		anzMitarbeiterBahnhofField.setText(String.valueOf(mitarbeiterVerteilung[1]));
 		anzMitarbeiterRastplatzField.setText(String.valueOf(mitarbeiterVerteilung[2]));
 	}
@@ -577,7 +578,7 @@ public class GUI extends JFrame implements ActionListener
 		//alle Preise *100 wegen Centberechnung
 		String fehlerString = sim.spielerRundeBeendet(Integer.parseInt(darlehenAufnehmenField.getText())*100, 
 				Integer.parseInt(darlehenTilgungField.getText())*100, aenderungMitarbeiter, 
-				maFoBericht, Integer.parseInt(marketingAusgabenField.getText())*100, tmpVerteilung,
+				maFoBerichtBool, Integer.parseInt(marketingAusgabenField.getText())*100, tmpVerteilung,
 				(int)(Double.parseDouble(preisStadtField.getText())*100), (int)(Double.parseDouble(preisBahnhofField.getText())*100), 
 				(int)(Double.parseDouble(preisRastplatzField.getText())*100), 
 				aenderungStadt, aenderungBahnhof, aenderungRastplatz, 
@@ -603,8 +604,8 @@ public class GUI extends JFrame implements ActionListener
 			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
 		}
 		if(object == maFoBerichtKaufen){			
-			maFoBericht = !maFoBericht;
-			if(maFoBericht){
+			maFoBerichtBool = !maFoBerichtBool;
+			if(maFoBerichtBool){
 				maFoBerichtKaufen.setText("MafoBericht nicht kaufen");
 			}else{
 				maFoBerichtKaufen.setText("MafoBericht kaufen");
@@ -688,7 +689,7 @@ public class GUI extends JFrame implements ActionListener
 		
 		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
 				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
-				100, 100, 50, 2, 2, 3, tmpB);
+				100, 100, 50, 2, 2, 3, tmpB, "<html>Kennzahlen</html>","GuV","mafo");
 	}
 	
 }
