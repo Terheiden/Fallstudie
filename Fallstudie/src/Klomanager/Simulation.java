@@ -173,6 +173,8 @@ public class Simulation
 		
 		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
 		return null;
+		
+		//TODO: muss hier nicht noch der nächste Spieler gewählt werden und dann die Anzeige angestoßen werden? 
 	}
 	
 	public void simuliere()
@@ -195,6 +197,8 @@ public class Simulation
 		if(pruefeGewinnbedingung() != null)
 		{
 			//TODO: Sonst noch was zu tun hier?
+			//vllt einen Sieger küren? wäre dann auch was für die GUI arbeit(Steffen war hier, falls 
+			// du dir das nicht am Rand zeigen lässt ;))
 			return;
 		}
 		

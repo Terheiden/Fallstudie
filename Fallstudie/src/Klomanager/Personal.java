@@ -12,6 +12,12 @@ public class Personal
 	public Personal(Spieler besitzer)
 	{
 		//TODO: Anzahl bzw. Verteilung setzen? Mit Startwert von GUI?
+		gesamtAnzahl = 3;
+		verteilung = new int[3];
+		verteilung[0] = 1;
+		verteilung[1] = 1;
+		verteilung[2] = 1;
+		
 		gehalt = 95000; //950 €
 		einstellungskosten = 200000; // 2.000 €
 		kuendigungskosten = 150000; // 1.500 €

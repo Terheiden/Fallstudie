@@ -254,7 +254,7 @@ public class GUI extends JFrame implements ActionListener
 				+ "<br>entstehen Kosten von 2000€</html>");
 		
 		maFoBerichtKaufen.setToolTipText("<html><b>Marktforschung:</b>"
-				+ "<br><u>Kosten:</u> 5.000€ "//TODO mafo ändern zu checkbox
+				+ "<br><u>Kosten:</u> 5.000€ "
 				+ "<br>In der nächsten Runde wird ein Bericht erstellt,"
 				+ "<br>der einen Überblick über den Markt verschafft.</html>");
 		
@@ -556,9 +556,11 @@ public class GUI extends JFrame implements ActionListener
 		anzRastplatzField.setText(String.valueOf(this.anzRastplatz));
 		
 		anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes));
-		//anzMitarbeiterStadtField.setText(String.valueOf(mitarbeiterVerteilung[0]));
+		anzMitarbeiterStadtField.setText(String.valueOf(mitarbeiterVerteilung[0]));
 		anzMitarbeiterBahnhofField.setText(String.valueOf(mitarbeiterVerteilung[1]));
 		anzMitarbeiterRastplatzField.setText(String.valueOf(mitarbeiterVerteilung[2]));
+		
+		//TODO: Berichte darstellen
 	}
 	
 	
