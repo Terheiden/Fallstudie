@@ -16,6 +16,7 @@ public class Simulation
 	private int runde;
 	private Spieler[] spieler ;
 	private Spieler aktuellerSpieler;
+	private GUI gui;
 	//Nummer des Spielers aktuellerSpieler
 	private int spielernummer;
 	private byte[] schuldenfrei;
@@ -61,8 +62,20 @@ public class Simulation
 	public void spielerRundeStart()
 	{
 		spielernummer = (spielernummer + 1) % spieler.length;
+		aktuellerSpieler = spieler[spielernummer];
 		
-		//TODO:
+		boolean[][] sonderausstattungen = new boolean[3][8];
+		sonderausstattungen[0] = aktuellerSpieler.getKlos()[0].getSonderausstattungen();
+		sonderausstattungen[1] = aktuellerSpieler.getKlos()[1].getSonderausstattungen();
+		sonderausstattungen[2] = aktuellerSpieler.getKlos()[2].getSonderausstattungen();
+		
+		gui.wechselSpieler(aktuellerSpieler.getName(), aktuellerSpieler.getMarketingbudget(), aktuellerSpieler.getPersonal().getGesamtAnzahl(),
+				aktuellerSpieler.getPersonal().getVerteilung(), aktuellerSpieler.getKlos()[0].getPreis(), aktuellerSpieler.getKlos()[1].getPreis(),
+				aktuellerSpieler.getKlos()[2].getPreis(), aktuellerSpieler.getKlos()[0].getAnzahl(), aktuellerSpieler.getKlos()[1].getAnzahl(),
+				aktuellerSpieler.getKlos()[2].getAnzahl(), sonderausstattungen, aktuellerSpieler.erstelleKennzahlen(), aktuellerSpieler.getGuv().erstelleGuV(),
+				aktuellerSpieler.getMafobericht());
+		
+		aktuellerSpieler.setGuv(new GuV(aktuellerSpieler, aktuellerSpieler.getGuv()));
 	}
 	
 	/**
@@ -170,6 +183,14 @@ public class Simulation
 				}
 			}
 		}		
+		
+		//Wenn dies der letzte Spieler war, simuliere den Wirtschaftsablauf
+		if(spielernummer == spieler.length - 1)
+		{
+			simuliere();
+		}
+		
+		spielerRundeStart();
 		
 		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
 		return null;
@@ -328,7 +349,7 @@ public class Simulation
 		{
 			if(spieler[i].isMafoberichtGefordert())
 			{
-				//TODO: String für Mafobericht erzeugen
+				spieler[i].setMafobericht(erstelleMaFoBericht());
 				spieler[i].setMafoberichtGefordert(false);
 			}
 			else
@@ -586,6 +607,70 @@ public class Simulation
 		}
 
 		return klosGesamt * multiplikator;
+	}
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
+	public int getRunde()
+	{
+		return runde;
+	}
+
+	public void setRunde(int runde)
+	{
+		this.runde = runde;
+	}
+
+	public Spieler[] getSpieler()
+	{
+		return spieler;
+	}
+
+	public void setSpieler(Spieler[] spieler)
+	{
+		this.spieler = spieler;
+	}
+
+	public Spieler getAktuellerSpieler()
+	{
+		return aktuellerSpieler;
+	}
+
+	public void setAktuellerSpieler(Spieler aktuellerSpieler)
+	{
+		this.aktuellerSpieler = aktuellerSpieler;
+	}
+
+	public GUI getGui()
+	{
+		return gui;
+	}
+
+	public void setGui(GUI gui)
+	{
+		this.gui = gui;
+	}
+
+	public int getSpielernummer()
+	{
+		return spielernummer;
+	}
+
+	public void setSpielernummer(int spielernummer)
+	{
+		this.spielernummer = spielernummer;
+	}
+
+	public byte[] getSchuldenfrei()
+	{
+		return schuldenfrei;
+	}
+
+	public void setSchuldenfrei(byte[] schuldenfrei)
+	{
+		this.schuldenfrei = schuldenfrei;
 	}
 	
 	//TESTMETHODE

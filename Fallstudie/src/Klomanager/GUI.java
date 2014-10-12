@@ -1,4 +1,4 @@
-package GUI;
+package Klomanager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,9 +14,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 import javax.swing.text.NumberFormatter;
 import javax.xml.stream.events.EndElement;
-
-import Klomanager.Simulation;
-import Klomanager.Spieler;
 
 public class GUI extends JFrame implements ActionListener
 {
@@ -743,7 +740,8 @@ public class GUI extends JFrame implements ActionListener
 		Simulation simu = new Simulation(spieler);
         
         //GUI erzeugen
-		GUI win = new GUI(spieler[0].getName(), simu);	
+		GUI win = new GUI(spieler[0].getName(), simu);
+		simu.setGui(win);
 		
 		
 		//TODO: TESTS
@@ -755,9 +753,9 @@ public class GUI extends JFrame implements ActionListener
 				{true,true,true,true,true,true,true,true}};
 		
 		//Mafobericht kann noch nicht gesetzt werden, keine kunden
-		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
-				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
-				100, 100, 50, 2, 2, 3, tmpB, spieler[0].erstelleKennzahlen(),spieler[0].getGuv().erstelleGuV(),"Dummy");
+//		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
+//				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
+//				100, 100, 50, 2, 2, 3, tmpB, spieler[0].erstelleKennzahlen(),spieler[0].getGuv().erstelleGuV(),"Dummy");
 	}
 	
 }
