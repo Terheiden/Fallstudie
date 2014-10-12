@@ -33,7 +33,7 @@ public class Personal
 			insgesamtVerteilt += verteilung[i];
 		}
 		
-		if (insgesamtVerteilt <= gesamtAnzahl)
+		if (insgesamtVerteilt == gesamtAnzahl)
 		{
 			return true;
 		}

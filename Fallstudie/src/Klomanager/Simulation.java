@@ -1,5 +1,7 @@
 package Klomanager;
 
+import javax.swing.JOptionPane;
+
 public class Simulation
 {
 
@@ -88,23 +90,23 @@ public class Simulation
 	{
 		//Prüfe, ob die Daten sinnvoll sind - falls nicht, gebe als String den Fehlertext zurück
 		//TODO: Strings auf HTML umstellen
-		String fehler = "";
+		String fehler = "<html>";
 		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
 		{
-			fehler += "Es kann nicht mehr Darlehen getilgt werden als aufgenommen wurde!";
+			fehler += "Es kann nicht mehr Darlehen getilgt werden als aufgenommen wurde! <br>";
 		}
 		if(aktuellerSpieler.getDarlehenkonto().getDarlehen() + darlehenAufnehmen - darlehenTilgen > Darlehen.LIMIT)
 		{
-			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €!";
+			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €! <br>";
 		}
 		aktuellerSpieler.getPersonal().setVerteilung(mitarbeiterVerteilung);
 		if(!Personal.pruefeVerteilung(mitarbeiterVerteilung, aktuellerSpieler.getPersonal().getGesamtAnzahl() + mitarbeiterAaenderung))
 		{
-			fehler += "Es kann nicht mehr Personal auf die Klos verteilt werden als insgesamt zur Verfügung steht!";
+			fehler += "Das zur Verfügung stehende Personal muss passgenau auf die einzelnen Regionen verteilt werden! <br>";
 		}
-		if(!fehler.equals(""))
+		if(!fehler.equals("<html>"))
 		{
-			return fehler;
+			return fehler + "</html>";
 		}
 		
 		//Führe alle Aktionen durch, die der Spieler auf der GUI eingestellt hat
@@ -195,8 +197,6 @@ public class Simulation
 		
 		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
 		return null;
-		
-		//TODO: muss hier nicht noch der nächste Spieler gewählt werden und dann die Anzeige angestoßen werden? 
 	}
 	
 	public void simuliere()
@@ -219,8 +219,7 @@ public class Simulation
 		if(pruefeGewinnbedingung() != null)
 		{
 			//TODO: Sonst noch was zu tun hier?
-			//vllt einen Sieger küren? wäre dann auch was für die GUI arbeit(Steffen war hier, falls 
-			// du dir das nicht am Rand zeigen lässt ;))
+			JOptionPane.showMessageDialog(gui, pruefeGewinnbedingung().getName() + " hat das Spiel gewonnen!", "Herzlichen Glückwunsch!", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 		
@@ -420,6 +419,11 @@ public class Simulation
 	
 	private void berechneHygiene(int region)
 	{
+		if(runde == 1)
+		{
+			return;
+		}
+		
 		for (int i = 0; i < spieler.length; i++)
 		{
 			Klohaus[] klos = spieler[i].getKlos();

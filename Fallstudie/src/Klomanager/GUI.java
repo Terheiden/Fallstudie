@@ -133,26 +133,26 @@ public class GUI extends JFrame implements ActionListener
 		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
 		anzStadtField = new JLabel(String.valueOf(anzStadt));
-		anzMitarbeiterStadtField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterStadtField = new JFormattedTextField();
 		anzMitarbeiterStadtField.setText("1");
-		anzMitarbeiterBahnhofField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterBahnhofField = new JFormattedTextField();
 		anzMitarbeiterBahnhofField.setText("1");
-		anzMitarbeiterRastplatzField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterRastplatzField = new JFormattedTextField();
 		anzMitarbeiterRastplatzField.setText("1");
 		
 		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
-		preisStadtField = new JFormattedTextField(positiveDouble);
+		preisStadtField = new JFormattedTextField();
 		preisStadtField.setText(String.valueOf(preisStadt));
-		preisBahnhofField = new JFormattedTextField(positiveDouble);
+		preisBahnhofField = new JFormattedTextField();
 		preisBahnhofField.setText(String.valueOf(preisBahnhof));
-		preisRastplatzField = new JFormattedTextField(positiveDouble);
+		preisRastplatzField = new JFormattedTextField();
 		preisRastplatzField.setText(String.valueOf(preisRastplatz));
-		darlehenAufnehmenField = new JFormattedTextField(positiveInt);
+		darlehenAufnehmenField = new JFormattedTextField();
 		darlehenAufnehmenField.setText("0");
-		darlehenTilgungField = new JFormattedTextField(positiveInt);
+		darlehenTilgungField = new JFormattedTextField();
 		darlehenTilgungField.setText("0");
-		marketingAusgabenField = new JFormattedTextField(positiveInt);
+		marketingAusgabenField = new JFormattedTextField();
 		marketingAusgabenField.setText("0");
 
 
@@ -743,6 +743,7 @@ public class GUI extends JFrame implements ActionListener
 		GUI win = new GUI(spieler[0].getName(), simu);
 		simu.setGui(win);
 		
+		simu.spielerRundeStart();
 		
 		//TODO: TESTS
 		

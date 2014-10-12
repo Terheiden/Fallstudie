@@ -25,6 +25,7 @@ public abstract class Klohaus
 		sonderausstattungen = new boolean[8];
 		attraktivitaetsboni = new int[8];
 		//TODO: Preis setzen? Mit Startwert von GUI??
+		preis = 100;
 		hygiene = 100;
 		anzahl = 1;
 		kvStrom = 0.0; //0,00 €
@@ -33,6 +34,7 @@ public abstract class Klohaus
 		kvKlopapier = 0.781818181818; //~ 0.008 €
 		kvSeife = 0.567; // 0.006 €
 		this.besitzer = besitzer;
+		
 	}
 	
 	//Kümmert sich nur um die Installation der Sonderausstattungen und deren Auswirkungen auf die Klos
