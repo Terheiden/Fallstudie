@@ -55,17 +55,17 @@ public class GUI extends JFrame implements ActionListener
 	private double preisBahnhof, preisRastplatz, preisStadt;
 	private boolean maFoBerichtBool;
 	
-	private static Simulation sim;
+	Simulation sim;
 
 
-	public GUI(String spielername)
+	public GUI(String spielername, Simulation sim)
 	{		
 		super("Klomanager - " + spielername);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBounds(0, 0, 1008, 620);
 		
-
+		this.sim = sim;
 		
 		//links
 		allgemeinPanel = new JPanel();
@@ -348,7 +348,7 @@ public class GUI extends JFrame implements ActionListener
 				+"<tr><td>Überziehungskredit</td><td colspan='3'>---</td></tr>"
 				+"<tr><td>Überziehungszinssatz</td><td colspan='3'>17%</td></tr>"
 				+"</table>"
-		+ "</html>");
+		+ "</html>");		
 		this.buildGuVPanel("<html><h2>Beispiel GuV des Unternehmens in der x-ten Spielrunde</h2>"
 				+ "<table border='1'>"
 						+"<tr><th colspan='4'>Soll</th><th colspan='4'>Haben</th></tr>"
@@ -740,22 +740,24 @@ public class GUI extends JFrame implements ActionListener
 			System.out.println(spieler[i].getName());
 		}
 		//Simulation
-		sim = new Simulation(spieler);
+		Simulation simu = new Simulation(spieler);
         
         //GUI erzeugen
-		GUI win = new GUI(spieler[0].getName());	
+		GUI win = new GUI(spieler[0].getName(), simu);	
 		
 		
-		//TESTS
+		//TODO: TESTS
+		
+		
 		//int[] tmpA = {3,3,4};
 		boolean[][] tmpB = {{false,false,false,false,false,false,false,false},
 				{false,true,false,true,false,true,false,true},
 				{true,true,true,true,true,true,true,true}};
 		
-		
-		//win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
-		//		spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
-		//		100, 100, 50, 2, 2, 3, tmpB, "<html>Kennzahlen</html>","GuV","mafo");
+		//Mafobericht kann noch nicht gesetzt werden, keine kunden
+		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
+				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
+				100, 100, 50, 2, 2, 3, tmpB, spieler[0].erstelleKennzahlen(),spieler[0].getGuv().erstelleGuV(),"Dummy");
 	}
 	
 }

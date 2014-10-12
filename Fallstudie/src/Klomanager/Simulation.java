@@ -207,7 +207,8 @@ public class Simulation
 		runde++;
 	}
 	// TODO: In Klassendiagramm einpflegen
-	private String erstelleMaFoBericht(){
+	//eher Private, so nur als test
+	public String erstelleMaFoBericht(){
 		String maFo ="";
 		maFo += "<html><h2>Marktforschungsbericht in der "+runde+"-ten Spielrunde</h2>";
 		
@@ -231,8 +232,9 @@ public class Simulation
 					gesKundenZahl[j] += spieler[k].getKlos()[j].getKunden();
 				}
 				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / gesKundenZahl[j];
+
 			}
-			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+"</td><td>"+marktanteil[1]+"/td><td>"+marktanteil[2]+"</td></tr>"
+			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+"</td><td>"+marktanteil[1]+"</td><td>"+marktanteil[2]+"</td></tr>"
 					+"<tr><td>Anzahl der Klohäuser</td><td>"+spieler[i].getKlos()[0].getAnzahl()+"</td><td>"+spieler[i].getKlos()[1].getAnzahl()+"</td><td>"+spieler[i].getKlos()[2].getAnzahl()+"</td></tr>"
 					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()+"</td><td>"+spieler[i].getKlos()[1].getPreis()+"</td><td>"+spieler[i].getKlos()[2].getPreis()+"</td></tr>"
 					+"<tr><td>Hygienelevel letzter Monat</td><td>"+spieler[i].getKlos()[0].getHygiene()+"</td><td>"+spieler[i].getKlos()[1].getHygiene()+"</td><td>"+spieler[i].getKlos()[2].getHygiene()+"</td></tr>"
