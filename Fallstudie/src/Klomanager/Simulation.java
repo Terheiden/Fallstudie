@@ -206,6 +206,42 @@ public class Simulation
 		
 		runde++;
 	}
+	// TODO: In Klassendiagramm einpflegen
+	private String erstelleMaFoBericht(){
+		String maFo ="";
+		maFo += "<html><h2>Marktforschungsbericht in der "+runde+"-ten Spielrunde</h2>";
+		
+		// Berichte von jedem einzelnen Spieler
+		for (int i = 0; i < spieler.length; i++)
+		{
+			maFo +="<h3>Daten von "+spieler[i].getName()+"</h3>"
+					+ "<table border='1'>"
+					+"<tr><th>Kennzahl</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>";
+			
+			//Berechne die Marktanteile
+			double marktanteil[] = new double[3];
+			//Unterschieden nach Region
+			for (int j = 0; j < marktanteil.length; j++)
+			{
+				//Berechne gesamte Kundenzahl je Region
+				int gesKundenZahl[] = new int[3];
+				gesKundenZahl[j] = 0;
+				for (int k = 0; k < spieler.length; k++)
+				{
+					gesKundenZahl[j] += spieler[k].getKlos()[j].getKunden();
+				}
+				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / gesKundenZahl[j];
+			}
+			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+"</td><td>"+marktanteil[1]+"/td><td>"+marktanteil[2]+"</td></tr>"
+					+"<tr><td>Anzahl der Klohäuser</td><td>"+spieler[i].getKlos()[0].getAnzahl()+"</td><td>"+spieler[i].getKlos()[1].getAnzahl()+"</td><td>"+spieler[i].getKlos()[2].getAnzahl()+"</td></tr>"
+					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()+"</td><td>"+spieler[i].getKlos()[1].getPreis()+"</td><td>"+spieler[i].getKlos()[2].getPreis()+"</td></tr>"
+					+"<tr><td>Hygienelevel letzter Monat</td><td>"+spieler[i].getKlos()[0].getHygiene()+"</td><td>"+spieler[i].getKlos()[1].getHygiene()+"</td><td>"+spieler[i].getKlos()[2].getHygiene()+"</td></tr>"
+					+"</table>";
+		}
+		
+		maFo += "</html>";
+		return maFo;
+	}
 	
 	private void erstelleHistorie()
 	{

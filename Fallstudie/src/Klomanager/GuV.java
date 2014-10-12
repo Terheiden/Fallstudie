@@ -70,8 +70,10 @@ public class GuV
 			return 0;
 		}
 	}
-	//TODO: GUV braucht runde des Spiels bzw. wäre für ausgabe interessant
+	//TODO: Alles Preise noch durch 100?
+	// GUV braucht runde des Spiels bzw. wäre für ausgabe interessant
 	// erst frage klären, ob untereinander(siehe Onenote GUI)
+	// teile noch dynamisch
 	public String erstelleGuV()	
 	{
 		String tmp ="";
@@ -79,21 +81,31 @@ public class GuV
 				+ "<table border='1'>"
 				+"<tr><th colspan='4'>Soll</th><th colspan='4'>Haben</th></tr>"
 				+"<tr><th>Aufwand</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th><th>Ertrag</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>";
-		tmp +="<tr><td>Fixkosten</td><td>"+fixkosten[0] +"</td><td>"+fixkosten[1] +"</td><td>"+fixkosten[2] +"</td><td>Umsatzerlöse<br>aus Klohäusern</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
-				+"<tr><td>Materialkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Kondomautomaten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
-				+"<tr><td>Wasserkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Kaugummiautomaten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
-				+"<tr><td>Stromkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Münzautomaten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
-				+"<tr><td>Anschaffungskosten<br>Klohäuser</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Sondererträge</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Anschaffungskosten<br>Sonderausstattungen</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td><b>Verlust</b></td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Lohnkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
-				+"<tr><td>Verwaltungskosten</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Sonderkosten</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Gewinn</td><td colspan='3'>1234.56</td></tr>"
-				+"<tr><td>Summe Aufwendungen</td><td colspan='3'>12342314.56</td><td>Summe Erträge</td><td colspan='3'>12342314.56</td></tr>"					
+		tmp +="<tr><td>Fixkosten</td><td>"+fixkosten[0] +"</td><td>"+fixkosten[1] +"</td><td>"+fixkosten[2] +"</td>"
+				+ "<td>Umsatzerlöse<br>aus Klohäusern</td><td>"+kloumsatz[0]+"</td><td>"+kloumsatz[1]+"</td><td>"+kloumsatz[2]+"</td></tr>"
+				+"<tr><td>Materialkosten</td><td>"+materialkosten[0]+"</td><td>"+materialkosten[1]+"</td><td>"+materialkosten[2]+"</td>"
+						+ "<td>Umsatzerlöse<br>aus Kondomautomaten</td><td>"+automatenumsatzKondom[0]+"</td><td>"+automatenumsatzKondom[1]+"</td><td>"+automatenumsatzKondom[2]+"</td></tr>"
+				+"<tr><td>Wasserkosten</td><td>"+wasserkosten[0]+"</td><td>"+wasserkosten[1]+"</td><td>"+wasserkosten[2]+"</td>"
+						+ "<td>Umsatzerlöse<br>aus Kaugummiautomaten</td><td>"+automatenumsatzKaugummi[0]+"</td><td>"+automatenumsatzKaugummi[1]+"</td><td>"+automatenumsatzKaugummi[2]+"</td></tr>"
+				+"<tr><td>Stromkosten</td><td>"+stromkosten[0]+"</td><td>"+stromkosten[1]+"</td><td>"+stromkosten[2]+"</td>"
+						+ "<td>Umsatzerlöse<br>aus Münzautomaten</td><td>"+automatenumsatzMuenzen[0]+"</td><td>"+automatenumsatzMuenzen[1]+"</td><td>"+automatenumsatzMuenzen[2]+"</td></tr>"
+				+"<tr><td>Anschaffungskosten<br>Klohäuser</td><td>"+anschaffungskostenKlo[0]+"</td><td>"+anschaffungskostenKlo[1]+"</td><td>"+anschaffungskostenKlo[2]+"</td>"
+						+ "<td>Sondererträge</td><td colspan='3'>"+sonderertraege+"</td></tr>"
+				+"<tr><td>Anschaffungskosten<br>Sonderausstattungen</td><td>"+anschaffungskostenSonder[0]+"</td><td>"+anschaffungskostenSonder[1]+"</td><td>"+anschaffungskostenSonder[2]+"</td>";
+		if(berechneGesamtumsatz() -berechneGesamtkosten()<0){
+			tmp += "<td><b>Verlust</b></td><td colspan='3'>"+(berechneGesamtumsatz() - berechneGesamtkosten())+"</td></tr>";
+		}
+		tmp +="<tr><td>Lohnkosten</td><td>"+lohnkosten[0]+"</td><td>"+lohnkosten[1]+"</td><td>"+lohnkosten[2]+"</td></tr>"
+				+"<tr><td>Verwaltungskosten</td><td colspan='3'>"+verwaltungskosten+"</td></tr>"
+				+"<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>"+zinsaufwendungenDarlehen+"</td></tr>"
+				+"<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>"+zinsaufwendungenDispo+"</td></tr>"
+				+"<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+(marketingkosten - this.besitzer.getMarketingbudget())+"</td></tr>"
+				+"<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+marketingkosten+"</td></tr>"
+				+"<tr><td>Sonderkosten</td><td colspan='3'>"+sonderkosten+"</td></tr>";
+		if(berechneGesamtumsatz() -berechneGesamtkosten()>=0){
+			tmp+= "<tr><td>Gewinn</td><td colspan='3'>"+(berechneGesamtumsatz() -berechneGesamtkosten())+"</td></tr>";
+		}
+		tmp +="<tr><td>Summe Aufwendungen</td><td colspan='3'>"+berechneGesamtkosten()+"</td><td>Summe Erträge</td><td colspan='3'>"+berechneGesamtumsatz()+"</td></tr>"					
 				+"</table>"
 		+ "</html>";
 		
@@ -102,6 +114,7 @@ public class GuV
 		return tmp;
 	}
 	
+
 	public void passeKontostandAn()
 	{
 		int gesamtkosten = berechneGesamtkosten();

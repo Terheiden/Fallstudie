@@ -213,16 +213,29 @@ public class Spieler
 	{
 		this.marketingbudget = marketingbudget;
 	}
-
-	public String getKennzahlen()
+	//TODO: Spielerrunde interessant
+	public String erstelleKennzahlen()
 	{
+		kennzahlen = "<html><h2>Beispiel Daten des Unternehmens in der "+"Spielerrunde"+"-ten Spielrunde</h2>"
+				+ "<table border='1'>"
+				+"<tr><th>Posten</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Personalplanung letzten Monat</td><td>"+getPersonal().getVerteilung()[0]+"</td><td>"+getPersonal().getVerteilung()[1]+"</td><td>"+getPersonal().getVerteilung()[2]+"</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>"+getKlos()[0].getAnzahl()+"</td><td>"+getKlos()[1].getAnzahl()+"</td><td>"+getKlos()[2].getAnzahl()+"</td></tr>"
+				+"<tr><td>Anzahl der Besucher letzten Monat</td><td>"+getKlos()[0].getKunden()+"</td><td>"+getKlos()[1].getKunden()+"</td><td>"+getKlos()[2].getKunden()+"</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>"+getKlos()[0].getPreis()/100.0+"</td><td>"+getKlos()[1].getPreis()/100.0+"</td><td>"+getKlos()[2].getPreis()/100.0+"</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>"+getKlos()[0].getHygiene()+"</td><td>"+getKlos()[1].getHygiene()+"</td><td>"+getKlos()[2].getHygiene()+"</td></tr>"
+				+"<tr><td>Bankguthaben</td><td colspan='3'>"+kontostand/100.0+"€</td></tr>"
+				+"<tr><td>Darlehen Restbetrag</td><td colspan='3'>"+getDarlehenkonto().getDarlehen()/100.0+"€</td></tr>"
+				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>"+getDarlehenkonto().getZinssatz()*100.0+"%</td></tr>";
+		if(kontostand < 0){
+			kennzahlen += "<tr><td>Überziehungskredit</td><td colspan='3'>"+kontostand/(-100.0)+"€</td></tr>"
+					+"<tr><td>Überziehungszinssatz</td><td colspan='3'>"+DISPOZINS*100.0+"%</td></tr>";
+		}
+		kennzahlen +="</table>"
+				+ "</html>";
 		return kennzahlen;
 	}
 
-	public void setKennzahlen(String kennzahlen)
-	{
-		this.kennzahlen = kennzahlen;
-	}
 
 	public Klohaus[] getKlos()
 	{

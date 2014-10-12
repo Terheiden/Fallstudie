@@ -387,15 +387,20 @@ public class GUI extends JFrame implements ActionListener
 				+"<tr><td>Preise letzter Monat</td><td>0.50</td><td>1.00</td><td>2.52</td></tr>"
 				+"<tr><td>Hygienelevel letzter Monat</td><td>75</td><td>83</td><td>100</td></tr>"							
 				+"</table>"
+				+ "<h3>Daten von Spieler 3</h3>"
+				+ "<table border='1'>"
+				+"<tr><th>Kennzahl</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Marktanteil</td><td>0.3</td><td>0.24</td><td>0.1</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>1</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>0.50</td><td>1.00</td><td>2.52</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>75</td><td>83</td><td>100</td></tr>"							
+				+"</table>"
 		+ "</html>");
 
 		
 		add(karteLabel);
 		karteLabel.setBounds(500, 300, 480, 270);
-		karteLabel.setBorder(new CompoundBorder(karteLabel.getBorder(), new LineBorder(Color.LIGHT_GRAY,2)));
-
-	
-		
+		karteLabel.setBorder(new CompoundBorder(karteLabel.getBorder(), new LineBorder(Color.LIGHT_GRAY,2)));		
 	}
 
 
@@ -403,26 +408,22 @@ public class GUI extends JFrame implements ActionListener
 	{
 		// TODO Auto-generated method stub
 		mafoBerichtLabel.setText(mafoBericht);
-
 	}
 
 	private void buildGuVPanel(String guv)
 	{
 		// TODO Auto-generated method stub
 		guvLabel.setText(guv);
-
 	}
 
 	private void buildKennzahlenPanel(String kennzahlen)
 	{
-		kennzahlenLabel.setText(kennzahlen);
-		
+		kennzahlenLabel.setText(kennzahlen);		
 	}
 
 	// w: 500 h: 280
 	private void allgemeinPanel()
-	{
-		
+	{	
 		allgemeinPanel.setLayout(null);
 		allgemeinPanel.setBorder(new TitledBorder("Allgemeine Verwaltung"));
 		//allgemeinPanel.setBorder(new CompoundBorder(allgemeinPanel.getBorder(), new LineBorder(Color.LIGHT_GRAY,2)));		
