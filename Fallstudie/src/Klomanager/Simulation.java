@@ -53,7 +53,15 @@ public class Simulation
 		//Prüft, ob der Spieler das Kontokorrentlimit überschritten hat
 		//Der return-Parameter gibt die Anzahl an Mitarbeitern an, die aufgrund dessen das Unternehmen verlässt
 		int kuendigungen = neueGuV.pruefeUeberschreitung();
-		aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
+		String meldung = aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
+		
+		//Die Fehlermeldung gibt an, dass der aktuelle Spieler verloren hat
+		//Als Folge daraus wird er hier aussortiert
+		if(meldung.contains("verloren"))
+		{
+			entferneSpieler();
+			return;
+		}
 		
 		gui.wechselSpieler(aktuellerSpieler.getName(), aktuellerSpieler.getMarketingbudget(), aktuellerSpieler.getPersonal().getGesamtAnzahl(),
 				aktuellerSpieler.getPersonal().getVerteilung(), aktuellerSpieler.getKlos()[0].getPreis(), aktuellerSpieler.getKlos()[1].getPreis(),
@@ -71,7 +79,6 @@ public class Simulation
 			int preisRastplatz, int aenderungStadt, int aenderungBahnhof, int aenderungRastplatz, boolean[][] neueSonderausstattungen)
 	{
 		//Prüfe, ob die Daten sinnvoll sind - falls nicht, gebe als String den Fehlertext zurück
-		//TODO: Strings auf HTML umstellen
 		String fehler = "<html>";
 		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
 		{
@@ -200,7 +207,6 @@ public class Simulation
 		//Wenn ein Spieler gewonnen hat, breche die Simulation ab
 		if(pruefeGewinnbedingung() != null)
 		{
-			//TODO: Sonst noch was zu tun hier?
 			JOptionPane.showMessageDialog(gui, pruefeGewinnbedingung().getName() + " hat das Spiel gewonnen!", "Herzlichen Glückwunsch!", JOptionPane.INFORMATION_MESSAGE);
 			System.exit(5000);
 			return;
@@ -210,8 +216,56 @@ public class Simulation
 		
 		runde++;
 	}
-
-	private String erstelleMafobericht(){
+	
+	//Entfernt den aktuellen Spieler, da er verloren hat
+	private void entferneSpieler()
+	{
+		//Es ist nur noch ein Spieler übrig, dieser hat dementsprechend gewonnen
+		if(spieler.length == 2)
+		{
+			Spieler gewinner;
+			if(spielernummer == 0)
+			{
+				gewinner = spieler[1];
+			}
+			else
+			{
+				gewinner = spieler[0];
+			}
+			JOptionPane.showMessageDialog(gui, gewinner.getName() + " hat das Spiel gewonnen, da alle anderen Spieler ausgeschieden sind!", "Herzlichen Glückwunsch!", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(5000);
+			return;
+		}
+		
+		//Neue Arrays, da jetzt ein Spieler weniger vorhanden ist
+		Spieler[] spielerNeu = new Spieler[spieler.length - 1];
+		byte[] schuldenfreiNeu = new byte[schuldenfrei.length - 1];
+		
+		//Fülle die neuen Arrays
+		for (int i = 0; i < spielerNeu.length; i++)
+		{
+			if(i < spielernummer)
+			{
+				spielerNeu[i] = spieler[i];
+				schuldenfreiNeu[i] = schuldenfrei[i];
+			}
+			else
+			{
+				spielerNeu[i] = spieler[i + 1];
+				schuldenfreiNeu[i] = schuldenfrei[i + 1];			}
+		}
+		
+		spieler = spielerNeu.clone();
+		schuldenfrei = schuldenfreiNeu.clone();
+		
+		//Spielernummer wird künstlich reduziert, da sie in der folgenden Methode spielerRundeStart wieder erhöht wird
+		spielernummer = (spielernummer - 1) % spieler.length;
+		
+		spielerRundeStart();
+	}
+	
+	private String erstelleMafobericht()
+	{
 		String maFo ="";
 		maFo += "<html><h2>Marktforschungsbericht in der "+runde+"-ten Spielrunde</h2>";
 		

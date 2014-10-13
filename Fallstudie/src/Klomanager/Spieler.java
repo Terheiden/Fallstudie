@@ -124,17 +124,44 @@ public class Spieler
 		guv.setSonderkosten(guv.getSonderkosten() + (personal.getKuendigungskosten() * anzahl));
 	}
 	
-	public void mitarbeiterKuendigt(int anzahl)
+	public String mitarbeiterKuendigt(int anzahl)
 	{
+		String meldung = "<html>";
+		
 		if(anzahl > personal.getGesamtAnzahl())
-		{
-			//Spieler hat verloren
-			//TODO: Ausgabe
+		{			
+			meldung += "Du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
+					"Es haben alle deine Mitarbeiter fristlos gekündigt, da sie sich Sorgen gemacht haben," +
+					" dass du sie nicht mehr bezahlen kannst <br>!";
+			
+			int auffangbarerDispo = personal.getGesamtAnzahl() * 100000; //1000,00 €
+			personal.setGesamtAnzahl(0);
+			
+			if((Math.abs(kontostand + 5000000) - auffangbarerDispo) <= Darlehen.LIMIT - darlehenkonto.getDarlehen())
+			{
+				int dlBetrag = Math.abs(kontostand + 5000000) - auffangbarerDispo;
+				nehmeDarlehenAuf(dlBetrag);
+				
+				 meldung += "Um das Kontokorrentlimit deiner Bank nicht noch weiter" +
+						" auszureizen, musstest du ein Zwangsdarlehen in Höhe von " + dlBetrag/100 + " € aufnehmen!";
+			}
+			else
+			{
+				meldung+= "Da deine Bank dir kein Darlehen mehr gewähren konnte, um deine Liquidität wieder zu verbessern," +
+						" musstest du Insolvenz anmelden. Du hast das Spiel verloren!";
+			}
 		}
 		else
 		{
 			personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
+			meldung += "Du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
+					"Es haben " + anzahl + " deiner Mitarbeiter fristlos gekündigt, da sie sich Sorgen gemacht haben," +
+					" dass du sie nicht mehr bezahlen kannst!";
 		}
+		
+		meldung += "</html>";
+		
+		return meldung;
 	}
 	
 	public void nehmeDarlehenAuf(int betrag)
