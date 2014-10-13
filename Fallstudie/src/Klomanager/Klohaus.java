@@ -81,10 +81,12 @@ public abstract class Klohaus
 		case 5:
 			attraktivitaetsboni[5] = 7000; //70,00 €
 			anschaffungskosten += 110000; //1100,00 €
+			break;
 		//Kaugummiautomat
 		case 6:
 			attraktivitaetsboni[6] = 5000; //50,00 €
 			anschaffungskosten += 50000; //500,00 €
+			break;
 		//Münzpressautomat
 		case 7:
 			attraktivitaetsboni[7] = 6000; //60,00 €
