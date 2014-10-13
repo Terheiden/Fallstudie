@@ -37,6 +37,10 @@ public class Simulation
 	//0 = Stadt, 1 = Bahnhof, 2 = Rastplatz
 	//--> klos[0] = Stadtklos von diesem Spieler
 	
+	/**
+	 * Diese Methode wird immer dann aufgerufen, wenn ein Spieler an der Reihe ist
+	 * Sie kümmert sich insbesondere um das Übergeben der Spielerdaten an die GUI
+	 */
 	public void spielerRundeStart()
 	{
 		spielernummer = (spielernummer + 1) % spieler.length;
@@ -84,8 +88,9 @@ public class Simulation
 	}
 	
 	/**
-	 * Nimm alle Preise *100!!!
-	 * String mit Fehlertext
+	 * Diese Methode wird immer dann aufgerufen, wenn ein Spieler seine Runde beendet hat
+	 * Die Daten werden auf inhaltliche Fehler überprüft, bei Bedarf wird die Methode vorzeitig unter Rückgabe eines Fehler-Strings abgebrochen
+	 * Tritt kein Fehler auf, werden alle vom Spieler vorgenommenen Änderungen ins Fachkonzept übernommen
 	 */
 	public String spielerRundeBeendet(int darlehenAufnehmen, int darlehenTilgen, int mitarbeiterAaenderung,
 			boolean mafoBericht, int marketingbudget, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
@@ -201,6 +206,9 @@ public class Simulation
 		return null;
 	}
 	
+	/**
+	 * Diese Methode simuliert den Wirtschaftsablauf - sie wird aufgerufen, nachdem alle Spieler einmal dran waren
+	 */
 	public void simuliere()
 	{
 		berechneHygiene(0);
