@@ -48,7 +48,8 @@ public class Simulation
 		sonderausstattungen[2] = aktuellerSpieler.getKlos()[2].getSonderausstattungen();
 		
 		System.out.println("Spieler " + spielernummer + " ist dran!");
-		GuV neueGuV = new GuV(aktuellerSpieler, aktuellerSpieler.getGuv());
+		GuV alteGuV = aktuellerSpieler.getGuv();
+		GuV neueGuV = new GuV(aktuellerSpieler, alteGuV);
 		aktuellerSpieler.setGuv(neueGuV);
 		//Prüft, ob der Spieler das Kontokorrentlimit überschritten hat
 		//Der return-Parameter gibt die Anzahl an Mitarbeitern an, die aufgrund dessen das Unternehmen verlässt
@@ -69,7 +70,7 @@ public class Simulation
 			return;
 		}
 		
-		String guvString = aktuellerSpieler.getGuv().erstelleGuV();
+		String guvString = alteGuV.erstelleGuV();
 		if(runde == 1)
 		{
 			guvString = "Dies ist die erste Runde. Es wurde noch kein Gewinn oder Verlust erwirtschaftet.";
@@ -78,7 +79,7 @@ public class Simulation
 		gui.wechselSpieler(aktuellerSpieler.getName(), aktuellerSpieler.getMarketingbudget(), aktuellerSpieler.getPersonal().getGesamtAnzahl(),
 				aktuellerSpieler.getPersonal().getVerteilung(), aktuellerSpieler.getKlos()[0].getPreis(), aktuellerSpieler.getKlos()[1].getPreis(),
 				aktuellerSpieler.getKlos()[2].getPreis(), aktuellerSpieler.getKlos()[0].getAnzahl(), aktuellerSpieler.getKlos()[1].getAnzahl(),
-				aktuellerSpieler.getKlos()[2].getAnzahl(), sonderausstattungen, aktuellerSpieler.erstelleKennzahlen(), guvString,
+				aktuellerSpieler.getKlos()[2].getAnzahl(), sonderausstattungen, aktuellerSpieler.erstelleKennzahlen(runde), guvString,
 				aktuellerSpieler.getMafobericht(), meldung);
 	}
 	
@@ -300,12 +301,13 @@ public class Simulation
 				{
 					gesKundenZahl[j] += spieler[k].getKlos()[j].getKunden();
 				}
-				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / gesKundenZahl[j];
-
+				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / (double) gesKundenZahl[j];
+				System.out.println("Marktanteil: " + marktanteil[j]);
+				marktanteil[j] = Math.round(1000.0 * marktanteil[j]) / 10.0;				
 			}
-			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+"</td><td>"+marktanteil[1]+"</td><td>"+marktanteil[2]+"</td></tr>"
+			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+" %</td><td>"+marktanteil[1]+" %</td><td>"+marktanteil[2]+" %</td></tr>"
 					+"<tr><td>Anzahl der Klohäuser</td><td>"+spieler[i].getKlos()[0].getAnzahl()+"</td><td>"+spieler[i].getKlos()[1].getAnzahl()+"</td><td>"+spieler[i].getKlos()[2].getAnzahl()+"</td></tr>"
-					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()+"</td><td>"+spieler[i].getKlos()[1].getPreis()+"</td><td>"+spieler[i].getKlos()[2].getPreis()+"</td></tr>"
+					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()/100.0+"€</td><td>"+spieler[i].getKlos()[1].getPreis()/100.0+"€</td><td>"+spieler[i].getKlos()[2].getPreis()/100.0+"€</td></tr>"
 					+"<tr><td>Hygienelevel letzter Monat</td><td>"+spieler[i].getKlos()[0].getHygiene()+"</td><td>"+spieler[i].getKlos()[1].getHygiene()+"</td><td>"+spieler[i].getKlos()[2].getHygiene()+"</td></tr>"
 					+"</table>";
 		}

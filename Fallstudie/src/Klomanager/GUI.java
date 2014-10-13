@@ -563,7 +563,7 @@ public class GUI extends JFrame implements ActionListener
 			int mitarbeiterAnzahl, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
 			int preisRastplatz, int anzStadt, int anzBahnhof, int anzRastplatz, 
 			boolean[][] sonderausstattungen, String kennzahlen, String GuV, String maFoBericht, String meldung){
-		this.setTitle("Klomanager - " + spielerName);
+		this.setTitle("Klomanager - " + spielerName + " - Runde " + sim.getRunde());
 		
 		//Startbedingungen
 		aenderungStadt = 0;
