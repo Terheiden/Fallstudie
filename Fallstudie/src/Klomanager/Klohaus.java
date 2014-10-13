@@ -91,6 +91,7 @@ public abstract class Klohaus
 		case 7:
 			attraktivitaetsboni[7] = 6000; //60,00 €
 			anschaffungskosten += 90000; //900,00 €
+			break;
 		}
 		
 	}
