@@ -240,6 +240,10 @@ public class Simulation
 		verteileKunden(1);
 		verteileKunden(2);
 		
+		berechneHygiene(0);
+		berechneHygiene(1);
+		berechneHygiene(2);
+		
 		vervollstaendigeGuV();
 		
 		erstelleHistorie();
@@ -521,11 +525,6 @@ public class Simulation
 	
 	private void berechneHygiene(int region)
 	{
-		if(runde == 1)
-		{
-			return;
-		}
-		
 		for (int i = 0; i < spieler.length; i++)
 		{
 			Klohaus[] klos = spieler[i].getKlos();
