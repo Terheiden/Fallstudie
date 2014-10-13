@@ -56,9 +56,11 @@ public class Simulation
 		String meldung = aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
 		
 		//Die Fehlermeldung gibt an, dass der aktuelle Spieler verloren hat
-		//Als Folge daraus wird er hier aussortiert
+		//Als Folge daraus wird er hier aussortiert, davor wird allerdings schon der JOptionPane-Dialog gezeigt,
+		//da wechselSpieler für den ausgeschiedenen Spieler gar nicht mehr ausgeführt wird
 		if(meldung.contains("verloren"))
 		{
+			JOptionPane.showMessageDialog(gui, meldung, "Verloren!", JOptionPane.INFORMATION_MESSAGE);
 			entferneSpieler();
 			return;
 		}
