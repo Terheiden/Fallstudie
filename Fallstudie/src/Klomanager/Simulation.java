@@ -22,6 +22,8 @@ public class Simulation
 	//Nummer des Spielers aktuellerSpieler
 	private int spielernummer;
 	private byte[] schuldenfrei;
+	private String eventtext;
+	private int eventnummer;
 	
 	public Simulation(Spieler[] spieler)
 	{
@@ -78,6 +80,25 @@ public class Simulation
 		if(runde == 1)
 		{
 			guvString = "Dies ist die erste Runde. Es wurde noch kein Gewinn oder Verlust erwirtschaftet.";
+		}
+		
+		if(eventtext != null)
+		{
+			//Es gibt ein Event, aber keine Fehlermeldung
+			if(meldung == null)
+			{
+				meldung = "<html>" + eventtext + "</html>";
+			}
+			//Es gibt ein Event und eine Fehlermeldung
+			else
+			{
+				meldung += " <br>" + eventtext + "</html>";
+			}
+		}
+		//Es gibt kein Event, aber eine Fehlermeldung
+		else if(meldung != null)
+		{
+			meldung += "</html>";
 		}
 		
 		gui.wechselSpieler(aktuellerSpieler.getName(), aktuellerSpieler.getMarketingbudget(), aktuellerSpieler.getPersonal().getGesamtAnzahl(),
@@ -370,7 +391,30 @@ public class Simulation
 	
 	private void erzeugeEreignis()
 	{
-		//TODO: Hier verschiedene Zufallsevents anstoßen
+		//Event aus der vorherigen Runde zurücksetzen
+		if(eventnummer == 1)
+		{
+			Bahnhofsklo.benzinpreisSteigtEx();
+			Rastplatzklo.benzinpreisSteigtEx();
+		}
+		
+		//Zufallszahl zwischen 1 und 100
+		eventnummer = (int) ((Math.random()) * 100 + 1); 
+		
+		eventtext = "Ein aktuelles Ereignis beeinflusst Ihren Geschäftsbetrieb! <br><br>";
+		
+		//Benzinpreis steigt
+		if(eventnummer == 1)
+		{
+			eventtext += "Der Benzinpreis steigt erheblich wegen Engpässen in der Erdölindustrie. Die Menschen steigen vermehrt"
+					+ " auf öffentliche Verkehrsmittel um. Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
+			Bahnhofsklo.benzinpreisSteigt();
+			Rastplatzklo.benzinpreisSteigt();
+			return;
+		}
+		
+		
+		eventtext = null;
 	}
 	
 	//TODO: Methode prüfen
@@ -648,13 +692,13 @@ public class Simulation
 		switch(region)
 		{
 		case 0:
-			multiplikator = 12000;
+			multiplikator = Stadtklo.getKundenmarkt();
 			break;
 		case 1:
-			multiplikator = 10000;
+			multiplikator = Bahnhofsklo.getKundenmarkt();
 			break;
 		case 2:
-			multiplikator = 7500;
+			multiplikator = Rastplatzklo.getKundenmarkt();
 			break;
 		}
 

@@ -148,12 +148,12 @@ public class Spieler
 				nehmeDarlehenAuf(dlBetrag);
 				
 				 meldung += "Um das Kontokorrentlimit deiner Bank nicht noch weiter" +
-						" auszureizen, musstest du ein Zwangsdarlehen in Höhe von " + dlBetrag/100 + " € aufnehmen!";
+						" auszureizen, musstest du ein Zwangsdarlehen in Höhe von " + dlBetrag/100 + " € aufnehmen! <br>";
 			}
 			else
 			{
 				meldung+= "Da deine Bank dir kein Darlehen mehr gewähren konnte, um deine Liquidität wieder zu verbessern," +
-						" musstest du Insolvenz anmelden. Du hast das Spiel verloren!";
+						" musstest du Insolvenz anmelden. Du hast das Spiel verloren! <br>";
 			}
 		}
 		else
@@ -161,10 +161,10 @@ public class Spieler
 			personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
 			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
 					"Es haben " + anzahl + " deiner Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
-					" dass du sie nicht mehr bezahlen kannst!";
+					" dass du sie nicht mehr bezahlen kannst! <br>";
 		}
 		
-		meldung += "</html>";
+		//meldung += "</html>";
 		
 		return meldung;
 	}
@@ -195,7 +195,6 @@ public class Spieler
 		letzteRunde = neu;
 	}
 	
-	//TODO: Spielerrunde interessant
 	public String erstelleKennzahlen(int runde)
 	{
 		kennzahlen = "<html><h2>Daten des Unternehmens in der "+runde+"-ten Spielrunde</h2>"
