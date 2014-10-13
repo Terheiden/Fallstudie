@@ -533,7 +533,13 @@ public class Simulation
 			int[] personal = spieler[i].getPersonal().getVerteilung();
 			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[i] * 52);
 			
-			if (hygieneNeu < 0)
+			//Wenn der Spieler sich erstmalig ein Klohaus in dieser Region gekauft hat
+			if(klos[region].getKunden() == 0)
+			{
+				hygieneNeu = 100;
+			}
+			//Wenn die Hygiene den Minalwert von 0 unterschreitet oder der Spieler gar kein Klohaus in dieser Region besitzt
+			if (hygieneNeu < 0 || klos[region].getAnzahl() == 0)
 			{
 				hygieneNeu = 0;
 			}
