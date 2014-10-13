@@ -562,7 +562,7 @@ public class GUI extends JFrame implements ActionListener
 	public void wechselSpieler(String spielerName, int marketingbudget, 
 			int mitarbeiterAnzahl, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
 			int preisRastplatz, int anzStadt, int anzBahnhof, int anzRastplatz, 
-			boolean[][] sonderausstattungen, String kennzahlen, String GuV, String maFoBericht){
+			boolean[][] sonderausstattungen, String kennzahlen, String GuV, String maFoBericht, String meldung){
 		this.setTitle("Klomanager - " + spielerName);
 		
 		//Startbedingungen

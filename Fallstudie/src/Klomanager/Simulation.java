@@ -73,7 +73,7 @@ public class Simulation
 				aktuellerSpieler.getPersonal().getVerteilung(), aktuellerSpieler.getKlos()[0].getPreis(), aktuellerSpieler.getKlos()[1].getPreis(),
 				aktuellerSpieler.getKlos()[2].getPreis(), aktuellerSpieler.getKlos()[0].getAnzahl(), aktuellerSpieler.getKlos()[1].getAnzahl(),
 				aktuellerSpieler.getKlos()[2].getAnzahl(), sonderausstattungen, aktuellerSpieler.erstelleKennzahlen(), aktuellerSpieler.getGuv().erstelleGuV(),
-				aktuellerSpieler.getMafobericht());
+				aktuellerSpieler.getMafobericht(), meldung);
 	}
 	
 	/**
