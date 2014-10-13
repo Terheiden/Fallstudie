@@ -130,9 +130,13 @@ public class Spieler
 		
 		if(anzahl > personal.getGesamtAnzahl())
 		{			
-			meldung += "Du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
-					"Es haben alle deine Mitarbeiter fristlos gekündigt, da sie sich Sorgen gemacht haben," +
-					" dass du sie nicht mehr bezahlen kannst <br>!";
+			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>";
+			
+			if(personal.getGesamtAnzahl() > 0)
+			{
+				meldung += "Es haben alle deine Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
+					" dass du sie nicht mehr bezahlen kannst! <br>Die Bank gewährt dir einmalig einen etwas höheren Kontokorrentkredit. <br>";
+			}
 			
 			int auffangbarerDispo = personal.getGesamtAnzahl() * 100000; //1000,00 €
 			personal.setGesamtAnzahl(0);
@@ -154,8 +158,8 @@ public class Spieler
 		else
 		{
 			personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
-			meldung += "Du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
-					"Es haben " + anzahl + " deiner Mitarbeiter fristlos gekündigt, da sie sich Sorgen gemacht haben," +
+			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
+					"Es haben " + anzahl + " deiner Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
 					" dass du sie nicht mehr bezahlen kannst!";
 		}
 		
