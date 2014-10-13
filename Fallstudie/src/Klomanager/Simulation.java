@@ -28,38 +28,14 @@ public class Simulation
 		runde = 1;
 		this.spieler = spieler;
 		aktuellerSpieler = spieler[0];
-		spielernummer = 0;
+		//Spielernummer wird künstlich um 1 reduziert, da auch beim Spielstart die Methode spielerRundeStart() aufgerufen wird
+		//In dieser Methode wird die Spielernummer wieder um 1 erhöht
+		spielernummer = -1;
 		schuldenfrei = new byte[spieler.length];
 	}
 
 	//0 = Stadt, 1 = Bahnhof, 2 = Rastplatz
 	//--> klos[0] = Stadtklos von diesem Spieler
-	
-	
-	/**
-	 * TODO: Prüfmethode:
-	 * Mehr Darlehen tilgen als aufgenommen?
-	 * Mehr Darlehen aufnehmen als Limit?
-	 * Mehr Personal verteilt als verfügbar?
-	 * Preis außerhalb des zulässigen Wertebereichs? --> Wird in GUI geprüft!
-	 * --> DONE
-	 */
-	
-	/**
-	 * TODO: Ablauf: Nach Eingabe prüfen, bei Nonsens zur Neueingabe auffordern
-	 * Berechnen, Werte setzen
-	 * In GUV Werte setzen (z.T.)
-	 * Alle anderen Spieler (dasselbe)
-	 * Endrundensimulation
-	 * Restwerte GUV
-	 * Dem Spieler die GUV ausgeben, wenn er wieder dran ist (und evtl. Mafo-Bericht)
-	 */
-	
-	/**
-	 * TODO: Bei Darlehensaufnahme
-	 * In GUV Zinsen berechnen BEVOR der Betrag im DL-Objekt neu gesetzt wird
-	 * --> DONE
-	 */
 	
 	public void spielerRundeStart()
 	{
@@ -71,13 +47,19 @@ public class Simulation
 		sonderausstattungen[1] = aktuellerSpieler.getKlos()[1].getSonderausstattungen();
 		sonderausstattungen[2] = aktuellerSpieler.getKlos()[2].getSonderausstattungen();
 		
+		System.out.println("Spieler " + spielernummer + " ist dran!");
+		GuV neueGuV = new GuV(aktuellerSpieler, aktuellerSpieler.getGuv());
+		aktuellerSpieler.setGuv(neueGuV);
+		//Prüft, ob der Spieler das Kontokorrentlimit überschritten hat
+		//Der return-Parameter gibt die Anzahl an Mitarbeitern an, die aufgrund dessen das Unternehmen verlässt
+		int kuendigungen = neueGuV.pruefeUeberschreitung();
+		aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
+		
 		gui.wechselSpieler(aktuellerSpieler.getName(), aktuellerSpieler.getMarketingbudget(), aktuellerSpieler.getPersonal().getGesamtAnzahl(),
 				aktuellerSpieler.getPersonal().getVerteilung(), aktuellerSpieler.getKlos()[0].getPreis(), aktuellerSpieler.getKlos()[1].getPreis(),
 				aktuellerSpieler.getKlos()[2].getPreis(), aktuellerSpieler.getKlos()[0].getAnzahl(), aktuellerSpieler.getKlos()[1].getAnzahl(),
 				aktuellerSpieler.getKlos()[2].getAnzahl(), sonderausstattungen, aktuellerSpieler.erstelleKennzahlen(), aktuellerSpieler.getGuv().erstelleGuV(),
 				aktuellerSpieler.getMafobericht());
-		
-		aktuellerSpieler.setGuv(new GuV(aktuellerSpieler, aktuellerSpieler.getGuv()));
 	}
 	
 	/**
@@ -220,6 +202,7 @@ public class Simulation
 		{
 			//TODO: Sonst noch was zu tun hier?
 			JOptionPane.showMessageDialog(gui, pruefeGewinnbedingung().getName() + " hat das Spiel gewonnen!", "Herzlichen Glückwunsch!", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(5000);
 			return;
 		}
 		
@@ -227,9 +210,8 @@ public class Simulation
 		
 		runde++;
 	}
-	// TODO: In Klassendiagramm einpflegen
-	//eher Private, so nur als test
-	public String erstelleMaFoBericht(){
+
+	private String erstelleMafobericht(){
 		String maFo ="";
 		maFo += "<html><h2>Marktforschungsbericht in der "+runde+"-ten Spielrunde</h2>";
 		
@@ -349,7 +331,7 @@ public class Simulation
 		{
 			if(spieler[i].isMafoberichtGefordert())
 			{
-				spieler[i].setMafobericht(erstelleMaFoBericht());
+				spieler[i].setMafobericht(erstelleMafobericht());
 				spieler[i].setMafoberichtGefordert(false);
 			}
 			else
@@ -581,9 +563,8 @@ public class Simulation
 		}
 	}
 
-
 	//Berechnet, wie viele Kunden es in dieser Region gibt
-	public int errechneKundenstamm(int region)
+	private int errechneKundenstamm(int region)
 	{
 		//Anzahl Kunden, die in dieser Region pro Klohaus vorhanden sind
 		int multiplikator = 0;

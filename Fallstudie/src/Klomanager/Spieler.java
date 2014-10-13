@@ -124,6 +124,19 @@ public class Spieler
 		guv.setSonderkosten(guv.getSonderkosten() + (personal.getKuendigungskosten() * anzahl));
 	}
 	
+	public void mitarbeiterKuendigt(int anzahl)
+	{
+		if(anzahl > personal.getGesamtAnzahl())
+		{
+			//Spieler hat verloren
+			//TODO: Ausgabe
+		}
+		else
+		{
+			personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
+		}
+	}
+	
 	public void nehmeDarlehenAuf(int betrag)
 	{
 		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst

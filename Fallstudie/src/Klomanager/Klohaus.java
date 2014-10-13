@@ -25,7 +25,7 @@ public abstract class Klohaus
 		sonderausstattungen = new boolean[8];
 		attraktivitaetsboni = new int[8];
 		//TODO: Preis setzen? Mit Startwert von GUI??
-		preis = 100;
+		preis = 50; //0,50 €
 		hygiene = 100;
 		anzahl = 1;
 		kvStrom = 0.0; //0,00 €
