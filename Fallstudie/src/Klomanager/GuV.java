@@ -70,16 +70,12 @@ public class GuV
 			return 0;
 		}
 	}
-	//TODO: 
-	// GUV braucht runde des Spiels bzw. wäre für ausgabe interessant
-	// erst frage klären, ob untereinander(siehe Onenote GUI)
-	// teile noch dynamisch
 	
 	//Alle €-beträge werden zur korrekten Darstellung durch 100 geteilt
-	public String erstelleGuV()	
+	public String erstelleGuV(int runde)	
 	{
 		String tmp ="";
-		tmp= "<html><h2>GuV des Unternehmens in der "+ "letz" +"ten Spielrunde</h2>"
+		tmp= "<html><h2>GuV des Unternehmens in der "+ runde +"-ten Spielrunde</h2>"
 				+ "<table border='1'>"
 				+"<tr><th colspan='4'>Soll</th><th colspan='4'>Haben</th></tr>"
 				+"<tr><th>Aufwand</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th><th>Ertrag</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>";
@@ -98,12 +94,23 @@ public class GuV
 			tmp += "<td><b>Verlust</b></td><td colspan='3'>"+(berechneGesamtumsatz() - berechneGesamtkosten())/100.0+"€</td></tr>";
 		}
 		tmp +="<tr><td>Lohnkosten</td><td>"+lohnkosten[0]/100.0+"€</td><td>"+lohnkosten[1]/100.0+"€</td><td>"+lohnkosten[2]/100.0+"€</td></tr>"
-				+"<tr><td>Verwaltungskosten</td><td colspan='3'>"+verwaltungskosten/100.0+"€</td></tr>"
-				+"<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>"+zinsaufwendungenDarlehen/100.0+"€</td></tr>"
-				+"<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>"+zinsaufwendungenDispo/100.0+"€</td></tr>"
-				+"<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+(marketingkosten - this.besitzer.getMarketingbudget())/100.0+"€</td></tr>"
-				+"<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+marketingkosten/100.0+"€</td></tr>"
-				+"<tr><td>Sonderkosten</td><td colspan='3'>"+sonderkosten/100.0+"€</td></tr>";
+				+"<tr><td>Verwaltungskosten</td><td colspan='3'>"+verwaltungskosten/100.0+"€</td></tr>";
+		
+		if(zinsaufwendungenDarlehen !=0){
+			tmp+="<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>"+zinsaufwendungenDarlehen/100.0+"€</td></tr>";
+		}
+		if(zinsaufwendungenDispo !=0){
+			tmp+="<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>"+zinsaufwendungenDispo/100.0+"€</td></tr>";
+		}		
+		if((marketingkosten - this.besitzer.getMarketingbudget()) !=0){
+			tmp+="<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+(marketingkosten - this.besitzer.getMarketingbudget())/100.0+"€</td></tr>";
+		}
+		if(this.besitzer.getMarketingbudget() !=0){
+			tmp+="<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+this.besitzer.getMarketingbudget()/100.0+"€</td></tr>";
+		}	
+		if(sonderkosten != 0){
+			tmp+="<tr><td>Sonderkosten</td><td colspan='3'>"+sonderkosten/100.0+"€</td></tr>";
+		}	
 		if(berechneGesamtumsatz() -berechneGesamtkosten()>=0){
 			tmp+= "<tr><td>Gewinn</td><td colspan='3'>"+(berechneGesamtumsatz() -berechneGesamtkosten())/100.0 +"€</td></tr>";
 		}
