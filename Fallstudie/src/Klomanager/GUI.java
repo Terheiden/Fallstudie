@@ -1,4 +1,4 @@
-package GUI;
+package Klomanager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,9 +14,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 import javax.swing.text.NumberFormatter;
 import javax.xml.stream.events.EndElement;
-
-import Klomanager.Simulation;
-import Klomanager.Spieler;
 
 public class GUI extends JFrame implements ActionListener
 {
@@ -136,26 +133,26 @@ public class GUI extends JFrame implements ActionListener
 		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
 		anzStadtField = new JLabel(String.valueOf(anzStadt));
-		anzMitarbeiterStadtField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterStadtField = new JFormattedTextField();
 		anzMitarbeiterStadtField.setText("1");
-		anzMitarbeiterBahnhofField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterBahnhofField = new JFormattedTextField();
 		anzMitarbeiterBahnhofField.setText("1");
-		anzMitarbeiterRastplatzField = new JFormattedTextField(positiveInt);
+		anzMitarbeiterRastplatzField = new JFormattedTextField();
 		anzMitarbeiterRastplatzField.setText("1");
 		
 		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
-		preisStadtField = new JFormattedTextField(positiveDouble);
+		preisStadtField = new JFormattedTextField();
 		preisStadtField.setText(String.valueOf(preisStadt));
-		preisBahnhofField = new JFormattedTextField(positiveDouble);
+		preisBahnhofField = new JFormattedTextField();
 		preisBahnhofField.setText(String.valueOf(preisBahnhof));
-		preisRastplatzField = new JFormattedTextField(positiveDouble);
+		preisRastplatzField = new JFormattedTextField();
 		preisRastplatzField.setText(String.valueOf(preisRastplatz));
-		darlehenAufnehmenField = new JFormattedTextField(positiveInt);
+		darlehenAufnehmenField = new JFormattedTextField();
 		darlehenAufnehmenField.setText("0");
-		darlehenTilgungField = new JFormattedTextField(positiveInt);
+		darlehenTilgungField = new JFormattedTextField();
 		darlehenTilgungField.setText("0");
-		marketingAusgabenField = new JFormattedTextField(positiveInt);
+		marketingAusgabenField = new JFormattedTextField();
 		marketingAusgabenField.setText("0");
 
 
@@ -334,9 +331,68 @@ public class GUI extends JFrame implements ActionListener
 		add(anzeigenTabbedPane);
 		anzeigenTabbedPane.setBounds(500, 10, 480, 270);
 		
-		this.buildKennzahlenPanel("");		
-		this.buildGuVPanel("");
-		this.buildMaFoPanel("");
+		this.buildKennzahlenPanel("<html><h2>Beispiel Daten des Unternehmens in der x-ten Spielrunde</h2>"
+				+ "<table border='1'>"
+				+"<tr><th>Posten</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Personalplanung letzten Monat</td><td>1</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>1</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Anzahl der Besucher letzten Monat</td><td>z.B. 13.435</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>0.50</td><td>1.00</td><td>2.52</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>75</td><td>83</td><td>100</td></tr>"
+				+"<tr><td>Bankguthaben</td><td colspan='3'>15.000€</td></tr>"
+				+"<tr><td>Darlehen Restbetrag</td><td colspan='3'>50.000€</td></tr>"
+				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>10%€</td></tr>"
+				+"<tr><td>Überziehungskredit</td><td colspan='3'>---</td></tr>"
+				+"<tr><td>Überziehungszinssatz</td><td colspan='3'>17%</td></tr>"
+				+"</table>"
+		+ "</html>");		
+		this.buildGuVPanel("<html><h2>Beispiel GuV des Unternehmens in der x-ten Spielrunde</h2>"
+				+ "<table border='1'>"
+						+"<tr><th colspan='4'>Soll</th><th colspan='4'>Haben</th></tr>"
+						+"<tr><th>Aufwand</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th><th>Ertrag</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+						+"<tr><td>Fixkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Klohäusern</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
+						+"<tr><td>Materialkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Kondomautomaten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
+						+"<tr><td>Wasserkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Kaugummiautomaten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
+						+"<tr><td>Stromkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Umsatzerlöse<br>aus Münzautomaten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
+						+"<tr><td>Anschaffungskosten<br>Klohäuser</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td>Sondererträge</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Anschaffungskosten<br>Sonderausstattungen</td><td>1234.56</td><td>1234.56</td><td>1234.56</td><td><b>Verlust</b></td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Lohnkosten</td><td>1234.56</td><td>1234.56</td><td>1234.56</td></tr>"
+						+"<tr><td>Verwaltungskosten</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Sonderkosten</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Gewinn</td><td colspan='3'>1234.56</td></tr>"
+						+"<tr><td>Summe Aufwendungen</td><td colspan='3'>12342314.56</td><td>Summe Erträge</td><td colspan='3'>12342314.56</td></tr>"					
+						+"</table>"
+				+ "</html>");
+		this.buildMaFoPanel("<html><h2>Beispiel Marktforschungsbericht in der x-ten Spielrunde</h2>"
+				+ "<h3>Daten von Spieler 1</h3>"
+				+ "<table border='1'>"
+				+"<tr><th>Kennzahl</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Marktanteil</td><td>0.3</td><td>0.24</td><td>0.1</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>1</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>0.50</td><td>1.00</td><td>2.52</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>75</td><td>83</td><td>100</td></tr>"							
+				+"</table>"
+				+ "<h3>Daten von Spieler 2</h3>"
+				+ "<table border='1'>"
+				+"<tr><th>Kennzahl</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Marktanteil</td><td>0.3</td><td>0.24</td><td>0.1</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>1</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>0.50</td><td>1.00</td><td>2.52</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>75</td><td>83</td><td>100</td></tr>"							
+				+"</table>"
+				+ "<h3>Daten von Spieler 3</h3>"
+				+ "<table border='1'>"
+				+"<tr><th>Kennzahl</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Marktanteil</td><td>0.3</td><td>0.24</td><td>0.1</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>1</td><td>1</td><td>1</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>0.50</td><td>1.00</td><td>2.52</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>75</td><td>83</td><td>100</td></tr>"							
+				+"</table>"
+		+ "</html>");
 
 		
 		add(karteLabel);
@@ -506,8 +562,8 @@ public class GUI extends JFrame implements ActionListener
 	public void wechselSpieler(String spielerName, int marketingbudget, 
 			int mitarbeiterAnzahl, int[] mitarbeiterVerteilung, int preisStadt, int preisBahnhof,
 			int preisRastplatz, int anzStadt, int anzBahnhof, int anzRastplatz, 
-			boolean[][] sonderausstattungen, String kennzahlen, String GuV, String maFoBericht){
-		this.setTitle("Klomanager - " + spielerName);
+			boolean[][] sonderausstattungen, String kennzahlen, String GuV, String maFoBericht, String meldung){
+		this.setTitle("Klomanager - " + spielerName + " - Runde " + sim.getRunde());
 		
 		//Startbedingungen
 		aenderungStadt = 0;
@@ -565,6 +621,11 @@ public class GUI extends JFrame implements ActionListener
 		this.buildGuVPanel(GuV);
 		if(maFoBericht != null){
 			this.buildMaFoPanel(maFoBericht);
+		}
+		
+		if(meldung != null)
+		{
+			JOptionPane.showMessageDialog(null, meldung, "Aktuelle Information!", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
@@ -684,8 +745,10 @@ public class GUI extends JFrame implements ActionListener
 		Simulation simu = new Simulation(spieler);
         
         //GUI erzeugen
-		GUI win = new GUI(spieler[0].getName(), simu);	
+		GUI win = new GUI(spieler[0].getName(), simu);
+		simu.setGui(win);
 		
+		simu.spielerRundeStart();
 		
 		//TODO: TESTS
 		
@@ -696,9 +759,9 @@ public class GUI extends JFrame implements ActionListener
 				{true,true,true,true,true,true,true,true}};
 		
 		//Mafobericht kann noch nicht gesetzt werden, keine kunden
-		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
-				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
-				100, 100, 50, 2, 2, 3, tmpB, spieler[0].erstelleKennzahlen(1),spieler[0].getGuv().erstelleGuV(),"Dummy");
+//		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
+//				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
+//				100, 100, 50, 2, 2, 3, tmpB, spieler[0].erstelleKennzahlen(),spieler[0].getGuv().erstelleGuV(),"Dummy");
 	}
 	
 }

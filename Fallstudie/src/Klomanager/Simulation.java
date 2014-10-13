@@ -1,5 +1,7 @@
 package Klomanager;
 
+import javax.swing.JOptionPane;
+
 public class Simulation
 {
 
@@ -16,6 +18,7 @@ public class Simulation
 	private int runde;
 	private Spieler[] spieler ;
 	private Spieler aktuellerSpieler;
+	private GUI gui;
 	//Nummer des Spielers aktuellerSpieler
 	private int spielernummer;
 	private byte[] schuldenfrei;
@@ -25,44 +28,59 @@ public class Simulation
 		runde = 1;
 		this.spieler = spieler;
 		aktuellerSpieler = spieler[0];
-		spielernummer = 0;
+		//Spielernummer wird künstlich um 1 reduziert, da auch beim Spielstart die Methode spielerRundeStart() aufgerufen wird
+		//In dieser Methode wird die Spielernummer wieder um 1 erhöht
+		spielernummer = -1;
 		schuldenfrei = new byte[spieler.length];
 	}
 
 	//0 = Stadt, 1 = Bahnhof, 2 = Rastplatz
 	//--> klos[0] = Stadtklos von diesem Spieler
 	
-	
-	/**
-	 * TODO: Prüfmethode:
-	 * Mehr Darlehen tilgen als aufgenommen?
-	 * Mehr Darlehen aufnehmen als Limit?
-	 * Mehr Personal verteilt als verfügbar?
-	 * Preis außerhalb des zulässigen Wertebereichs? --> Wird in GUI geprüft!
-	 * --> DONE
-	 */
-	
-	/**
-	 * TODO: Ablauf: Nach Eingabe prüfen, bei Nonsens zur Neueingabe auffordern
-	 * Berechnen, Werte setzen
-	 * In GUV Werte setzen (z.T.)
-	 * Alle anderen Spieler (dasselbe)
-	 * Endrundensimulation
-	 * Restwerte GUV
-	 * Dem Spieler die GUV ausgeben, wenn er wieder dran ist (und evtl. Mafo-Bericht)
-	 */
-	
-	/**
-	 * TODO: Bei Darlehensaufnahme
-	 * In GUV Zinsen berechnen BEVOR der Betrag im DL-Objekt neu gesetzt wird
-	 * --> DONE
-	 */
-	
 	public void spielerRundeStart()
 	{
 		spielernummer = (spielernummer + 1) % spieler.length;
+		aktuellerSpieler = spieler[spielernummer];
 		
-		//TODO:
+		boolean[][] sonderausstattungen = new boolean[3][8];
+		sonderausstattungen[0] = aktuellerSpieler.getKlos()[0].getSonderausstattungen();
+		sonderausstattungen[1] = aktuellerSpieler.getKlos()[1].getSonderausstattungen();
+		sonderausstattungen[2] = aktuellerSpieler.getKlos()[2].getSonderausstattungen();
+		
+		System.out.println("Spieler " + spielernummer + " ist dran!");
+		GuV alteGuV = aktuellerSpieler.getGuv();
+		GuV neueGuV = new GuV(aktuellerSpieler, alteGuV);
+		aktuellerSpieler.setGuv(neueGuV);
+		//Prüft, ob der Spieler das Kontokorrentlimit überschritten hat
+		//Der return-Parameter gibt die Anzahl an Mitarbeitern an, die aufgrund dessen das Unternehmen verlässt
+		int kuendigungen = neueGuV.pruefeUeberschreitung();
+		String meldung = null;
+		if(kuendigungen != 0)
+		{
+			meldung = aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
+		}
+		
+		//Die Fehlermeldung gibt an, dass der aktuelle Spieler verloren hat
+		//Als Folge daraus wird er hier aussortiert, davor wird allerdings schon der JOptionPane-Dialog gezeigt,
+		//da wechselSpieler für den ausgeschiedenen Spieler gar nicht mehr ausgeführt wird
+		if(meldung != null && meldung.contains("verloren"))
+		{
+			JOptionPane.showMessageDialog(gui, meldung, "Verloren!", JOptionPane.INFORMATION_MESSAGE);
+			entferneSpieler();
+			return;
+		}
+		
+		String guvString = alteGuV.erstelleGuV();
+		if(runde == 1)
+		{
+			guvString = "Dies ist die erste Runde. Es wurde noch kein Gewinn oder Verlust erwirtschaftet.";
+		}
+		
+		gui.wechselSpieler(aktuellerSpieler.getName(), aktuellerSpieler.getMarketingbudget(), aktuellerSpieler.getPersonal().getGesamtAnzahl(),
+				aktuellerSpieler.getPersonal().getVerteilung(), aktuellerSpieler.getKlos()[0].getPreis(), aktuellerSpieler.getKlos()[1].getPreis(),
+				aktuellerSpieler.getKlos()[2].getPreis(), aktuellerSpieler.getKlos()[0].getAnzahl(), aktuellerSpieler.getKlos()[1].getAnzahl(),
+				aktuellerSpieler.getKlos()[2].getAnzahl(), sonderausstattungen, aktuellerSpieler.erstelleKennzahlen(runde), guvString,
+				aktuellerSpieler.getMafobericht(), meldung);
 	}
 	
 	/**
@@ -74,24 +92,23 @@ public class Simulation
 			int preisRastplatz, int aenderungStadt, int aenderungBahnhof, int aenderungRastplatz, boolean[][] neueSonderausstattungen)
 	{
 		//Prüfe, ob die Daten sinnvoll sind - falls nicht, gebe als String den Fehlertext zurück
-		//TODO: Strings auf HTML umstellen
-		String fehler = "";
+		String fehler = "<html>";
 		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
 		{
-			fehler += "Es kann nicht mehr Darlehen getilgt werden als aufgenommen wurde!";
+			fehler += "Es kann nicht mehr Darlehen getilgt werden als aufgenommen wurde! <br>";
 		}
 		if(aktuellerSpieler.getDarlehenkonto().getDarlehen() + darlehenAufnehmen - darlehenTilgen > Darlehen.LIMIT)
 		{
-			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €!";
+			fehler += "Das neu aufgenommene Darlehen überschreitet den Maximalbetrag von " + Darlehen.LIMIT/100 + " €! <br>";
 		}
 		aktuellerSpieler.getPersonal().setVerteilung(mitarbeiterVerteilung);
 		if(!Personal.pruefeVerteilung(mitarbeiterVerteilung, aktuellerSpieler.getPersonal().getGesamtAnzahl() + mitarbeiterAaenderung))
 		{
-			fehler += "Es kann nicht mehr Personal auf die Klos verteilt werden als insgesamt zur Verfügung steht!";
+			fehler += "Das zur Verfügung stehende Personal muss passgenau auf die einzelnen Regionen verteilt werden! <br>";
 		}
-		if(!fehler.equals(""))
+		if(!fehler.equals("<html>"))
 		{
-			return fehler;
+			return fehler + "</html>";
 		}
 		
 		//Führe alle Aktionen durch, die der Spieler auf der GUI eingestellt hat
@@ -114,11 +131,12 @@ public class Simulation
 			marketingkosten += Spieler.MAFOKOSTEN;
 		}
 		aktuellerSpieler.getGuv().setMarketingkosten(marketingkosten);
-		for (int i = 0; i < mitarbeiterVerteilung.length; i++)
+		int[] lohnkosten = new int[mitarbeiterVerteilung.length];
+		for (int i = 0; i < lohnkosten.length; i++)
 		{
-			mitarbeiterVerteilung[i] = mitarbeiterVerteilung[i] * aktuellerSpieler.getPersonal().getGehalt();
+			lohnkosten[i] = mitarbeiterVerteilung[i] * aktuellerSpieler.getPersonal().getGehalt();
 		}
-		aktuellerSpieler.getGuv().setLohnkosten(mitarbeiterVerteilung);
+		aktuellerSpieler.getGuv().setLohnkosten(lohnkosten);
 		
 		aktuellerSpieler.getKlos()[0].setPreis(preisStadt);
 		aktuellerSpieler.getKlos()[1].setPreis(preisBahnhof);
@@ -171,10 +189,16 @@ public class Simulation
 			}
 		}		
 		
+		//Wenn dies der letzte Spieler war, simuliere den Wirtschaftsablauf
+		if(spielernummer == spieler.length - 1)
+		{
+			simuliere();
+		}
+		
+		spielerRundeStart();
+		
 		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
 		return null;
-		
-		//TODO: muss hier nicht noch der nächste Spieler gewählt werden und dann die Anzeige angestoßen werden? 
 	}
 	
 	public void simuliere()
@@ -196,9 +220,8 @@ public class Simulation
 		//Wenn ein Spieler gewonnen hat, breche die Simulation ab
 		if(pruefeGewinnbedingung() != null)
 		{
-			//TODO: Sonst noch was zu tun hier?
-			//vllt einen Sieger küren? wäre dann auch was für die GUI arbeit(Steffen war hier, falls 
-			// du dir das nicht am Rand zeigen lässt ;))
+			JOptionPane.showMessageDialog(gui, pruefeGewinnbedingung().getName() + " hat das Spiel gewonnen!", "Herzlichen Glückwunsch!", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(5000);
 			return;
 		}
 		
@@ -206,9 +229,56 @@ public class Simulation
 		
 		runde++;
 	}
-	// TODO: In Klassendiagramm einpflegen
-	//eher Private, so nur als test
-	public String erstelleMaFoBericht(){
+	
+	//Entfernt den aktuellen Spieler, da er verloren hat
+	private void entferneSpieler()
+	{
+		//Es ist nur noch ein Spieler übrig, dieser hat dementsprechend gewonnen
+		if(spieler.length == 2)
+		{
+			Spieler gewinner;
+			if(spielernummer == 0)
+			{
+				gewinner = spieler[1];
+			}
+			else
+			{
+				gewinner = spieler[0];
+			}
+			JOptionPane.showMessageDialog(gui, gewinner.getName() + " hat das Spiel gewonnen, da alle anderen Spieler ausgeschieden sind!", "Herzlichen Glückwunsch!", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(5000);
+			return;
+		}
+		
+		//Neue Arrays, da jetzt ein Spieler weniger vorhanden ist
+		Spieler[] spielerNeu = new Spieler[spieler.length - 1];
+		byte[] schuldenfreiNeu = new byte[schuldenfrei.length - 1];
+		
+		//Fülle die neuen Arrays
+		for (int i = 0; i < spielerNeu.length; i++)
+		{
+			if(i < spielernummer)
+			{
+				spielerNeu[i] = spieler[i];
+				schuldenfreiNeu[i] = schuldenfrei[i];
+			}
+			else
+			{
+				spielerNeu[i] = spieler[i + 1];
+				schuldenfreiNeu[i] = schuldenfrei[i + 1];			}
+		}
+		
+		spieler = spielerNeu.clone();
+		schuldenfrei = schuldenfreiNeu.clone();
+		
+		//Spielernummer wird künstlich reduziert, da sie in der folgenden Methode spielerRundeStart wieder erhöht wird
+		spielernummer = (spielernummer - 1) % spieler.length;
+		
+		spielerRundeStart();
+	}
+	
+	private String erstelleMafobericht()
+	{
 		String maFo ="";
 		maFo += "<html><h2>Marktforschungsbericht in der "+runde+"-ten Spielrunde</h2>";
 		
@@ -231,12 +301,13 @@ public class Simulation
 				{
 					gesKundenZahl[j] += spieler[k].getKlos()[j].getKunden();
 				}
-				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / gesKundenZahl[j];
-
+				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / (double) gesKundenZahl[j];
+				System.out.println("Marktanteil: " + marktanteil[j]);
+				marktanteil[j] = Math.round(1000.0 * marktanteil[j]) / 10.0;				
 			}
-			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+"</td><td>"+marktanteil[1]+"</td><td>"+marktanteil[2]+"</td></tr>"
+			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+" %</td><td>"+marktanteil[1]+" %</td><td>"+marktanteil[2]+" %</td></tr>"
 					+"<tr><td>Anzahl der Klohäuser</td><td>"+spieler[i].getKlos()[0].getAnzahl()+"</td><td>"+spieler[i].getKlos()[1].getAnzahl()+"</td><td>"+spieler[i].getKlos()[2].getAnzahl()+"</td></tr>"
-					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()+"</td><td>"+spieler[i].getKlos()[1].getPreis()+"</td><td>"+spieler[i].getKlos()[2].getPreis()+"</td></tr>"
+					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()/100.0+"€</td><td>"+spieler[i].getKlos()[1].getPreis()/100.0+"€</td><td>"+spieler[i].getKlos()[2].getPreis()/100.0+"€</td></tr>"
 					+"<tr><td>Hygienelevel letzter Monat</td><td>"+spieler[i].getKlos()[0].getHygiene()+"</td><td>"+spieler[i].getKlos()[1].getHygiene()+"</td><td>"+spieler[i].getKlos()[2].getHygiene()+"</td></tr>"
 					+"</table>";
 		}
@@ -328,7 +399,7 @@ public class Simulation
 		{
 			if(spieler[i].isMafoberichtGefordert())
 			{
-				//TODO: String für Mafobericht erzeugen
+				spieler[i].setMafobericht(erstelleMafobericht());
 				spieler[i].setMafoberichtGefordert(false);
 			}
 			else
@@ -398,6 +469,11 @@ public class Simulation
 	
 	private void berechneHygiene(int region)
 	{
+		if(runde == 1)
+		{
+			return;
+		}
+		
 		for (int i = 0; i < spieler.length; i++)
 		{
 			Klohaus[] klos = spieler[i].getKlos();
@@ -555,9 +631,8 @@ public class Simulation
 		}
 	}
 
-
 	//Berechnet, wie viele Kunden es in dieser Region gibt
-	public int errechneKundenstamm(int region)
+	private int errechneKundenstamm(int region)
 	{
 		//Anzahl Kunden, die in dieser Region pro Klohaus vorhanden sind
 		int multiplikator = 0;
@@ -586,6 +661,70 @@ public class Simulation
 		}
 
 		return klosGesamt * multiplikator;
+	}
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
+	public int getRunde()
+	{
+		return runde;
+	}
+
+	public void setRunde(int runde)
+	{
+		this.runde = runde;
+	}
+
+	public Spieler[] getSpieler()
+	{
+		return spieler;
+	}
+
+	public void setSpieler(Spieler[] spieler)
+	{
+		this.spieler = spieler;
+	}
+
+	public Spieler getAktuellerSpieler()
+	{
+		return aktuellerSpieler;
+	}
+
+	public void setAktuellerSpieler(Spieler aktuellerSpieler)
+	{
+		this.aktuellerSpieler = aktuellerSpieler;
+	}
+
+	public GUI getGui()
+	{
+		return gui;
+	}
+
+	public void setGui(GUI gui)
+	{
+		this.gui = gui;
+	}
+
+	public int getSpielernummer()
+	{
+		return spielernummer;
+	}
+
+	public void setSpielernummer(int spielernummer)
+	{
+		this.spielernummer = spielernummer;
+	}
+
+	public byte[] getSchuldenfrei()
+	{
+		return schuldenfrei;
+	}
+
+	public void setSchuldenfrei(byte[] schuldenfrei)
+	{
+		this.schuldenfrei = schuldenfrei;
 	}
 	
 	//TESTMETHODE

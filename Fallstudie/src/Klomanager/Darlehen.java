@@ -10,6 +10,7 @@ public class Darlehen
 	
 	public Darlehen(Spieler besitzer)
 	{
+		darlehen = 5000000; //50.000,00 €
 		zinssatz = 0.1;
 		this.besitzer = besitzer;
 	}

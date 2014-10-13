@@ -25,6 +25,7 @@ public abstract class Klohaus
 		sonderausstattungen = new boolean[8];
 		attraktivitaetsboni = new int[8];
 		//TODO: Preis setzen? Mit Startwert von GUI??
+		preis = 50; //0,50 €
 		hygiene = 100;
 		anzahl = 1;
 		kvStrom = 0.0; //0,00 €
@@ -33,6 +34,7 @@ public abstract class Klohaus
 		kvKlopapier = 0.781818181818; //~ 0.008 €
 		kvSeife = 0.567; // 0.006 €
 		this.besitzer = besitzer;
+		
 	}
 	
 	//Kümmert sich nur um die Installation der Sonderausstattungen und deren Auswirkungen auf die Klos
@@ -79,14 +81,17 @@ public abstract class Klohaus
 		case 5:
 			attraktivitaetsboni[5] = 7000; //70,00 €
 			anschaffungskosten += 110000; //1100,00 €
+			break;
 		//Kaugummiautomat
 		case 6:
 			attraktivitaetsboni[6] = 5000; //50,00 €
 			anschaffungskosten += 50000; //500,00 €
+			break;
 		//Münzpressautomat
 		case 7:
 			attraktivitaetsboni[7] = 6000; //60,00 €
 			anschaffungskosten += 90000; //900,00 €
+			break;
 		}
 		
 	}

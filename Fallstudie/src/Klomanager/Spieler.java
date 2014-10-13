@@ -27,6 +27,7 @@ public class Spieler
 		klos[2] = new Rastplatzklo(this);
 		darlehenkonto = new Darlehen(this);
 		personal = new Personal(this);
+		kontostand = 1500000; //15.000,00 €
 		
 		//TODO: Wird hier schon ein GuV-Objekt erzeugt?
 		guv = new GuV(this, null);
@@ -124,6 +125,50 @@ public class Spieler
 		guv.setSonderkosten(guv.getSonderkosten() + (personal.getKuendigungskosten() * anzahl));
 	}
 	
+	public String mitarbeiterKuendigt(int anzahl)
+	{
+		String meldung = "<html>";
+		
+		if(anzahl > personal.getGesamtAnzahl())
+		{			
+			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>";
+			
+			if(personal.getGesamtAnzahl() > 0)
+			{
+				meldung += "Es haben alle deine Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
+					" dass du sie nicht mehr bezahlen kannst! <br>Die Bank gewährt dir einmalig einen etwas höheren Kontokorrentkredit. <br>";
+			}
+			
+			int auffangbarerDispo = personal.getGesamtAnzahl() * 100000; //1000,00 €
+			personal.setGesamtAnzahl(0);
+			
+			if((Math.abs(kontostand + 5000000) - auffangbarerDispo) <= Darlehen.LIMIT - darlehenkonto.getDarlehen())
+			{
+				int dlBetrag = Math.abs(kontostand + 5000000) - auffangbarerDispo;
+				nehmeDarlehenAuf(dlBetrag);
+				
+				 meldung += "Um das Kontokorrentlimit deiner Bank nicht noch weiter" +
+						" auszureizen, musstest du ein Zwangsdarlehen in Höhe von " + dlBetrag/100 + " € aufnehmen!";
+			}
+			else
+			{
+				meldung+= "Da deine Bank dir kein Darlehen mehr gewähren konnte, um deine Liquidität wieder zu verbessern," +
+						" musstest du Insolvenz anmelden. Du hast das Spiel verloren!";
+			}
+		}
+		else
+		{
+			personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
+			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
+					"Es haben " + anzahl + " deiner Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
+					" dass du sie nicht mehr bezahlen kannst!";
+		}
+		
+		meldung += "</html>";
+		
+		return meldung;
+	}
+	
 	public void nehmeDarlehenAuf(int betrag)
 	{
 		//TODO: Nach aktuellem Kenntnisstand wird hier der Kontostand angepasst
@@ -148,6 +193,36 @@ public class Spieler
 		}
 		
 		letzteRunde = neu;
+	}
+	
+	//TODO: Spielerrunde interessant
+	public String erstelleKennzahlen(int runde)
+	{
+		kennzahlen = "<html><h2>Daten des Unternehmens in der "+runde+"-ten Spielrunde</h2>"
+				+ "<table border='1'>"
+				+"<tr><th>Posten</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
+				+"<tr><td>Personalplanung letzten Monat</td><td>"+getPersonal().getVerteilung()[0]+"</td><td>"+getPersonal().getVerteilung()[1]+"</td><td>"+getPersonal().getVerteilung()[2]+"</td></tr>"
+				+"<tr><td>Anzahl der Klohäuser</td><td>"+getKlos()[0].getAnzahl()+"</td><td>"+getKlos()[1].getAnzahl()+"</td><td>"+getKlos()[2].getAnzahl()+"</td></tr>";
+		
+		if(runde != 1)
+		{
+			kennzahlen += "<tr><td>Anzahl der Besucher letzten Monat</td><td>"+getKlos()[0].getKunden()+"</td><td>"+getKlos()[1].getKunden()+"</td><td>"+getKlos()[2].getKunden()+"</td></tr>"
+				+"<tr><td>Preise letzter Monat</td><td>"+getKlos()[0].getPreis()/100.0+"€</td><td>"+getKlos()[1].getPreis()/100.0+"€</td><td>"+getKlos()[2].getPreis()/100.0+"€</td></tr>"
+				+"<tr><td>Hygienelevel letzter Monat</td><td>"+getKlos()[0].getHygiene()+"</td><td>"+getKlos()[1].getHygiene()+"</td><td>"+getKlos()[2].getHygiene()+"</td></tr>";
+		}
+		
+		kennzahlen += "<tr><td>Bankguthaben</td><td colspan='3'>"+kontostand/100.0+"€</td></tr>"
+				+"<tr><td>Darlehen Restbetrag</td><td colspan='3'>"+getDarlehenkonto().getDarlehen()/100.0+"€</td></tr>"
+				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>"+getDarlehenkonto().getZinssatz()*100.0+"%</td></tr>";
+		
+		if(kontostand < 0)
+		{
+			kennzahlen += "<tr><td>Überziehungskredit</td><td colspan='3'>"+kontostand/(-100.0)+"€</td></tr>"
+					+"<tr><td>Überziehungszinssatz</td><td colspan='3'>"+DISPOZINS*100.0+"%</td></tr>";
+		}
+		kennzahlen +="</table>"
+				+ "</html>";
+		return kennzahlen;
 	}
 	
 	/**
@@ -213,30 +288,7 @@ public class Spieler
 	{
 		this.marketingbudget = marketingbudget;
 	}
-	//TODO: Spielerrunde interessant
-	public String erstelleKennzahlen()
-	{
-		kennzahlen = "<html><h2>Daten des Unternehmens in der "+"letz"+"ten Spielrunde</h2>"
-				+ "<table border='1'>"
-				+"<tr><th>Posten</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
-				+"<tr><td>Personalplanung letzten Monat</td><td>"+getPersonal().getVerteilung()[0]+"</td><td>"+getPersonal().getVerteilung()[1]+"</td><td>"+getPersonal().getVerteilung()[2]+"</td></tr>"
-				+"<tr><td>Anzahl der Klohäuser</td><td>"+getKlos()[0].getAnzahl()+"</td><td>"+getKlos()[1].getAnzahl()+"</td><td>"+getKlos()[2].getAnzahl()+"</td></tr>"
-				+"<tr><td>Anzahl der Besucher letzten Monat</td><td>"+getKlos()[0].getKunden()+"</td><td>"+getKlos()[1].getKunden()+"</td><td>"+getKlos()[2].getKunden()+"</td></tr>"
-				+"<tr><td>Preise letzter Monat</td><td>"+getKlos()[0].getPreis()/100.0+"€</td><td>"+getKlos()[1].getPreis()/100.0+"€</td><td>"+getKlos()[2].getPreis()/100.0+"€</td></tr>"
-				+"<tr><td>Hygienelevel letzter Monat</td><td>"+getKlos()[0].getHygiene()+"</td><td>"+getKlos()[1].getHygiene()+"</td><td>"+getKlos()[2].getHygiene()+"</td></tr>"
-				+"<tr><td>Bankguthaben</td><td colspan='3'>"+kontostand/100.0+"€</td></tr>"
-				+"<tr><td>Darlehen Restbetrag</td><td colspan='3'>"+getDarlehenkonto().getDarlehen()/100.0+"€</td></tr>"
-				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>"+getDarlehenkonto().getZinssatz()*100.0+"%</td></tr>";
-		if(kontostand < 0){
-			kennzahlen += "<tr><td>Überziehungskredit</td><td colspan='3'>"+kontostand/(-100.0)+"€</td></tr>"
-					+"<tr><td>Überziehungszinssatz</td><td colspan='3'>"+DISPOZINS*100.0+"%</td></tr>";
-		}
-		kennzahlen +="</table>"
-				+ "</html>";
-		return kennzahlen;
-	}
-
-
+	
 	public Klohaus[] getKlos()
 	{
 		return klos;
