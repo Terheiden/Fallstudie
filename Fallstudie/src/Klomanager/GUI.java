@@ -120,36 +120,38 @@ public class GUI extends JFrame implements ActionListener
 		NumberFormatter positiveInt = new NumberFormatter(); 
 		positiveInt.setMinimum(new Integer(0));
 		positiveInt.setAllowsInvalid(false);
+		positiveInt.setOverwriteMode(true);
 		
 		DecimalFormat format = new DecimalFormat("#0.00");
 		NumberFormatter positiveDouble = new NumberFormatter(format); 
 		positiveDouble.setMinimum(new Double(0));
 		positiveDouble.setMaximum(new Double(10.0));
-		//positiveDouble.setAllowsInvalid(false);
+		positiveDouble.setAllowsInvalid(false);
+		positiveDouble.setOverwriteMode(true);
 		
 		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
 		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
 		anzStadtField = new JLabel(String.valueOf(anzStadt));
-		anzMitarbeiterStadtField = new JFormattedTextField();
+		anzMitarbeiterStadtField = new JFormattedTextField(positiveInt);
 		anzMitarbeiterStadtField.setText("1");
-		anzMitarbeiterBahnhofField = new JFormattedTextField();
+		anzMitarbeiterBahnhofField = new JFormattedTextField(positiveInt);
 		anzMitarbeiterBahnhofField.setText("1");
-		anzMitarbeiterRastplatzField = new JFormattedTextField();
+		anzMitarbeiterRastplatzField = new JFormattedTextField(positiveInt);
 		anzMitarbeiterRastplatzField.setText("1");
 		
 		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
-		preisStadtField = new JFormattedTextField();
+		preisStadtField = new JFormattedTextField(positiveDouble);
 		preisStadtField.setText(String.valueOf(preisStadt));
-		preisBahnhofField = new JFormattedTextField();
+		preisBahnhofField = new JFormattedTextField(positiveDouble);
 		preisBahnhofField.setText(String.valueOf(preisBahnhof));
-		preisRastplatzField = new JFormattedTextField();
+		preisRastplatzField = new JFormattedTextField(positiveDouble);
 		preisRastplatzField.setText(String.valueOf(preisRastplatz));
-		darlehenAufnehmenField = new JFormattedTextField();
+		darlehenAufnehmenField = new JFormattedTextField(positiveInt);
 		darlehenAufnehmenField.setText("0");
-		darlehenTilgungField = new JFormattedTextField();
+		darlehenTilgungField = new JFormattedTextField(positiveInt);
 		darlehenTilgungField.setText("0");
-		marketingAusgabenField = new JFormattedTextField();
+		marketingAusgabenField = new JFormattedTextField(positiveInt);
 		marketingAusgabenField.setText("0");
 
 
