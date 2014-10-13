@@ -341,13 +341,11 @@ public class GUI extends JFrame implements ActionListener
 
 	private void buildMaFoPanel(String mafoBericht)
 	{
-		// TODO Auto-generated method stub
 		mafoBerichtLabel.setText(mafoBericht);
 	}
 
 	private void buildGuVPanel(String guv)
 	{
-		// TODO Auto-generated method stub
 		guvLabel.setText(guv);
 	}
 
@@ -606,11 +604,14 @@ public class GUI extends JFrame implements ActionListener
 		//Mitarbeiterzahl ändern
 		if(object == mitarbeiterEinstellen){
 			aenderungMitarbeiter++;
-			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));			
+			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
 		}
 		if(object == mitarbeiterEntlassen){
-			aenderungMitarbeiter--;
-			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
+			if (anzMitarbeiterGes + aenderungMitarbeiter > 0)
+			{
+				aenderungMitarbeiter--;
+				anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes + aenderungMitarbeiter));
+			}
 		}
 		if(object == maFoBerichtKaufen){			
 			maFoBerichtBool = !maFoBerichtBool;
@@ -639,18 +640,26 @@ public class GUI extends JFrame implements ActionListener
 			anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
 		}
 		if(object == verkaufeStadt){
-			aenderungStadt--;
-			anzStadtField.setText(String.valueOf(anzStadt+aenderungStadt));
+			if (anzStadt + aenderungStadt > 0)
+			{
+				aenderungStadt--;
+				anzStadtField.setText(String.valueOf(anzStadt + aenderungStadt));
+			}
 		}
 		if(object == verkaufeBahnhof){
-			aenderungBahnhof--;
-			anzBahnhofField.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
-		}
+			if(anzBahnhof+aenderungBahnhof > 0){
+				aenderungBahnhof--;
+				anzBahnhofField.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
+			}
+		}			
 		if(object == verkaufeRastplatz){
-			aenderungRastplatz--;
-			anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
+			if(anzRastplatz+aenderungRastplatz > 0){
+				aenderungRastplatz--;
+				anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
+			}
 		}
 	}
+	
 	//Auch Anfang des Spiels untergebracht
 	public static void main(String[] args)
 	{	

@@ -70,16 +70,12 @@ public class GuV
 			return 0;
 		}
 	}
-	//TODO: 
-	// GUV braucht runde des Spiels bzw. wäre für ausgabe interessant
-	// erst frage klären, ob untereinander(siehe Onenote GUI)
-	// teile noch dynamisch
 	
 	//Alle €-beträge werden zur korrekten Darstellung durch 100 geteilt
-	public String erstelleGuV()	
+	public String erstelleGuV(int runde)	
 	{
 		String tmp ="";
-		tmp= "<html><h2>GuV des Unternehmens in der "+ "letz" +"ten Spielrunde</h2>"
+		tmp= "<html><h2>GuV des Unternehmens in der "+ runde +"-ten Spielrunde</h2>"
 				+ "<table border='1'>"
 				+"<tr><th colspan='4'>Soll</th><th colspan='4'>Haben</th></tr>"
 				+"<tr><th>Aufwand</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th><th>Ertrag</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>";

@@ -24,7 +24,6 @@ public abstract class Klohaus
 	{
 		sonderausstattungen = new boolean[8];
 		attraktivitaetsboni = new int[8];
-		//TODO: Preis setzen? Mit Startwert von GUI??
 		preis = 50; //0,50 €
 		hygiene = 100;
 		anzahl = 1;
@@ -61,7 +60,7 @@ public abstract class Klohaus
 		//Selbstreinigende Klos
 		case 2:
 			kvStrom = kvStrom + 0.021666666658; //~ 0,0002 €
-			//TODO: Hygiene erhöhen - ERLEDIGT
+			// Hygiene erhöhen - ERLEDIGT
 			verschmutzungsfaktor = verschmutzungsfaktor * 0.9;
 			attraktivitaetsboni[2] = 50000; //500,00 €
 			anschaffungskosten += 500000; //5000,00 €

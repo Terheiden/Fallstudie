@@ -74,7 +74,7 @@ public class Simulation
 			return;
 		}
 		
-		String guvString = alteGuV.erstelleGuV();
+		String guvString = alteGuV.erstelleGuV(runde);
 		if(runde == 1)
 		{
 			guvString = "Dies ist die erste Runde. Es wurde noch kein Gewinn oder Verlust erwirtschaftet.";
