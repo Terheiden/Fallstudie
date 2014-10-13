@@ -53,7 +53,11 @@ public class Simulation
 		//Prüft, ob der Spieler das Kontokorrentlimit überschritten hat
 		//Der return-Parameter gibt die Anzahl an Mitarbeitern an, die aufgrund dessen das Unternehmen verlässt
 		int kuendigungen = neueGuV.pruefeUeberschreitung();
-		String meldung = aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
+		String meldung = null;
+		if(kuendigungen != 0)
+		{
+			meldung = aktuellerSpieler.mitarbeiterKuendigt(kuendigungen);
+		}
 		
 		//Die Fehlermeldung gibt an, dass der aktuelle Spieler verloren hat
 		//Als Folge daraus wird er hier aussortiert, davor wird allerdings schon der JOptionPane-Dialog gezeigt,
