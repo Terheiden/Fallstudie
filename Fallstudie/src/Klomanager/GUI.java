@@ -622,6 +622,11 @@ public class GUI extends JFrame implements ActionListener
 		if(maFoBericht != null){
 			this.buildMaFoPanel(maFoBericht);
 		}
+		
+		if(meldung != null)
+		{
+			JOptionPane.showMessageDialog(null, meldung, "Aktuelle Information!", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 	
 	
