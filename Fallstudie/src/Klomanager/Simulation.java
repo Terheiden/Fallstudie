@@ -118,7 +118,9 @@ public class Simulation
 			int preisRastplatz, int aenderungStadt, int aenderungBahnhof, int aenderungRastplatz, boolean[][] neueSonderausstattungen)
 	{
 		//Prüfe, ob die Daten sinnvoll sind - falls nicht, gebe als String den Fehlertext zurück
-		String fehler = "<html>";
+		
+		//HTML Tags werden in der GUI gesetzt
+		String fehler = "";
 		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
 		{
 			fehler += "Es kann nicht mehr Darlehen getilgt werden als aufgenommen wurde! <br>";
@@ -132,9 +134,9 @@ public class Simulation
 		{
 			fehler += "Das zur Verfügung stehende Personal muss passgenau auf die einzelnen Regionen verteilt werden! <br>";
 		}
-		if(!fehler.equals("<html>"))
+		if(!fehler.equals(""))
 		{
-			return fehler + "</html>";
+			return fehler ;
 		}
 		
 		//Führe alle Aktionen durch, die der Spieler auf der GUI eingestellt hat
