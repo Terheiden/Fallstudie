@@ -660,22 +660,28 @@ public class GUI extends JFrame implements ActionListener
 			{
 				tmpVerteilung[0] = Integer.parseInt(anzMitarbeiterStadtField.getText());
 			} catch (NumberFormatException e1)
-			{			
-				fehlerString += "Die Anzahl der Mitarbeiter in der Stadt ist keine korrekte Zahl.<br>";
+			{	
+				tmpVerteilung[0] = 0;
+				// Fehler Ausgaben nicht ohne weiteres möglich, da mitarbeiterVeränderung neu nerechnet werden müsste
+				// sich jedoch nichts verändert hat
+				// Zudem wird der Nutzer schon aufgefordert seine Mitarbeiter korrekt zu verteilen
+				//fehlerString += "Die Anzahl der Mitarbeiter in der Stadt ist keine korrekte Zahl.<br>";
 			}
 			try
 			{
-				tmpVerteilung[2] = Integer.parseInt(anzMitarbeiterBahnhofField.getText());
+				tmpVerteilung[1] = Integer.parseInt(anzMitarbeiterBahnhofField.getText());
 			} catch (NumberFormatException e1)
-			{			
-				fehlerString += "Die Anzahl der Mitarbeiter am Bahnhof ist keine korrekte Zahl.<br>";
+			{	
+				tmpVerteilung[1] = 0;
+				//fehlerString += "Die Anzahl der Mitarbeiter am Bahnhof ist keine korrekte Zahl.<br>";
 			}
 			try
 			{
 				tmpVerteilung[2] = Integer.parseInt(anzMitarbeiterRastplatzField.getText());
 			} catch (NumberFormatException e1)
 			{			
-				fehlerString += "Die Anzahl der Mitarbeiter am Rastplatz ist keine korrekte Zahl.<br>";
+				tmpVerteilung[2] = 0;
+				//fehlerString += "Die Anzahl der Mitarbeiter am Rastplatz ist keine korrekte Zahl.<br>";
 			}
 
 			boolean[][] tmpSonderausstattungen = new boolean[3][8];
