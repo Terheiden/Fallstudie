@@ -570,8 +570,11 @@ public class GUI extends JFrame implements ActionListener
 		}
 	}
 
+	/*
+	 * wandelt den übergebenen Preis in Cent in die richtige Darstellungsweise
+	 */
 	private String stellePreisDar(int preis)
-	{
+	{		
 		char[] tmp = String.valueOf(preis).toCharArray();
 		String preisString;
 		if(tmp.length < 3){
@@ -650,6 +653,9 @@ public class GUI extends JFrame implements ActionListener
 		}
 	}
 
+	/*
+	 * gibt den im FormattedTextField angezeigten wert als Integer berechnet auf Cent zurück
+	 */	
 	private int preisBekommen(JFormattedTextField field)
 	{
 		String preisString = field.getText();
@@ -737,13 +743,30 @@ public class GUI extends JFrame implements ActionListener
 	{	
 		
 		//Fehler abfangen, evtl auch Wahlmöglichkeiten vorgeben(dropdown oder radioButton)
-		String eingabe = JOptionPane.showInputDialog(null,"Geben Sie die Anzahl der Spieler ein.",
-                "Klomanager - Spielbeginn",
-                JOptionPane.PLAIN_MESSAGE);
-		
-		if(eingabe==null) System.exit(0);	
-		int spielerZahl = Integer.parseInt(eingabe);
-		
+		int spielerZahl = 0;
+		// läuft so oft, bis der Nutzer eine Zahl im Bereich eingibt
+		while (spielerZahl > 10 || spielerZahl < 3)
+		{
+			String eingabe = JOptionPane.showInputDialog(
+						null,
+						"<html>Geben Sie die Anzahl der Spieler ein.<br>"
+								+ "Die Anzahl der Spieler sollte zwischen 3 und 10 liegen.</html>",
+						"Klomanager - Spielbeginn",
+						JOptionPane.PLAIN_MESSAGE);
+
+			if (eingabe == null)
+				System.exit(0);
+			
+			try
+			{
+				spielerZahl = Integer.parseInt(eingabe);
+			} catch (NumberFormatException e) // Falls unzulässiges eingegeben wird
+			{
+				e.printStackTrace();
+				spielerZahl = 0;
+			}
+		}
+
 		// Erstellung Array vom Datentyp Object, Hinzufügen der Komponenten		
 		JTextField[] name = new JTextField[spielerZahl];
 		for(int i=0; i<spielerZahl;i++){
