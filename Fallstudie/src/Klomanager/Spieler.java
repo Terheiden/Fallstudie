@@ -137,7 +137,8 @@ public class Spieler
 			if(personal.getGesamtAnzahl() > 0)
 			{
 				meldung += "Es haben alle deine Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
-					" dass du sie nicht mehr bezahlen kannst! <br>Die Bank gewährt dir einmalig einen etwas höheren Kontokorrentkredit. <br>";
+					" dass du sie nicht mehr bezahlen kannst! <br>Durch die gesunkenen Lohnkosten gewährt dir die Bank einmalig einen" +
+					" etwas höheren Kontokorrentkredit. <br>";
 			}
 			
 			int auffangbarerDispo = personal.getGesamtAnzahl() * 100000; //1000,00 €
@@ -160,9 +161,21 @@ public class Spieler
 		else
 		{
 			personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
-			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>" + 
-					"Es haben " + anzahl + " deiner Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
-					" dass du sie nicht mehr bezahlen kannst! <br>";
+			meldung += name +  ", du hast das Kontokorrentlimit von 50000 € überschritten! <br>";
+			
+			if(anzahl == 1)
+			{
+				meldung += "Einer deiner Mitarbeiter hat mit sofortiger Wirkung gekündigt, da er sich Sorgen gemacht habet," +
+						" dass du ihn nicht mehr bezahlen kannst! <br>Durch die gesunkenen Lohnkosten gewährt dir die Bank einmalig einen" +
+						" etwas höheren Kontokorrentkredit. <br>";
+			}
+			else
+			{
+			 
+				meldung += "Es haben " + anzahl + " deiner Mitarbeiter mit sofortiger Wirkung gekündigt, da sie sich Sorgen gemacht haben," +
+					" dass du sie nicht mehr bezahlen kannst! <br>Durch die gesunkenen Lohnkosten gewährt dir die Bank einmalig einen" +
+					" etwas höheren Kontokorrentkredit. <br>";
+			}
 		}
 		
 		//meldung += "</html>";
