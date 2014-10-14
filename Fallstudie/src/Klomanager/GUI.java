@@ -867,19 +867,7 @@ public class GUI extends JFrame implements ActionListener
 		simu.setGui(win);
 		
 		simu.spielerRundeStart();
-		
-		//TODO: TESTS
-		
-		
-		//int[] tmpA = {3,3,4};
-		boolean[][] tmpB = {{false,false,false,false,false,false,false,false},
-				{false,true,false,true,false,true,false,true},
-				{true,true,true,true,true,true,true,true}};
-		
-		//Mafobericht kann noch nicht gesetzt werden, keine kunden
-//		win.wechselSpieler(spieler[0].getName(), spieler[0].getMarketingbudget(), 
-//				spieler[0].getPersonal().getGesamtAnzahl(),spieler[0].getPersonal().getVerteilung(), 
-//				100, 100, 50, 2, 2, 3, tmpB, spieler[0].erstelleKennzahlen(),spieler[0].getGuv().erstelleGuV(),"Dummy");
+		// Das Spiel beginnt :)
 	}
 	
 }
