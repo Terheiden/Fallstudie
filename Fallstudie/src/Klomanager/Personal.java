@@ -41,6 +41,22 @@ public class Personal
 			return false;
 		}
 	}
+	
+	public static void tariferhoehung(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getPersonal().gehalt *= 1.05;
+		}
+	}
+	
+	public static void ausstattungserhoehung(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getPersonal().gehalt += 4000; //40,00 €
+		}
+	}
 
 	/**
 	 * Ab hier: Getter & Setter

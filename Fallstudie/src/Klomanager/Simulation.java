@@ -406,7 +406,8 @@ public class Simulation
 			{
 				//Versuche, ein zufälliges Ereignis mithilfe eines Zufallszahl zwischen 1 und 100 zu erzeugen
 				//Gibt es das Ereignis nicht, wird eine Exception gefangen, dann tritt in der Folgerunde kein Ereignis auf
-				laufendesEreignis = new Ereignis((int) ((Math.random()) * 100 + 1), spieler);
+				int zufall = (int) ((Math.random()) * 100 + 1);
+				laufendesEreignis = new Ereignis(zufall, spieler);
 			} catch(IllegalArgumentException e)
 			{
 				laufendesEreignis = null;

@@ -6,7 +6,7 @@ public class Ereignis
 	private String ereignistext;
 	private int lebenszeit;
 	//Lebenszeiten der einzelnen Ereignisse    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	//Dauerereignisse bekommen die Lebenszeit 1
 	private Spieler[] spieler;
 
@@ -82,9 +82,22 @@ public class Ereignis
 			Bahnhofsklo.bahnstreik();
 			Rastplatzklo.bahnverspaetungStreikFerien();
 			break;
+		case 9:
+			//Lohnerhöhung nach Tarif
+			ereignistext += "Die Gewerkschaft der Putzfrauen fordert Tariferhöhungen ein, es stehen harte Verhandlungen bevor! <br>"
+					     +  "Es wird ab Ende des nächsten Monats mit einer Lohnsteigerung von 5 % gerechnet!";
+			//Hier noch keine Auswirkungen, diese treten später ein
+			break;
+		case 10:
+			//Lohnerhöhung
+			ereignistext += "Die Putzfrauen leiden unter schlechten Bedingungen bei den Bahnhofstoiletten und streiken für bessere Putzausstattung. <br>"
+					     +  "Um den Geschäftsbetrieb nicht zu beinträchtigen, mussten Sie ihr Budget für die Putzausstattung erheblich aufstocken. <br>"
+					     +  "Die Lohnkosten pro Reinigungskraft steigen um 40 €!";
+			Personal.ausstattungserhoehung(spieler);
+			break;
 		}
 		
-		if (ereignisnummer > 8 || ereignisnummer < 1)
+		if (ereignisnummer > 10 || ereignisnummer < 1)
 		{
 			throw new IllegalArgumentException("Ereignisnummer nicht vorhanden");
 		}
@@ -100,8 +113,10 @@ public class Ereignis
 		ereignistext = null;
 		
 		//Einige Ereignisse treten erst verzögert ein - deren Auswirkungen werden hier angestoßen
-		
-		
+		if(ereignisnummer == 9)
+		{
+			Personal.tariferhoehung(spieler);
+		}
 		
 		if(lebenszeit > 0)
 		{
