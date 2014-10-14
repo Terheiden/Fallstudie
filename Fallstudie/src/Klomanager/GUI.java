@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,7 +31,8 @@ public class GUI extends JFrame implements ActionListener
 	private JLabel anzBahnhofField, anzRastplatzField, anzStadtField;
 	private JLabel anzMitarbeiterGesField;
 	
-	private JTextField  marketingAusgabenField, preisStadtField,
+	private JTextField  marketingAusgabenField; 
+	private JFormattedTextField preisStadtField,
 			preisRastplatzField, preisBahnhofField;
 	private JTextField darlehenTilgungField,
 			darlehenAufnehmenField, anzMitarbeiterBahnhofField,
@@ -104,9 +106,6 @@ public class GUI extends JFrame implements ActionListener
 		aenderungStadt = 0;
 		aenderungBahnhof = 0;
 		aenderungRastplatz = 0;
-		preisBahnhof = 0.5;
-		preisRastplatz = 0.5;
-		preisStadt = 0.5;
 		//Mitarbeiter
 		anzMitarbeiterGes = 3;	
 		aenderungMitarbeiter = 0;
@@ -142,11 +141,11 @@ public class GUI extends JFrame implements ActionListener
 		anzMitarbeiterGesField = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
 		preisStadtField = new JFormattedTextField(positiveDouble);
-		preisStadtField.setText(String.valueOf(preisStadt));
+		preisStadtField.setText("0,50");
 		preisBahnhofField = new JFormattedTextField(positiveDouble);
-		preisBahnhofField.setText(String.valueOf(preisBahnhof));
+		preisBahnhofField.setText("0,50");
 		preisRastplatzField = new JFormattedTextField(positiveDouble);
-		preisRastplatzField.setText(String.valueOf(preisRastplatz));
+		preisRastplatzField.setText("0,50");
 		darlehenAufnehmenField = new JFormattedTextField(positiveInt);
 		darlehenAufnehmenField.setText("0");
 		darlehenTilgungField = new JFormattedTextField(positiveInt);
@@ -572,29 +571,79 @@ public class GUI extends JFrame implements ActionListener
 	
 	
 	private void beendeSpielerRunde(){
-		int[] tmpVerteilung = {Integer.parseInt(anzMitarbeiterStadtField.getText()),
-				Integer.parseInt(anzMitarbeiterBahnhofField.getText()),
-				Integer.parseInt(anzMitarbeiterRastplatzField.getText())};
-		boolean[][] tmpSonderausstattungen = new boolean[3][8];
-		for (int i = 0; i < 3; i++){
-			for (int j = 0; j < 8; j++){
-				if (sonderausstattungen[i][j].isSelected())//falls schon gekauft
-				{
-					tmpSonderausstattungen[i][j]= true;						
+		//prüfen ob Preise richtig gesetzt
+		String fehlerString = "<html>";
+		try
+		{
+			preisStadtField.commitEdit();
+			preisBahnhofField.commitEdit();
+			preisRastplatzField.commitEdit();
+		} catch (ParseException e)
+		{
+			fehlerString += "Ups, das dürfte nicht passieren.<br>" + e.getMessage();
+			e.printStackTrace();
+		}
+		
+		if(preisStadtField.getValue() == null){
+			fehlerString +="Bitte trage einen Preis für deine Stadtklos ein.<br>";
+		}
+		if(preisBahnhofField.getValue() == null){
+			fehlerString +="Bitte trage einen Preis für deine Bahnhofklos ein.<br>";
+		}		
+		if(preisRastplatzField.getValue() == null){
+			fehlerString +="Bitte trage einen Preis für deine Rastplatzklos ein.<br>";
+		}
+		//wenn alle preise gesetzt sind führe das Beenden der Runde aus
+		if(preisStadtField.getValue() != null && preisBahnhofField.getValue() != null && preisRastplatzField.getValue() != null)
+		{
+			//Preis richtig darstellen 
+			int preisStadt = preisBekommen(preisStadtField);
+			int preisBahnhof = preisBekommen(preisBahnhofField);
+			int preisRastplatz = preisBekommen(preisRastplatzField);
+			
+		
+			int[] tmpVerteilung = {Integer.parseInt(anzMitarbeiterStadtField.getText()),
+					Integer.parseInt(anzMitarbeiterBahnhofField.getText()),
+					Integer.parseInt(anzMitarbeiterRastplatzField.getText())};
+			boolean[][] tmpSonderausstattungen = new boolean[3][8];
+			for (int i = 0; i < 3; i++){
+				for (int j = 0; j < 8; j++){
+					if (sonderausstattungen[i][j].isSelected())//falls schon gekauft
+					{
+						tmpSonderausstattungen[i][j]= true;						
+					}
 				}
 			}
+			//alle Preise *100 wegen Centberechnung
+			fehlerString += sim.spielerRundeBeendet(Integer.parseInt(darlehenAufnehmenField.getText())*100, 
+					Integer.parseInt(darlehenTilgungField.getText())*100, aenderungMitarbeiter, 
+					maFoBerichtBool, Integer.parseInt(marketingAusgabenField.getText())*100, tmpVerteilung,
+					preisStadt, preisBahnhof, preisRastplatz, 
+					aenderungStadt, aenderungBahnhof, aenderungRastplatz, 
+					tmpSonderausstattungen); 
 		}
-		//alle Preise *100 wegen Centberechnung
-		String fehlerString = sim.spielerRundeBeendet(Integer.parseInt(darlehenAufnehmenField.getText())*100, 
-				Integer.parseInt(darlehenTilgungField.getText())*100, aenderungMitarbeiter, 
-				maFoBerichtBool, Integer.parseInt(marketingAusgabenField.getText())*100, tmpVerteilung,
-				(int)(Double.parseDouble(preisStadtField.getText())*100), (int)(Double.parseDouble(preisBahnhofField.getText())*100), 
-				(int)(Double.parseDouble(preisRastplatzField.getText())*100), 
-				aenderungStadt, aenderungBahnhof, aenderungRastplatz, 
-				tmpSonderausstattungen); 
-		if(fehlerString != null){
+		
+		fehlerString +="</html>";
+		if(fehlerString != "<html></html>"){
             JOptionPane.showMessageDialog(null,fehlerString,"Fehler",JOptionPane.WARNING_MESSAGE);	
 		}
+	}
+
+	private int preisBekommen(JFormattedTextField field)
+	{
+		String preisString = field.getText();
+		String[] tmp = preisString.split(",");
+		int preis;
+		if(tmp.length == 1){
+			System.out.println("nur punkt");
+			preis = (int)(Double.parseDouble(field.getText())*100);
+		}else{
+			System.out.println("ein komma");
+			preisString = tmp[0]+tmp[1];
+			preis = Integer.parseInt(preisString);
+		}		
+		System.out.println(preisString +" in Cent");
+		return preis;
 	}
 	
 	//TODO: Prüfen, ob kleiner Null
