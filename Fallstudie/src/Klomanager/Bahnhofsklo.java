@@ -17,14 +17,44 @@ public class Bahnhofsklo extends Klohaus
 		kundenmarkt = 10000;
 	}
 	
-	public static void benzinpreisSteigt()
+	public static void benzinpreisFerien()
 	{
 		kundenmarkt += 2500;
 	}
 	
-	public static void benzinpreisSteigtEx()
+	public static void benzinpreisFerienEx()
 	{
 		kundenmarkt -= 2500;
+	}
+	
+	public static void bahnverspaetung()
+	{
+		kundenmarkt -= 2000;
+	}
+	
+	public static void bahnverspaetungEx()
+	{
+		kundenmarkt += 2000;
+	}
+	
+	public static void grippewelle()
+	{
+		kundenmarkt += 1500;
+	}
+	
+	public static void grippewelleEx()
+	{
+		kundenmarkt -= 1500;
+	}
+	
+	public static void bahnstreik()
+	{
+		kundenmarkt -= 2500;
+	}
+	
+	public static void bahnstreikEx()
+	{
+		kundenmarkt += 2500;
 	}
 	
 	public static int getKundenmarkt()
