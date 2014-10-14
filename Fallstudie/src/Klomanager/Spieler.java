@@ -147,6 +147,7 @@ public class Spieler
 			if((Math.abs(kontostand + 5000000) - auffangbarerDispo) <= Darlehen.LIMIT - darlehenkonto.getDarlehen())
 			{
 				int dlBetrag = Math.abs(kontostand + 5000000) - auffangbarerDispo;
+				dlBetrag = (int) (Math.round(dlBetrag / 100.0) + 1) * 100;
 				nehmeDarlehenAuf(dlBetrag);
 				
 				 meldung += "Um das Kontokorrentlimit deiner Bank nicht noch weiter" +
