@@ -22,8 +22,9 @@ public class Simulation
 	//Nummer des Spielers aktuellerSpieler
 	private int spielernummer;
 	private byte[] schuldenfrei;
-	private String eventtext;
-	private int eventnummer;
+	private Ereignis laufendesEreignis;
+	//private String eventtext;
+	//private int eventnummer;
 	
 	public Simulation(Spieler[] spieler)
 	{
@@ -82,20 +83,20 @@ public class Simulation
 			guvString = "Dies ist die erste Runde. Es wurde noch kein Gewinn oder Verlust erwirtschaftet.";
 		}
 		
-		if(eventtext != null)
+		if(laufendesEreignis != null && laufendesEreignis.getEreignistext() != null)
 		{
-			//Es gibt ein Event, aber keine Fehlermeldung
+			//Es gibt ein neues Ereignis zu verkünden, aber keine Fehlermeldung
 			if(meldung == null)
 			{
-				meldung = "<html>" + eventtext + "</html>";
+				meldung = "<html>" + laufendesEreignis.getEreignistext() + "</html>";
 			}
-			//Es gibt ein Event und eine Fehlermeldung
+			//Es gibt ein neues Ereignis zu verkünden und eine Fehlermeldung
 			else
 			{
-				meldung += " <br>" + eventtext + "</html>";
+				meldung += " <br>" + laufendesEreignis.getEreignistext()  + "</html>";
 			}
 		}
-		//Es gibt kein Event, aber eine Fehlermeldung
+		//Es gibt kein neues Ereignis, aber eine Fehlermeldung
 		else if(meldung != null)
 		{
 			meldung += "</html>";
@@ -398,144 +399,19 @@ public class Simulation
 	
 	private void erzeugeEreignis()
 	{
-		//Event aus der vorherigen Runde zurücksetzen
-		if(eventnummer == 1)
+		//Wenn kein Ereignis läuft oder das aktuelle Ereignis nicht mehr fortgesetzt wird, kann ein neues erstellt werden
+		if(laufendesEreignis == null || !laufendesEreignis.fortsetzen())
 		{
-			Bahnhofsklo.benzinpreisFerienEx();
-			Rastplatzklo.benzinpreisSteigtEx();
-		}
-		if(eventnummer == 2)
-		{
-			//Dieses Event hält zwei Runden - handelt es sich um die erste, wird nur der Eventtext zurückgesetzt
-			//Das return-Statement verhindert, dass ein neues Event erzeugt wird
-			if(eventtext != null)
+			try
 			{
-				eventtext = null;
-				return;
-			}
-			else
+				//Versuche, ein zufälliges Ereignis mithilfe eines Zufallszahl zwischen 1 und 100 zu erzeugen
+				//Gibt es das Ereignis nicht, wird eine Exception gefangen, dann tritt in der Folgerunde kein Ereignis auf
+				laufendesEreignis = new Ereignis((int) ((Math.random()) * 100 + 1), spieler);
+			} catch(IllegalArgumentException e)
 			{
-				Bahnhofsklo.bahnverspaetungEx();
-				Rastplatzklo.bahnverspaetungStreikFerienEx();
+				laufendesEreignis = null;
 			}
 		}
-		if(eventnummer == 3)
-		{
-			Stadtklo.sommerschlussverkaufEx();
-		}
-		if(eventnummer == 4)
-		{
-			Rastplatzklo.subentionEx(spieler);
-		}
-		if(eventnummer == 5)
-		{
-			pkanteil = 0.5;
-			hkanteil = 0.4;
-			akanteil = 0.1;
-			Stadtklo.grippewelleEx();
-			Bahnhofsklo.grippewelleEx();
-			Rastplatzklo.grippewelleEx();
-		}
-		if(eventnummer == 6)
-		{
-			pkanteil = 0.5;
-			hkanteil = 0.4;
-			akanteil = 0.1;
-		}
-		if(eventnummer == 7)
-		{
-			Bahnhofsklo.benzinpreisFerienEx();
-			Rastplatzklo.bahnverspaetungStreikFerienEx();
-		}
-		if(eventnummer == 8)
-		{
-			Bahnhofsklo.bahnstreikEx();
-			Rastplatzklo.bahnverspaetungStreikFerienEx();
-		}
-		
-		//Zufallszahl zwischen 1 und 100
-		eventnummer = (int) ((Math.random()) * 100 + 1); 
-		
-		//HTML-Tags werden woanders schon eingefügt
-		eventtext = "Ein aktuelles Ereignis beeinflusst Ihren Geschäftsbetrieb! <br><br>";
-		
-		//Benzinpreis steigt
-		if(eventnummer == 1)
-		{
-			eventtext += "Der Benzinpreis steigt erheblich wegen Engpässen in der Erdölindustrie. Die Menschen steigen vermehrt"
-					+ " auf öffentliche Verkehrsmittel um. Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
-			Bahnhofsklo.benzinpreisFerien();
-			Rastplatzklo.benzinpreisSteigt();
-			return;
-		}
-		//Bahnverspätungen
-		if(eventnummer == 2)
-		{
-			eventtext += "Durch das heftige Sturmtief und andauernde Stürme hat die Bahn massive Verspätungen. Die Bürger sind verärgert "
-					+ "und nutzen lieber das Auto. Rechnen Sie in den kommenden zwei Monaten mit entsprechenden regionalen Auswirkungen!";
-			Bahnhofsklo.bahnverspaetung();
-			Rastplatzklo.bahnverspaetungStreikFerien();
-			return;
-		}
-		//Sommerschlussverkauf
-		if(eventnummer == 3)
-		{
-			eventtext += "Sommerschlussverkauf! Die Menschen strömen in die Einkaufsstraßen der Städte um die billigsten Preise zu ergattern."
-					+ "Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
-			Stadtklo.sommerschlussverkauf();
-			return;
-		}
-		//Rastplatzsubvention
-		if(eventnummer == 4)
-		{
-			eventtext += "Der Bundesminister für öffentliche Toilettenhygiene stellt ein großes Defizit beim Ausbau der öffentlichen Toiletten auf "
-					+ "Rastplätzen fest, sie werden subventioniert. Dadurch verringern sich die Anschaffungskosten für neue Klohäuser in dieser "
-					+ "Region um 1.500 €! Die Suvention ist jedoch auf diesen Monat befristet!";
-			Rastplatzklo.subvention(spieler);
-			return;
-		}
-		//Grippewelle
-		if(eventnummer == 5)
-		{
-			eventtext += "Das Gesundheitsamt warnt vor einer Grippewelle und empfiehlt allen erhöhte Hygiene einzuhalten. Es ist diesen Monat mit "
-					+ "erhöhtem Besucherandrang auf allen Toiletten zu rechnen. Rechnen Sie außerdem damit, dass die Empfindlichkeit für mangelnde "
-					+ "Hygiene stark zunehmen wird!";
-			pkanteil = 0.35;
-			hkanteil = 0.6;
-			akanteil = 0.05;
-			Stadtklo.grippewelle();
-			Bahnhofsklo.grippewelle();
-			Rastplatzklo.grippewelle();
-			return;
-		}
-		//Wirtschaftskrise
-		if(eventnummer == 6)
-		{
-			eventtext += "Das Land steckt kurzzeitig in einer Wirtschaftskrise. Die Menschen gehen vorsichtig mit ihrem Geld um und sind zurzeit sehr "
-					+ "sparsam! Achten Sie auf angemessene Preise!";
-			pkanteil = 0.65;
-			hkanteil = 0.3;
-			akanteil = 0.05;
-			return;
-		}
-		//Ferienbeginn
-		if(eventnummer == 7)
-		{
-			eventtext += "Die Ferien haben begonnen. Das ganze Land ist unterwegs! Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
-			Bahnhofsklo.benzinpreisFerien();
-			Rastplatzklo.bahnverspaetungStreikFerien();
-			return;
-		}
-		//Bahnstreik
-		if(eventnummer == 8)
-		{
-			eventtext += "Die Bahn hat einen Streik angekündigt. Die Bürger steigen auf das Auto um und es ist mit erhöhtem Andrang auf den Rastplätzen zu rechnen!";
-			Bahnhofsklo.bahnstreik();
-			Rastplatzklo.bahnverspaetungStreikFerien();
-			return;
-		}
-		
-		eventtext = null;
 	}
 	
 	//TODO: Methode prüfen
@@ -844,6 +720,46 @@ public class Simulation
 	public int getRunde()
 	{
 		return runde;
+	}
+
+	public static double getPkanteil()
+	{
+		return pkanteil;
+	}
+
+	public static void setPkanteil(double pkanteil)
+	{
+		Simulation.pkanteil = pkanteil;
+	}
+
+	public static double getHkanteil()
+	{
+		return hkanteil;
+	}
+
+	public static void setHkanteil(double hkanteil)
+	{
+		Simulation.hkanteil = hkanteil;
+	}
+
+	public static double getAkanteil()
+	{
+		return akanteil;
+	}
+
+	public static void setAkanteil(double akanteil)
+	{
+		Simulation.akanteil = akanteil;
+	}
+
+	public Ereignis getLaufendesEreignis()
+	{
+		return laufendesEreignis;
+	}
+
+	public void setLaufendesEreignis(Ereignis laufendesEreignis)
+	{
+		this.laufendesEreignis = laufendesEreignis;
 	}
 
 	public void setRunde(int runde)

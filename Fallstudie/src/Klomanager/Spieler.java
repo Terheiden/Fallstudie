@@ -28,6 +28,7 @@ public class Spieler
 		darlehenkonto = new Darlehen(this);
 		personal = new Personal(this);
 		kontostand = 1500000; //15.000,00 €
+		marketingbudget = 2000; //20,00 €
 		mafobericht = "Ein Marktforschungsbericht kann über den Button links angefordert werden.";
 		
 		//TODO: Wird hier schon ein GuV-Objekt erzeugt?
