@@ -17,6 +17,25 @@ public class Stadtklo extends Klohaus
 		kundenmarkt = 12000;
 	}
 
+	public static void sommerschlussverkauf()
+	{
+		kundenmarkt += 2000;
+	}
+	public static void sommerschlussverkaufEx()
+	{
+		kundenmarkt -= 2000;
+	}
+	
+	public static void grippewelle()
+	{
+		kundenmarkt += 1500;
+	}
+	
+	public static void grippewelleEx()
+	{
+		kundenmarkt -= 1500;
+	}
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;

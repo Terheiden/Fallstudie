@@ -27,6 +27,42 @@ public class Rastplatzklo extends Klohaus
 		kundenmarkt += 2000;
 	}
 	
+	public static void bahnverspaetungStreikFerien()
+	{
+		kundenmarkt += 2500;
+	}
+	
+	public static void bahnverspaetungStreikFerienEx()
+	{
+		kundenmarkt -= 2500;
+	}
+	
+	public static void subvention(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getKlos()[2].anschaffungskosten -= 150000; //1.500,00 €
+		}
+	}
+	
+	public static void subentionEx(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getKlos()[2].anschaffungskosten += 150000; //1.500,00 €
+		}
+	}
+	
+	public static void grippewelle()
+	{
+		kundenmarkt += 1500;
+	}
+	
+	public static void grippewelleEx()
+	{
+		kundenmarkt -= 1500;
+	}
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;

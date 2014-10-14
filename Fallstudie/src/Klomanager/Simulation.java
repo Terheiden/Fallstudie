@@ -401,14 +401,62 @@ public class Simulation
 		//Event aus der vorherigen Runde zurücksetzen
 		if(eventnummer == 1)
 		{
-			Bahnhofsklo.benzinpreisSteigtEx();
+			Bahnhofsklo.benzinpreisFerienEx();
 			Rastplatzklo.benzinpreisSteigtEx();
+		}
+		if(eventnummer == 2)
+		{
+			//Dieses Event hält zwei Runden - handelt es sich um die erste, wird nur der Eventtext zurückgesetzt
+			//Das return-Statement verhindert, dass ein neues Event erzeugt wird
+			if(eventtext != null)
+			{
+				eventtext = null;
+				return;
+			}
+			else
+			{
+				Bahnhofsklo.bahnverspaetungEx();
+				Rastplatzklo.bahnverspaetungStreikFerienEx();
+			}
+		}
+		if(eventnummer == 3)
+		{
+			Stadtklo.sommerschlussverkaufEx();
+		}
+		if(eventnummer == 4)
+		{
+			Rastplatzklo.subentionEx(spieler);
+		}
+		if(eventnummer == 5)
+		{
+			pkanteil = 0.5;
+			hkanteil = 0.4;
+			akanteil = 0.1;
+			Stadtklo.grippewelleEx();
+			Bahnhofsklo.grippewelleEx();
+			Rastplatzklo.grippewelleEx();
+		}
+		if(eventnummer == 6)
+		{
+			pkanteil = 0.5;
+			hkanteil = 0.4;
+			akanteil = 0.1;
+		}
+		if(eventnummer == 7)
+		{
+			Bahnhofsklo.benzinpreisFerienEx();
+			Rastplatzklo.bahnverspaetungStreikFerienEx();
+		}
+		if(eventnummer == 8)
+		{
+			Bahnhofsklo.bahnstreikEx();
+			Rastplatzklo.bahnverspaetungStreikFerienEx();
 		}
 		
 		//Zufallszahl zwischen 1 und 100
 		eventnummer = (int) ((Math.random()) * 100 + 1); 
 		
-		//HTML-Tags sind schon drin ;)
+		//HTML-Tags werden woanders schon eingefügt
 		eventtext = "Ein aktuelles Ereignis beeinflusst Ihren Geschäftsbetrieb! <br><br>";
 		
 		//Benzinpreis steigt
@@ -416,11 +464,76 @@ public class Simulation
 		{
 			eventtext += "Der Benzinpreis steigt erheblich wegen Engpässen in der Erdölindustrie. Die Menschen steigen vermehrt"
 					+ " auf öffentliche Verkehrsmittel um. Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
-			Bahnhofsklo.benzinpreisSteigt();
+			Bahnhofsklo.benzinpreisFerien();
 			Rastplatzklo.benzinpreisSteigt();
 			return;
 		}
-		
+		//Bahnverspätungen
+		if(eventnummer == 2)
+		{
+			eventtext += "Durch das heftige Sturmtief und andauernde Stürme hat die Bahn massive Verspätungen. Die Bürger sind verärgert "
+					+ "und nutzen lieber das Auto. Rechnen Sie in den kommenden zwei Monaten mit entsprechenden regionalen Auswirkungen!";
+			Bahnhofsklo.bahnverspaetung();
+			Rastplatzklo.bahnverspaetungStreikFerien();
+			return;
+		}
+		//Sommerschlussverkauf
+		if(eventnummer == 3)
+		{
+			eventtext += "Sommerschlussverkauf! Die Menschen strömen in die Einkaufsstraßen der Städte um die billigsten Preise zu ergattern."
+					+ "Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
+			Stadtklo.sommerschlussverkauf();
+			return;
+		}
+		//Rastplatzsubvention
+		if(eventnummer == 4)
+		{
+			eventtext += "Der Bundesminister für öffentliche Toilettenhygiene stellt ein großes Defizit beim Ausbau der öffentlichen Toiletten auf "
+					+ "Rastplätzen fest, sie werden subventioniert. Dadurch verringern sich die Anschaffungskosten für neue Klohäuser in dieser "
+					+ "Region um 1.500 €! Die Suvention ist jedoch auf diesen Monat befristet!";
+			Rastplatzklo.subvention(spieler);
+			return;
+		}
+		//Grippewelle
+		if(eventnummer == 5)
+		{
+			eventtext += "Das Gesundheitsamt warnt vor einer Grippewelle und empfiehlt allen erhöhte Hygiene einzuhalten. Es ist diesen Monat mit "
+					+ "erhöhtem Besucherandrang auf allen Toiletten zu rechnen. Rechnen Sie außerdem damit, dass die Empfindlichkeit für mangelnde "
+					+ "Hygiene stark zunehmen wird!";
+			pkanteil = 0.35;
+			hkanteil = 0.6;
+			akanteil = 0.05;
+			Stadtklo.grippewelle();
+			Bahnhofsklo.grippewelle();
+			Rastplatzklo.grippewelle();
+			return;
+		}
+		//Wirtschaftskrise
+		if(eventnummer == 6)
+		{
+			eventtext += "Das Land steckt kurzzeitig in einer Wirtschaftskrise. Die Menschen gehen vorsichtig mit ihrem Geld um und sind zurzeit sehr "
+					+ "sparsam! Achten Sie auf angemessene Preise!";
+			pkanteil = 0.65;
+			hkanteil = 0.3;
+			akanteil = 0.05;
+			return;
+		}
+		//Ferienbeginn
+		if(eventnummer == 7)
+		{
+			eventtext += "Die Ferien haben begonnen. Das ganze Land ist unterwegs! Rechnen Sie in diesem Monat mit entsprechenden regionalen Auswirkungen!";
+			Bahnhofsklo.benzinpreisFerien();
+			Rastplatzklo.bahnverspaetungStreikFerien();
+			return;
+		}
+		//Bahnstreik
+		if(eventnummer == 8)
+		{
+			eventtext += "Die Bahn hat einen Streik angekündigt. Die Bürger steigen auf das Auto um und es ist mit erhöhtem Andrang auf den Rastplätzen zu rechnen!";
+			Bahnhofsklo.bahnstreik();
+			Rastplatzklo.bahnverspaetungStreikFerien();
+			return;
+		}
 		
 		eventtext = null;
 	}
