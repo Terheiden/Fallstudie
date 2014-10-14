@@ -28,6 +28,7 @@ public class Spieler
 		darlehenkonto = new Darlehen(this);
 		personal = new Personal(this);
 		kontostand = 1500000; //15.000,00 €
+		mafobericht = "Ein Marktforschungsbericht kann über den Button links angefordert werden.";
 		
 		//TODO: Wird hier schon ein GuV-Objekt erzeugt?
 		guv = new GuV(this, null);
@@ -206,11 +207,11 @@ public class Spieler
 		if(runde != 1)
 		{
 			kennzahlen += "<tr><td>Anzahl der Besucher letzten Monat</td><td>"+getKlos()[0].getKunden()+"</td><td>"+getKlos()[1].getKunden()+"</td><td>"+getKlos()[2].getKunden()+"</td></tr>"
-				+"<tr><td>Preise letzter Monat</td><td>"+getKlos()[0].getPreis()/100.0+"€</td><td>"+getKlos()[1].getPreis()/100.0+"€</td><td>"+getKlos()[2].getPreis()/100.0+"€</td></tr>"
-				+"<tr><td>Hygienelevel letzter Monat</td><td>"+getKlos()[0].getHygiene()+"</td><td>"+getKlos()[1].getHygiene()+"</td><td>"+getKlos()[2].getHygiene()+"</td></tr>";
+				+"<tr><td>Preise letzter Monat</td><td>"+getKlos()[0].getPreis()/100.0+"€</td><td>"+getKlos()[1].getPreis()/100.0+"€</td><td>"+getKlos()[2].getPreis()/100.0+"€</td></tr>";
 		}
-		
-		kennzahlen += "<tr><td>Bankguthaben</td><td colspan='3'>"+kontostand/100.0+"€</td></tr>"
+				
+		kennzahlen += "<tr><td>Aktueller Hygienelevel</td><td>"+getKlos()[0].getHygiene()+"</td><td>"+getKlos()[1].getHygiene()+"</td><td>"+getKlos()[2].getHygiene()+"</td></tr>"		
+		 		+ "<tr><td>Bankguthaben</td><td colspan='3'>"+kontostand/100.0+"€</td></tr>"
 				+"<tr><td>Darlehen Restbetrag</td><td colspan='3'>"+getDarlehenkonto().getDarlehen()/100.0+"€</td></tr>"
 				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>"+getDarlehenkonto().getZinssatz()*100.0+"%</td></tr>";
 		

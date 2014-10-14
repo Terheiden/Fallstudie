@@ -4,16 +4,16 @@ import javax.swing.JOptionPane;
 
 public class Simulation
 {
-
-	private static final double PKANTEIL = 0.5;
-	private static final double HKANTEIL = 0.4;
-	private static final double AKANTEIL = 0.1;
 	private static final double KOAANTEIL = 0.009;
 	private static final int KOAERLOES = 300; //3,00 €
 	private static final double KAAANTEIL = 0.01;
 	private static final int KAAERLOES = 100; //1,00 €
 	private static final double MUAANTEIL = 0.02;
 	private static final int MUAERLOES = 200; //2,00 €
+	
+	private static double pkanteil = 0.5;
+	private static double hkanteil = 0.4;
+	private static double akanteil = 0.1;
 	
 	private int runde;
 	private Spieler[] spieler ;
@@ -240,6 +240,10 @@ public class Simulation
 		verteileKunden(1);
 		verteileKunden(2);
 		
+		berechneHygiene(0);
+		berechneHygiene(1);
+		berechneHygiene(2);
+		
 		vervollstaendigeGuV();
 		
 		erstelleHistorie();
@@ -401,6 +405,7 @@ public class Simulation
 		//Zufallszahl zwischen 1 und 100
 		eventnummer = (int) ((Math.random()) * 100 + 1); 
 		
+		//HTML-Tags sind schon drin ;)
 		eventtext = "Ein aktuelles Ereignis beeinflusst Ihren Geschäftsbetrieb! <br><br>";
 		
 		//Benzinpreis steigt
@@ -521,11 +526,6 @@ public class Simulation
 	
 	private void berechneHygiene(int region)
 	{
-		if(runde == 1)
-		{
-			return;
-		}
-		
 		for (int i = 0; i < spieler.length; i++)
 		{
 			Klohaus[] klos = spieler[i].getKlos();
@@ -582,17 +582,17 @@ public class Simulation
 			
 			//Preiskunden
 			double preiskundenanteil = (1.0 - ((double) alleKlos[region].getPreis() / preissumme)) / (double) (spieler.length - 1);
-			int preiskunden = (int) (preiskundenanteil * gesamtkunden * PKANTEIL);
+			int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
 			System.out.println("Preiskunden bei Spieler " + i + ": " + preiskunden);
 			
 			//Hygienekunden
 			double hygienekundenanteil = ((double) alleKlos[region].getHygiene() / hygienesumme);
-			int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * HKANTEIL);
+			int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * hkanteil);
 			System.out.println("Hygienekunden bei Spieler " + i + ": " + hygienekunden);
 			
 			//Attraktivitätskunden
 			double attraktivitaetskundenanteil = ((double) alleKlos[region].getAttraktivitaet() / attraktivitaetssumme);
-			int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * AKANTEIL);
+			int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * akanteil);
 			System.out.println("Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
 			
 			int alleKunden = preiskunden + hygienekunden + attraktivitaetskunden;
@@ -646,17 +646,17 @@ public class Simulation
 
 					//Preiskunden
 					double preiskundenanteil = (1.0 - ((double) alleKlos[region].getPreis() / preissumme)) / (double) (spieler.length - anzahlbetroffenerSpieler - 1);
-					int preiskunden = (int) (preiskundenanteil * gesamtkunden * PKANTEIL);
+					int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
 					System.out.println("Zusätzliche Preiskunden bei Spieler " + i + ": " + preiskunden);
 
 					//Hygienekunden
 					double hygienekundenanteil = ((double) alleKlos[region].getHygiene() / hygienesumme);
-					int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * HKANTEIL);
+					int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * hkanteil);
 					System.out.println("Zusätzliche Hygienekunden bei Spieler " + i + ": " + hygienekunden);
 
 					//Attraktivitätskunden
 					double attraktivitaetskundenanteil = ((double) alleKlos[region].getAttraktivitaet() / attraktivitaetssumme);
-					int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * AKANTEIL);
+					int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * akanteil);
 					System.out.println("Zusätzliche Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
 
 					int alleKunden = alleKlos[region].getKunden() + preiskunden + hygienekunden + attraktivitaetskunden;
