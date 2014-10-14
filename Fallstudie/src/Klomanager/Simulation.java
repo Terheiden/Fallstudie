@@ -224,7 +224,8 @@ public class Simulation
 		spielerRundeStart();
 		
 		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
-		return null;
+		// nicht null, sondern leerer String, da in der GUI diese Rückgabe mit html umgeben wird
+		return "";
 	}
 	
 	/**

@@ -542,10 +542,10 @@ public class GUI extends JFrame implements ActionListener
 		}
 		//alle Preise /100 (Umrechnung Cent in Euro)		
 		marketingAusgabenField.setText(String.valueOf(marketingbudget/100));
-		
-		preisStadtField.setText(String.valueOf(preisStadt/100.0));
-		preisBahnhofField.setText(String.valueOf(preisBahnhof/100.0));
-		preisRastplatzField.setText(String.valueOf(preisRastplatz/100.0));
+	
+		preisStadtField.setText(stellePreisDar(preisStadt));
+		preisBahnhofField.setText(stellePreisDar(preisBahnhof));
+		preisRastplatzField.setText(stellePreisDar(preisRastplatz));
 		
 		anzStadtField.setText(String.valueOf(this.anzStadt));
 		anzBahnhofField.setText(String.valueOf(this.anzBahnhof));
@@ -566,13 +566,30 @@ public class GUI extends JFrame implements ActionListener
 		if(meldung != null)
 		{
 			JOptionPane.showMessageDialog(null, meldung, "Aktuelle Information!", JOptionPane.INFORMATION_MESSAGE);
+		System.out.println("aus GUI/wechselSpieler" + meldung );
 		}
+	}
+
+	private String stellePreisDar(int preis)
+	{
+		char[] tmp = String.valueOf(preis).toCharArray();
+		String preisString;
+		if(tmp.length < 3){
+			if(tmp.length <2){
+				preisString = "0,0"+tmp[0];
+			}else{
+				preisString = "0,"+ tmp[0]+tmp[1];				
+			}			
+		}else{
+			preisString = tmp[0]+ ","+ tmp[1]+tmp[2];	
+		}
+		return preisString;
 	}
 	
 	
 	private void beendeSpielerRunde(){
 		//prüfen ob Preise richtig gesetzt
-		String fehlerString = "<html>";
+		String fehlerString = "<html>";		
 		try
 		{
 			preisStadtField.commitEdit();
@@ -580,7 +597,7 @@ public class GUI extends JFrame implements ActionListener
 			preisRastplatzField.commitEdit();
 		} catch (ParseException e)
 		{
-			fehlerString += "Ups, das dürfte nicht passieren.<br>" + e.getMessage();
+			//fehlerString += "Ups, das dürfte nicht passieren.<br>" + e.getMessage();
 			e.printStackTrace();
 		}
 		
@@ -593,6 +610,9 @@ public class GUI extends JFrame implements ActionListener
 		if(preisRastplatzField.getValue() == null){
 			fehlerString +="Bitte trage einen Preis für deine Rastplatzklos ein.<br>";
 		}
+		
+
+		
 		//wenn alle preise gesetzt sind führe das Beenden der Runde aus
 		if(preisStadtField.getValue() != null && preisBahnhofField.getValue() != null && preisRastplatzField.getValue() != null)
 		{
@@ -624,8 +644,9 @@ public class GUI extends JFrame implements ActionListener
 		}
 		
 		fehlerString +="</html>";
-		if(fehlerString != "<html></html>"){
+		if(!fehlerString.equals("<html></html>")){
             JOptionPane.showMessageDialog(null,fehlerString,"Fehler",JOptionPane.WARNING_MESSAGE);	
+		System.out.println(fehlerString);
 		}
 	}
 
@@ -634,19 +655,19 @@ public class GUI extends JFrame implements ActionListener
 		String preisString = field.getText();
 		String[] tmp = preisString.split(",");
 		int preis;
+		//mit Punkt gesetzte Werte
 		if(tmp.length == 1){
-			System.out.println("nur punkt");
 			preis = (int)(Double.parseDouble(field.getText())*100);
-		}else{
-			System.out.println("ein komma");
+		}else
+		//mit Komma eingegebene/formatierte Werte
+		{
 			preisString = tmp[0]+tmp[1];
 			preis = Integer.parseInt(preisString);
 		}		
-		System.out.println(preisString +" in Cent");
 		return preis;
 	}
 	
-	//TODO: Prüfen, ob kleiner Null
+	
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{		
