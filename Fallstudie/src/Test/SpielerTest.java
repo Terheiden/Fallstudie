@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import Klomanager.GuV;
 import Klomanager.Klohaus;
 import Klomanager.Spieler;
 
@@ -20,15 +21,13 @@ public class SpielerTest extends Spieler
 	@Before
 	public void erstelleTestSpieler() {
 		Spieler = new SpielerTest();
+		assertNotNull("Spieler erzeugen ist fehlgeschlagen!", Spieler);
 	}
 	
 	@Test
 	public void testKaufeEinStadtklo()
 	{
-			//fail("Not yet implemented");			
 
-		assertNotNull("Spieler erzeugen ist fehlgeschlagen!", Spieler);
-		
 		Spieler.kaufeKlohaus(0, 1);
 		
 		Klohaus[] klos = Spieler.getKlos();
@@ -41,7 +40,6 @@ public class SpielerTest extends Spieler
 	@Test
 	public void testVerkaufeEinStadtklo()
 	{
-		assertNotNull("Spieler erzeugen ist fehlgeschlagen!", Spieler);
 		
 		Spieler.verkaufeKlohaus(0, 1);
 		
@@ -53,12 +51,17 @@ public class SpielerTest extends Spieler
 	
 	@Test
 	public void testKaufeSonderausstattungKaugummiautomatBahnhof()
-	{
-		assertNotNull("Spieler erzeugen ist fehlgeschlagen!", Spieler);
+	{	
+		Spieler.kaufeSonderausstattung(2, 3); //Berührungslose Wasserhähne auf Rastplatz
+		GuV gtest = Spieler.getGuv();
+		int[] anschaffkosten = gtest.getAnschaffungskostenSonder();
 		
-		Spieler.kaufeSonderausstattung(1, 6);
-		
+		if(anschaffkosten[2] != 60000) {
+			fail("Anschaffung hat nicht funktioniert!");
+		}
 		
 	}
+	
+	
 	
 }
