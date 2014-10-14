@@ -591,8 +591,38 @@ public class GUI extends JFrame implements ActionListener
 	
 	
 	private void beendeSpielerRunde(){
-		//prüfen ob Preise richtig gesetzt
-		String fehlerString = "<html>";		
+		String fehlerString = "<html>";	
+		// Felder auslesen
+		// Falls kein Wert eingegeben wurde wird 0 angenommen (nur möglich, falls beim ersten klick in Feld 
+		// Text eingegeben wird)
+		int darlehenAufnehmen = 0;
+		int darlehenTilgung = 0;
+		int marketingAusgaben = 0;
+		
+		try
+		{
+			darlehenAufnehmen = getEingabe(darlehenAufnehmenField);
+		} catch (NumberFormatException e1)
+		{			
+			System.out.println("Spieler hat Text eingegeben.");
+		}
+		try
+		{
+			darlehenTilgung = getEingabe(darlehenTilgungField);
+		} catch (NumberFormatException e1)
+		{			
+			System.out.println("Spieler hat Text eingegeben.");
+		}		
+		try
+		{
+			marketingAusgaben = getEingabe(marketingAusgabenField);
+		} catch (NumberFormatException e1)
+		{			
+			System.out.println("Spieler hat Text eingegeben.");
+		}
+
+		
+		//prüfen ob Preise richtig gesetzt		
 		try
 		{
 			preisStadtField.commitEdit();
@@ -624,10 +654,30 @@ public class GUI extends JFrame implements ActionListener
 			int preisBahnhof = preisBekommen(preisBahnhofField);
 			int preisRastplatz = preisBekommen(preisRastplatzField);
 			
-		
-			int[] tmpVerteilung = {Integer.parseInt(anzMitarbeiterStadtField.getText()),
-					Integer.parseInt(anzMitarbeiterBahnhofField.getText()),
-					Integer.parseInt(anzMitarbeiterRastplatzField.getText())};
+					
+			int[] tmpVerteilung = {0,0,0};
+			try
+			{
+				tmpVerteilung[0] = Integer.parseInt(anzMitarbeiterStadtField.getText());
+			} catch (NumberFormatException e1)
+			{			
+				fehlerString += "Die Anzahl der Mitarbeiter in der Stadt ist keine korrekte Zahl.<br>";
+			}
+			try
+			{
+				tmpVerteilung[2] = Integer.parseInt(anzMitarbeiterBahnhofField.getText());
+			} catch (NumberFormatException e1)
+			{			
+				fehlerString += "Die Anzahl der Mitarbeiter am Bahnhof ist keine korrekte Zahl.<br>";
+			}
+			try
+			{
+				tmpVerteilung[2] = Integer.parseInt(anzMitarbeiterRastplatzField.getText());
+			} catch (NumberFormatException e1)
+			{			
+				fehlerString += "Die Anzahl der Mitarbeiter am Rastplatz ist keine korrekte Zahl.<br>";
+			}
+
 			boolean[][] tmpSonderausstattungen = new boolean[3][8];
 			for (int i = 0; i < 3; i++){
 				for (int j = 0; j < 8; j++){
@@ -638,9 +688,9 @@ public class GUI extends JFrame implements ActionListener
 				}
 			}
 			//alle Preise *100 wegen Centberechnung
-			fehlerString += sim.spielerRundeBeendet(Integer.parseInt(darlehenAufnehmenField.getText())*100, 
-					Integer.parseInt(darlehenTilgungField.getText())*100, aenderungMitarbeiter, 
-					maFoBerichtBool, Integer.parseInt(marketingAusgabenField.getText())*100, tmpVerteilung,
+			fehlerString += sim.spielerRundeBeendet(darlehenAufnehmen, 
+					darlehenTilgung, aenderungMitarbeiter, 
+					maFoBerichtBool, marketingAusgaben, tmpVerteilung,
 					preisStadt, preisBahnhof, preisRastplatz, 
 					aenderungStadt, aenderungBahnhof, aenderungRastplatz, 
 					tmpSonderausstattungen); 
@@ -652,9 +702,32 @@ public class GUI extends JFrame implements ActionListener
 		System.out.println(fehlerString);
 		}
 	}
+	/*
+	 * gibt den im FormattedTextField angezeigten Wert als Integer berechnet auf Cent zurück
+	 */
+	private int getEingabe(JTextField field)
+	{
+		int wert;
+		String wertString = field.getText();
+		char[] tmp = wertString.toCharArray();
+		if(tmp.length <4){
+			wert = Integer.parseInt(field.getText())*100;
+		}else{
+			wertString = "";
+			//String ohne Punkte zusammenbauen
+			for (int i = 0; i < tmp.length; i++)
+			{
+				// tausender (4) und millionen(8) Punkt werden rausgenommen 
+				if(i != tmp.length-4 && i != tmp.length-8)
+				wertString += tmp[i];
+			}	
+			wert = Integer.parseInt(wertString) * 100; 
+		}
+		return wert;
+	}
 
 	/*
-	 * gibt den im FormattedTextField angezeigten wert als Integer berechnet auf Cent zurück
+	 * gibt den Preis, der im FormattedTextField angezeigten wird als Integer berechnet auf Cent zurück
 	 */	
 	private int preisBekommen(JFormattedTextField field)
 	{
