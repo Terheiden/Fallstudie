@@ -31,10 +31,10 @@ public class GUI extends JFrame implements ActionListener
 	private JLabel anzBahnhofField, anzRastplatzField, anzStadtField;
 	private JLabel anzMitarbeiterGesField;
 	
-	private JTextField  marketingAusgabenField; 
+	private JFormattedTextField  marketingAusgabenField; 
 	private JFormattedTextField preisStadtField,
 			preisRastplatzField, preisBahnhofField;
-	private JTextField darlehenTilgungField,
+	private JFormattedTextField darlehenTilgungField,
 			darlehenAufnehmenField, anzMitarbeiterBahnhofField,
 			anzMitarbeiterRastplatzField, anzMitarbeiterStadtField;
 
@@ -542,6 +542,14 @@ public class GUI extends JFrame implements ActionListener
 		}
 		//alle Preise /100 (Umrechnung Cent in Euro)		
 		marketingAusgabenField.setText(String.valueOf(marketingbudget/100));
+		try
+		{
+			marketingAusgabenField.commitEdit();
+		} catch (ParseException e)
+		{
+			marketingAusgabenField.setText("0");
+			System.out.println("fehler bei markeitng setzen");
+		}
 	
 		preisStadtField.setText(stellePreisDar(preisStadt));
 		preisBahnhofField.setText(stellePreisDar(preisBahnhof));
