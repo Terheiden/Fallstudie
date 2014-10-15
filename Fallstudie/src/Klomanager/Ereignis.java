@@ -11,11 +11,7 @@ public class Ereignis
 	private Spieler[] spieler;
 
 	public Ereignis(int ereignisnummer, Spieler[] spieler)
-	{
-		this.spieler = spieler;
-		this.ereignisnummer = ereignisnummer;
-		this.lebenszeit = LEBENSZEITEN[ereignisnummer - 1];
-						
+	{					
 		//HTML-Tags werden woanders schon eingefügt
 		ereignistext = "Ein aktuelles Ereignis beeinflusst Ihren Geschäftsbetrieb! <br><br>";
 
@@ -101,6 +97,10 @@ public class Ereignis
 		{
 			throw new IllegalArgumentException("Ereignisnummer nicht vorhanden");
 		}
+		
+		this.spieler = spieler;
+		this.ereignisnummer = ereignisnummer;
+		this.lebenszeit = LEBENSZEITEN[ereignisnummer - 1];
 	}
 	
 	//Wird das Ereignis immer noch fortgesetzt?
