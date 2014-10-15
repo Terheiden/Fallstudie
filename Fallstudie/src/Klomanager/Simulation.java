@@ -11,9 +11,9 @@ public class Simulation
 	private static final double MUAANTEIL = 0.02;
 	private static final int MUAERLOES = 200; //2,00 €
 	
-	private static double pkanteil = 0.5;
-	private static double hkanteil = 0.4;
-	private static double akanteil = 0.1;
+	private static double pkanteil = 0.625;
+	private static double hkanteil = 0.3;
+	private static double akanteil = 0.075;
 	
 	private int runde;
 	private Spieler[] spieler ;
@@ -173,27 +173,27 @@ public class Simulation
 		
 		if (aenderungStadt < 0)
 		{
-			aktuellerSpieler.verkaufeKlohaus(0, Math.abs(aenderungStadt));
+			aktuellerSpieler.gebeKlohausAb(0, Math.abs(aenderungStadt));
 		}
 		else
 		{
-			aktuellerSpieler.kaufeKlohaus(0, aenderungStadt);
+			aktuellerSpieler.mieteKlohaus(0, aenderungStadt);
 		}
 		if (aenderungBahnhof < 0)
 		{
-			aktuellerSpieler.verkaufeKlohaus(1, Math.abs(aenderungBahnhof));
+			aktuellerSpieler.gebeKlohausAb(1, Math.abs(aenderungBahnhof));
 		}
 		else
 		{
-			aktuellerSpieler.kaufeKlohaus(1, aenderungBahnhof);
+			aktuellerSpieler.mieteKlohaus(1, aenderungBahnhof);
 		}
 		if (aenderungRastplatz < 0)
 		{
-			aktuellerSpieler.verkaufeKlohaus(2, Math.abs(aenderungRastplatz));
+			aktuellerSpieler.gebeKlohausAb(2, Math.abs(aenderungRastplatz));
 		}
 		else
 		{
-			aktuellerSpieler.kaufeKlohaus(2, aenderungRastplatz);
+			aktuellerSpieler.mieteKlohaus(2, aenderungRastplatz);
 		}
 		
 		//Behandlung evtl. zugekaufter Sonderausstattungen
@@ -546,7 +546,8 @@ public class Simulation
 	//TODO: Syso's entfernen
 	private void verteileKunden(int region)
 	{
-		int preissumme = 0;
+		//Da die Preise mit der vierten Potenz eingehen reicht Int beim Maximalpreis (300 Cent) nicht als Datentyp aus
+		long preissumme = 0;
 		int hygienesumme = 0;
 		int attraktivitaetssumme = 0;
 		int gesamtkunden = this.errechneKundenstamm(region);
@@ -556,7 +557,7 @@ public class Simulation
 		{
 			Klohaus[] alleKlos = spieler[i].getKlos();
 	
-			preissumme += alleKlos[region].getPreis();
+			preissumme += Math.pow(alleKlos[region].getPreis(), 4);
 			hygienesumme += alleKlos[region].getHygiene();
 			attraktivitaetssumme += alleKlos[region].getAttraktivitaet();	
 		}
@@ -574,7 +575,7 @@ public class Simulation
 			Klohaus[] alleKlos = spieler[i].getKlos();
 			
 			//Preiskunden
-			double preiskundenanteil = (1.0 - ((double) alleKlos[region].getPreis() / preissumme)) / (double) (spieler.length - 1);
+			double preiskundenanteil = (1.0 - ((double) Math.pow(alleKlos[region].getPreis(), 4) / preissumme)) / (double) (spieler.length - 1);
 			int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
 			System.out.println("Preiskunden bei Spieler " + i + ": " + preiskunden);
 			
@@ -595,10 +596,10 @@ public class Simulation
 			if(alleKunden > alleKlos[region].getKapazitaet())
 			{
 				alleKlos[region].setKunden(alleKlos[region].getKapazitaet());
-				kundenueberlauf = alleKunden - alleKlos[region].getKapazitaet();
+				kundenueberlauf += alleKunden - alleKlos[region].getKapazitaet();
 				betroffenerSpieler[i] = true;
 				anzahlbetroffenerSpieler++;
-				System.out.println("Überlauf bei Spieler " + i + ". " + kundenueberlauf + " Kunden zu viel!");
+				System.out.println("Überlauf bei Spieler " + i + ". " + (alleKunden - alleKlos[region].getKapazitaet()) + " Kunden zu viel!");
 			}
 			else
 			{			
@@ -606,12 +607,13 @@ public class Simulation
 			}			
 		}
 		
+		//TODO: Besprechen, was passiert, wenn nur auf einen Spieler verteilt wird - bei hohem Preis unerwünscht
 		//Wenn Kunden übrig sind, werden diese auf die übrigen Spieler neu verteilt
 		if(kundenueberlauf > 0)
 		{
 			
 			//Restkunden verteilen
-			System.out.println("Verteile Überlauf...");
+			System.out.println("Verteile Überlauf (" + kundenueberlauf + " Kunden)...");
 			
 			preissumme = 0;
 			hygienesumme = 0;
@@ -624,7 +626,7 @@ public class Simulation
 				{
 					Klohaus[] alleKlos = spieler[i].getKlos();
 		
-					preissumme += alleKlos[region].getPreis();
+					preissumme += Math.pow(alleKlos[region].getPreis(), 4);
 					hygienesumme += alleKlos[region].getHygiene();
 					attraktivitaetssumme += alleKlos[region].getAttraktivitaet();	
 				}
@@ -638,12 +640,13 @@ public class Simulation
 					Klohaus[] alleKlos = spieler[i].getKlos();
 
 					//Preiskunden
-					double preiskundenanteil = (1.0 - ((double) alleKlos[region].getPreis() / preissumme)) / (double) (spieler.length - anzahlbetroffenerSpieler - 1);
+					double preiskundenanteil = (1.0 - ((double) Math.pow(alleKlos[region].getPreis(), 4) / preissumme)) / (double) (spieler.length - anzahlbetroffenerSpieler - 1);
 					int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
 					System.out.println("Zusätzliche Preiskunden bei Spieler " + i + ": " + preiskunden);
 
 					//Hygienekunden
 					double hygienekundenanteil = ((double) alleKlos[region].getHygiene() / hygienesumme);
+					System.out.println("Hygienekundenanteil = " + hygienekundenanteil);
 					int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * hkanteil);
 					System.out.println("Zusätzliche Hygienekunden bei Spieler " + i + ": " + hygienekunden);
 

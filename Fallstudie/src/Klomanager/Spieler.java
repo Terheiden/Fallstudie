@@ -36,7 +36,7 @@ public class Spieler
 	}
 	
 	//Diese Methoden werden erst ausgeführt, wenn der Spieler seine Runde beendet hat
-	public void kaufeKlohaus(int region, int anzahl)
+	public void mieteKlohaus(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() + anzahl);
 		
@@ -49,7 +49,7 @@ public class Spieler
 		guv.setAnschaffungskostenKlo(tmp);
 	}
 	
-	public void verkaufeKlohaus(int region, int anzahl)
+	public void gebeKlohausAb(int region, int anzahl)
 	{
 		klos[region].setAnzahl(klos[region].getAnzahl() - anzahl);
 		
@@ -213,7 +213,7 @@ public class Spieler
 	
 	public String erstelleKennzahlen(int runde)
 	{
-		kennzahlen = "<html><h2>Daten des Unternehmens in der "+runde+"-ten Spielrunde</h2>"
+		kennzahlen = "<html><h2>Daten des Unternehmens nach der " + (runde-1) +"-ten Spielrunde</h2>"
 				+ "<table border='1'>"
 				+"<tr><th>Posten</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
 				+"<tr><td>Personalplanung letzten Monat</td><td>"+getPersonal().getVerteilung()[0]+"</td><td>"+getPersonal().getVerteilung()[1]+"</td><td>"+getPersonal().getVerteilung()[2]+"</td></tr>"

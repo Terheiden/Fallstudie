@@ -28,7 +28,7 @@ public class SpielerTest extends Spieler
 	public void testKaufeEinStadtklo()
 	{
 
-		Spieler.kaufeKlohaus(0, 1);
+		Spieler.mieteKlohaus(0, 1);
 		
 		Klohaus[] klos = Spieler.getKlos();
 		double anzahlStadtklos = klos[0].getAnzahl();
@@ -41,7 +41,7 @@ public class SpielerTest extends Spieler
 	public void testVerkaufeEinStadtklo()
 	{
 		
-		Spieler.verkaufeKlohaus(0, 1);
+		Spieler.gebeKlohausAb(0, 1);
 		
 		Klohaus[] klos = Spieler.getKlos();
 		int anzahlStadtklos = klos[0].getAnzahl();
