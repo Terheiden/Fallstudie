@@ -36,6 +36,16 @@ public class Stadtklo extends Klohaus
 		kundenmarkt -= 1500;
 	}
 	
+	public static void stadtfest()
+	{
+		kundenmarkt += 3000;
+	}
+	
+	public static void stadtfestEx()
+	{
+		kundenmarkt -= 3000;
+	}
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;
