@@ -9,6 +9,7 @@ public class Spieler
 	private int kontostand;
 	private int marketingbudget;
 	private String kennzahlen;
+	private String kennzahlenzusatz;
 	private String mafobericht;
 	private boolean mafoberichtGefordert;
 	private Klohaus[] klos;
@@ -235,11 +236,27 @@ public class Spieler
 			kennzahlen += "<tr><td>Überziehungskredit</td><td colspan='3'>"+kontostand/(-100.0)+"€</td></tr>"
 					+"<tr><td>Überziehungszinssatz</td><td colspan='3'>"+DISPOZINS*100.0+"%</td></tr>";
 		}
-		kennzahlen +="</table>"
-				+ "</html>";
+		
+		kennzahlen +="</table>";
+				
+		if(kennzahlenzusatz != null)
+		{
+			kennzahlen += kennzahlenzusatz;
+		}
+		
+		kennzahlen += "</html>";
 		return kennzahlen;
 	}
 	
+	public static void kloverstopfung(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].guv.setSonderkosten(spieler[i].guv.getSonderkosten() + 45000); //450,00 €
+		}
+	}
+
+
 	/**
 	 * Ab hier: Getter & Setter
 	 */
@@ -247,6 +264,36 @@ public class Spieler
 	public String getName()
 	{
 		return name;
+	}
+	
+	public String getKennzahlenzusatz()
+	{
+		return kennzahlenzusatz;
+	}
+
+	public void setKennzahlenzusatz(String kennzahlenzusatz)
+	{
+		this.kennzahlenzusatz = kennzahlenzusatz;
+	}
+	
+	public String getKennzahlen()
+	{
+		return kennzahlen;
+	}
+
+	public void setKennzahlen(String kennzahlen)
+	{
+		this.kennzahlen = kennzahlen;
+	}
+
+	public BWLHistorie getLetzteRunde()
+	{
+		return letzteRunde;
+	}
+
+	public void setLetzteRunde(BWLHistorie letzteRunde)
+	{
+		this.letzteRunde = letzteRunde;
 	}
 
 	public String getMafobericht()

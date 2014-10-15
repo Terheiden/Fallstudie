@@ -6,7 +6,7 @@ public class Ereignis
 	private String ereignistext;
 	private int lebenszeit;
 	//Lebenszeiten der einzelnen Ereignisse    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1};
 	//Dauerereignisse bekommen die Lebenszeit 1
 	private Spieler[] spieler;
 
@@ -91,9 +91,37 @@ public class Ereignis
 					     +  "Die Lohnkosten pro Reinigungskraft steigen um 40 €!";
 			Personal.ausstattungserhoehung(spieler);
 			break;
+		case 11:
+			//Stadtfest
+			ereignistext += "Das jährliche Stadtfest hat heute eröffnet und zieht viele Besucher von außerhalb an. <br>"
+					     +  "In den Städten ist in diesem Monat mit erhöhten Besucherzahlen zu rechnen.";
+			Stadtklo.stadtfest();
+			Bahnhofsklo.stadtfest();
+			Rastplatzklo.stadtfest();
+			break;
+		case 12:
+			//Vandalismus
+			ereignistext += "Der Vandalismus nimmt zu: Bahnhoftoiletten wurden von unbekannten Gangs während der Nacht sachbeschädigt. <br>"
+					     +  "Die Polizei empfiehlt Wachsamkeit bei nächtlichen Spaziergängen. Rechnen Sie mit entsprechenden Sonderkosten!";
+			Bahnhofsklo.vandalismus(spieler);
+			break;
+		case 13:
+			//Nicht möglich
+		case 14:
+			//Verstopfung
+			ereignistext += "Aufgrund ein paar unliebsamer Toilettenbesucher sind einige Toiletten verstopft. Das muss kostspielig behoben werden! <br>"
+					     +  "Rechnen Sie mit entsprechenden Sonderkosten!";
+			Spieler.kloverstopfung(spieler);
+			break;
+		case 15:
+			//Besuch vom Gesundheitsamt
+			ereignistext += "Das Gesundheitsamt führt ab Ende des Monats einmalige strenge Kontrollen durch. <br>"
+				       	 +  "Bei groben Verstößen gegen die Hygienevorschriften drohen Bußgelder!";
+			//Hier noch keine Auswirkungen, diese treten später ein
+			break;
 		}
 		
-		if (ereignisnummer > 10 || ereignisnummer < 1)
+		if (ereignisnummer > 15 || ereignisnummer < 1)
 		{
 			throw new IllegalArgumentException("Ereignisnummer nicht vorhanden");
 		}
@@ -116,6 +144,17 @@ public class Ereignis
 		if(ereignisnummer == 9)
 		{
 			Personal.tariferhoehung(spieler);
+		}
+		if(ereignisnummer == 15)
+		{
+			if(lebenszeit == 1)
+			{
+				Ereignis.gesundheitsamt(spieler);
+			}
+			if(lebenszeit == 0)
+			{
+				Ereignis.gesundheitsamtEx(spieler);
+			}
 		}
 		
 		if(lebenszeit > 0)
@@ -163,12 +202,72 @@ public class Ereignis
 				Bahnhofsklo.bahnstreikEx();
 				Rastplatzklo.bahnverspaetungStreikFerienEx();
 				break;
+			case 11:
+				Stadtklo.stadtfestEx();
+				Bahnhofsklo.stadtfestEx();
+				Rastplatzklo.stadtfestEx();
+				break;
 			}
 			
 			return false;
 		}
 	}
 
+	public static void gesundheitsamt(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			Klohaus[] klos = spieler[i].getKlos();
+			String[] text = {"Stadtklos: ", "Bahnhofsklos: ", "Rastplatzklos: "};
+			
+			for (int j = 0; j < klos.length; j++)
+			{
+				int zusatzerfolg = 0;
+				int hygiene = klos[j].getHygiene();
+				
+				if(hygiene < 50)
+				{
+					zusatzerfolg = -100000 * klos[j].getAnzahl(); //1000,00 €
+					text[j] += zusatzerfolg/100.0 + " € (Massive Missachtung der Hygienestandards)";
+				}
+				else if(hygiene < 70)
+				{
+					zusatzerfolg = -50000; //500,00 €
+					text[j] += zusatzerfolg/100.0 + " € (Missachtung der Hygienevorschriften)";
+				}
+				else if(hygiene < 90)
+				{
+					zusatzerfolg = -25000; //250,00 €
+					text[j] += zusatzerfolg/100.0 + " € (Toiletten sind unhygienisch)";
+				}
+				else if(hygiene < 150)
+				{
+					text[j] += zusatzerfolg/100.0 + " € (Hygiene erfüllt die gesetzlichen Standards)";
+				}
+				else if(hygiene >= 150)
+				{
+					zusatzerfolg = 50000; //Prämie von 500,00 €
+					text[j] += zusatzerfolg/100.0 + " € (Prämie erhalten, wegen vorbildlicher Sauberkeit)";
+				}
+				
+				if(zusatzerfolg <= 0) spieler[i].getGuv().setSonderkosten(spieler[i].getGuv().getSonderkosten() + Math.abs(zusatzerfolg));
+				else spieler[i].getGuv().setSonderertraege(spieler[i].getGuv().getSonderertraege() + zusatzerfolg);
+			}
+			
+			String zusatz = "<br><h3>Sonderzahlungen an das Gesundheitsamt:</h3>"
+			              + text[0] + "<br>" + text[1] + "<br>" + text[2] + "</html>";
+			spieler[i].setKennzahlenzusatz(zusatz);
+		}
+	}
+	
+	public static void gesundheitsamtEx(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].setKennzahlenzusatz(null);
+		}
+	}
+	
 	public int getEreignisnummer()
 	{
 		return ereignisnummer;

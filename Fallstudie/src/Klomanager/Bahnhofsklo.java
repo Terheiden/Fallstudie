@@ -57,6 +57,24 @@ public class Bahnhofsklo extends Klohaus
 		kundenmarkt += 2500;
 	}
 	
+	public static void stadtfest()
+	{
+		kundenmarkt += 1000;
+	}
+	
+	public static void stadtfestEx()
+	{
+		kundenmarkt -= 1000;
+	}
+	
+	public static void vandalismus(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getGuv().setSonderkosten(spieler[i].getGuv().getSonderkosten() + (30000 * spieler[i].getKlos()[1].anzahl)); //Je 300,00 €
+		}
+	}
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;
