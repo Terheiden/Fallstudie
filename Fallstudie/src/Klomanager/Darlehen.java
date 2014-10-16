@@ -5,7 +5,7 @@ public class Darlehen
 	static final int LIMIT = 15000000; //150.000,00 €
 	
 	private int darlehen;
-	private double zinssatz;
+	private static double zinssatz;
 	private Spieler besitzer;
 	
 	public Darlehen(Spieler besitzer)
@@ -18,6 +18,11 @@ public class Darlehen
 	public int berechneZinsen()
 	{
 		return (int) (darlehen * zinssatz);
+	}
+	
+	public static void leitzinsaenderung(double aenderung)
+	{
+		zinssatz += aenderung;
 	}
 
 	/**
@@ -34,14 +39,14 @@ public class Darlehen
 		this.darlehen = darlehen;
 	}
 
-	public double getZinssatz()
+	public static double getZinssatz()
 	{
 		return zinssatz;
 	}
 
-	public void setZinssatz(double zinssatz)
+	public static void setZinssatz(double zinssatz)
 	{
-		this.zinssatz = zinssatz;
+		Darlehen.zinssatz = zinssatz;
 	}
 
 	public Spieler getBesitzer()

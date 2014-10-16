@@ -361,7 +361,7 @@ public class Simulation
 		{
 			int kontostand = spieler[i].getKontostand();
 			int darlehen = spieler[i].getDarlehenkonto().getDarlehen();
-			double darlehenszinssatz = spieler[i].getDarlehenkonto().getZinssatz();
+			double darlehenszinssatz = Darlehen.getZinssatz();
 			int marketingbudget = spieler[i].getMarketingbudget();
 			
 			Klohaus[] klos = spieler[i].getKlos();

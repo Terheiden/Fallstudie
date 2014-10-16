@@ -44,7 +44,6 @@ public class GuV
 		else
 		{
 			Klohaus[] klos = this.besitzer.getKlos();
-			int[] verteilung = this.besitzer.getPersonal().getVerteilung();
 			
 			for (int i = 0; i < klos.length; i++)
 			{
