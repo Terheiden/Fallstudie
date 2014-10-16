@@ -102,6 +102,8 @@ public class Spieler
 			break;
 		}
 		
+		anschaffungskosten *= klos[region].getAnzahl();
+		
 		int[] tmp = guv.getAnschaffungskostenSonder();
 		tmp[region] = tmp[region] + anschaffungskosten;
 		guv.setAnschaffungskostenSonder(tmp);
