@@ -409,7 +409,7 @@ public class Simulation
 				//Versuche, ein zufälliges Ereignis mithilfe eines Zufallszahl zwischen 1 und 40 zu erzeugen
 				//Gibt es das Ereignis nicht, wird eine Exception gefangen, dann tritt in der Folgerunde kein Ereignis auf
 				int zufall = (int) ((Math.random()) * 40 + 1);
-				laufendesEreignis = new Ereignis(17, this);
+				laufendesEreignis = new Ereignis(zufall, this);
 			} catch(IllegalArgumentException e)
 			{
 				laufendesEreignis = null;
@@ -569,6 +569,8 @@ public class Simulation
 		//true = Spieler hat seine Kapazitätsgrenze erreicht und wird bei der zweiten Verteilungsrunde nicht mehr berücksichtigt
 		boolean[] betroffenerSpieler = new boolean[spieler.length];
 		int anzahlbetroffenerSpieler = 0;
+		//Speichert die Preiskunden aller Spieler um sie bei einer eventuellen zweiten Verteilungsrunde noch zu kennen
+		int[] tmpPreiskunden = new int[spieler.length];
 		
 		//Verteile die Kunden bei allen Spielern gemäß der Formeln in der Spezifikation
 		//(Division durch 0 ist möglich und führt zufällig auch zum richtigen Ergebnis)
@@ -579,6 +581,7 @@ public class Simulation
 			//Preiskunden
 			double preiskundenanteil = (1.0 - ((double) Math.pow(alleKlos[region].getPreis(), 4) / preissumme)) / (double) (spieler.length - 1);
 			int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
+			tmpPreiskunden[i] = preiskunden;
 			System.out.println("Preiskunden bei Spieler " + i + ": " + preiskunden);
 			
 			//Hygienekunden
@@ -609,7 +612,6 @@ public class Simulation
 			}			
 		}
 		
-		//TODO: Besprechen, was passiert, wenn nur auf einen Spieler verteilt wird - bei hohem Preis unerwünscht
 		//Wenn Kunden übrig sind, werden diese auf die übrigen Spieler neu verteilt
 		if(kundenueberlauf > 0)
 		{
@@ -643,12 +645,18 @@ public class Simulation
 
 					//Preiskunden
 					double preiskundenanteil = (1.0 - ((double) Math.pow(alleKlos[region].getPreis(), 4) / preissumme)) / (double) (spieler.length - anzahlbetroffenerSpieler - 1);
+					if(anzahlbetroffenerSpieler == spieler.length - 1)
+					{
+						//Sonderfall: Es ist nur noch ein Spieler frei, der Anteil beträgt also 1.0
+						//Berechnung mit NaN würde hier durch die Division durch (Anzahl der Spieler - 1) zu einem Anteil von 0.0 führen
+						//Diese if-Anweisung ist nur hier nötig, da der erste Durchlauf nie mit nur einem Spieler geschieht
+						preiskundenanteil = 1.0;
+					}
 					int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
 					System.out.println("Zusätzliche Preiskunden bei Spieler " + i + ": " + preiskunden);
 
 					//Hygienekunden
 					double hygienekundenanteil = ((double) alleKlos[region].getHygiene() / hygienesumme);
-					System.out.println("Hygienekundenanteil = " + hygienekundenanteil);
 					int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * hkanteil);
 					System.out.println("Zusätzliche Hygienekunden bei Spieler " + i + ": " + hygienekunden);
 
@@ -657,20 +665,28 @@ public class Simulation
 					int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * akanteil);
 					System.out.println("Zusätzliche Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
 
-					int alleKunden = alleKlos[region].getKunden() + preiskunden + hygienekunden + attraktivitaetskunden;
+					int alleneuenKunden = preiskunden + hygienekunden + attraktivitaetskunden;
+					int alleKunden = alleKlos[region].getKunden() + alleneuenKunden;
 	
-					//Übersteigt jetzt die Summe aller Kunden für einen Spieler dessen Kapazität, bekommt er so viele Kunden, wie er Kapazitäten frei hat
-					//Übrige Kunden werden nicht mehr weiter verteilt
-					if(alleKunden > alleKlos[region].getKapazitaet())
+					
+					//Ein Spieler darf aus der zweiten Verteilung nicht mehr Kunden bekommen als er Preiskunden (aus der ersten Verteilung) hatte
+					if(alleneuenKunden > tmpPreiskunden[i])
+					{
+						alleKlos[region].setKunden(alleKlos[region].getKunden() + tmpPreiskunden[i]);
+						System.out.println("Spieler " + i + " darf seine Kapazität nicht ausnutzen, er bekommt " + (alleKlos[region].getKunden()) + " Kunden.");
+					}
+					//Übersteigt die Summe aller Kunden für einen Spieler dessen Kapazität, bekommt er so viele Kunden, wie er Kapazitäten frei hat
+					else if(alleKunden > alleKlos[region].getKapazitaet())
 					{
 						alleKlos[region].setKunden(alleKlos[region].getKapazitaet());
 						System.out.println("Überlauf bei Spieler " + i + ". Wird nicht mehr verteilt!");
 					}
 					else
 					{			
-						System.out.println("Kunden gesetzt bei Spieler " + i + ": " + (alleKunden));
+						System.out.println("Kunden neu gesetzt bei Spieler " + i + ": " + (alleKunden));
 						alleKlos[region].setKunden(alleKunden);	
-					}					
+					}	
+					//Übrige Kunden werden nicht mehr weiter verteilt
 				}
 			}
 		}
