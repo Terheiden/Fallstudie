@@ -8,9 +8,9 @@ public class Ereignis
 	//Lebenszeiten der einzelnen Ereignisse    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
 	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1};
 	//Dauerereignisse bekommen die Lebenszeit 1
-	private Spieler[] spieler;
+	private Simulation sim;
 
-	public Ereignis(int ereignisnummer, Spieler[] spieler)
+	public Ereignis(int ereignisnummer, Simulation sim)
 	{					
 		//HTML-Tags werden woanders schon eingefügt
 		ereignistext = "Ein aktuelles Ereignis beeinflusst Ihren Geschäftsbetrieb! <br><br>";
@@ -42,7 +42,7 @@ public class Ereignis
 			ereignistext += "Der Bundesminister für öffentliche Toilettenhygiene stellt ein großes Defizit beim Ausbau der öffentlichen <br>"
 					     +  "Toiletten auf Rastplätzen fest, sie werden subventioniert. Dadurch verringern sich die Anschaffungskosten <br>"
 					     +  "für neue Klohäuser in dieser Region um 1.500 €! Die Suvention ist jedoch auf diesen Monat befristet!";
-			Rastplatzklo.subvention(spieler);
+			Rastplatzklo.subvention(sim.getSpieler());
 			break;
 		case 5:
 			//Grippewelle
@@ -89,7 +89,7 @@ public class Ereignis
 			ereignistext += "Die Putzfrauen leiden unter schlechten Bedingungen bei den Bahnhofstoiletten und streiken für bessere Putzausstattung. <br>"
 					     +  "Um den Geschäftsbetrieb nicht zu beinträchtigen, mussten Sie ihr Budget für die Putzausstattung erheblich aufstocken. <br>"
 					     +  "Die Lohnkosten pro Reinigungskraft steigen um 40 €!";
-			Personal.ausstattungserhoehung(spieler);
+			Personal.ausstattungserhoehung(sim.getSpieler());
 			break;
 		case 11:
 			//Stadtfest
@@ -103,7 +103,7 @@ public class Ereignis
 			//Vandalismus
 			ereignistext += "Der Vandalismus nimmt zu: Bahnhoftoiletten wurden von unbekannten Gangs während der Nacht sachbeschädigt. <br>"
 					     +  "Die Polizei empfiehlt Wachsamkeit bei nächtlichen Spaziergängen. Rechnen Sie mit entsprechenden Sonderkosten!";
-			Bahnhofsklo.vandalismus(spieler);
+			Bahnhofsklo.vandalismus(sim.getSpieler());
 			break;
 		case 13:
 			//Nicht möglich
@@ -111,7 +111,7 @@ public class Ereignis
 			//Verstopfung
 			ereignistext += "Aufgrund ein paar unliebsamer Toilettenbesucher sind einige Toiletten verstopft. Das muss kostspielig behoben werden! <br>"
 					     +  "Rechnen Sie mit entsprechenden Sonderkosten!";
-			Spieler.kloverstopfung(spieler);
+			Spieler.kloverstopfung(sim.getSpieler());
 			break;
 		case 15:
 			//Besuch vom Gesundheitsamt
@@ -126,9 +126,9 @@ public class Ereignis
 			throw new IllegalArgumentException("Ereignisnummer nicht vorhanden");
 		}
 		
-		this.spieler = spieler;
 		this.ereignisnummer = ereignisnummer;
 		this.lebenszeit = LEBENSZEITEN[ereignisnummer - 1];
+		this.sim = sim;
 	}
 	
 	//Wird das Ereignis immer noch fortgesetzt?
@@ -143,17 +143,17 @@ public class Ereignis
 		//Einige Ereignisse treten erst verzögert ein - deren Auswirkungen werden hier angestoßen
 		if(ereignisnummer == 9)
 		{
-			Personal.tariferhoehung(spieler);
+			Personal.tariferhoehung(sim.getSpieler());
 		}
 		if(ereignisnummer == 15)
 		{
 			if(lebenszeit == 1)
 			{
-				Ereignis.gesundheitsamt(spieler);
+				gesundheitsamt(sim.getSpieler());
 			}
 			if(lebenszeit == 0)
 			{
-				Ereignis.gesundheitsamtEx(spieler);
+				gesundheitsamtEx(sim.getSpieler());
 			}
 		}
 		
@@ -179,7 +179,7 @@ public class Ereignis
 				Stadtklo.sommerschlussverkaufEx();
 				break;
 			case 4:
-				Rastplatzklo.subentionEx(spieler);
+				Rastplatzklo.subentionEx(sim.getSpieler());
 				break;
 			case 5:
 				Simulation.setPkanteil(0.5);
@@ -213,7 +213,7 @@ public class Ereignis
 		}
 	}
 
-	public static void gesundheitsamt(Spieler[] spieler)
+	public void gesundheitsamt(Spieler[] spieler)
 	{
 		for (int i = 0; i < spieler.length; i++)
 		{
