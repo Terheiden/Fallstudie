@@ -1,5 +1,9 @@
 package Klomanager;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Spieler
 {
 	static final double DISPOZINS = 0.17;
@@ -214,6 +218,9 @@ public class Spieler
 	
 	public String erstelleKennzahlen(int runde)
 	{
+		NumberFormat nf = java.text.NumberFormat.getInstance(Locale.US); 
+        nf.setMaximumFractionDigits(1); 
+		
 		kennzahlen = "<html><h2>Daten des Unternehmens nach der " + (runde-1) +"-ten Spielrunde</h2>"
 				+ "<table border='1'>"
 				+"<tr><th>Posten</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>"
@@ -229,7 +236,7 @@ public class Spieler
 		kennzahlen += "<tr><td>Aktuelles Hygienelevel</td><td>"+getKlos()[0].getHygiene()+"</td><td>"+getKlos()[1].getHygiene()+"</td><td>"+getKlos()[2].getHygiene()+"</td></tr>"		
 		 		+ "<tr><td>Bankguthaben</td><td colspan='3'>"+kontostand/100.0+" €</td></tr>"
 				+"<tr><td>Darlehen Restbetrag</td><td colspan='3'>"+getDarlehenkonto().getDarlehen()/100.0+" €</td></tr>"
-				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>"+Darlehen.getZinssatz()*100.0+"%</td></tr>";
+				+"<tr><td>Darlehen Zinssatz</td><td colspan='3'>"+nf.format(new BigDecimal(Darlehen.getZinssatz()*100.0))+"%</td></tr>";
 		
 		if(kontostand < 0)
 		{

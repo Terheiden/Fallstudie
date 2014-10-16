@@ -828,7 +828,6 @@ public class GUI extends JFrame implements ActionListener
 	//Auch Anfang des Spiels untergebracht
 	public static void main(String[] args)
 	{	
-		
 		//Fehler abfangen, evtl auch Wahlmöglichkeiten vorgeben(dropdown oder radioButton)
 		int spielerZahl = 0;
 		// läuft so oft, bis der Nutzer eine Zahl im Bereich eingibt
