@@ -80,42 +80,42 @@ public class GuV
 				+ "<table border='1'>"
 				+"<tr><th colspan='4'>Soll</th><th colspan='4'>Haben</th></tr>"
 				+"<tr><th>Aufwand</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th><th>Ertrag</th><th>Stadt</th><th>Bahnhof</th><th>Rastplatz</th></tr>";
-		tmp +="<tr><td>Fixkosten</td><td>"+fixkosten[0]/100.0 +"€</td><td>"+fixkosten[1]/100.0 +"€</td><td>"+fixkosten[2]/100.0 +"€</td>"
-				+ "<td>Umsatzerlöse<br>aus Klohäusern</td><td>"+kloumsatz[0]/100.0 +"€</td><td>"+kloumsatz[1]/100.0 +"€</td><td>"+kloumsatz[2]/100.0 +"€</td></tr>"
-				+"<tr><td>Materialkosten</td><td>"+materialkosten[0]/100.0 +"€</td><td>"+materialkosten[1]/100.0 +"€</td><td>"+materialkosten[2]/100.0 +"€</td>"
-						+ "<td>Umsatzerlöse<br>aus Kondomautomaten</td><td>"+automatenumsatzKondom[0]/100.0 +"€</td><td>"+automatenumsatzKondom[1]/100.0 +"€</td><td>"+automatenumsatzKondom[2]/100.0 +"€</td></tr>"
-						+"<tr><td>Wasserkosten</td><td>"+wasserkosten[0]/100.0+"€</td><td>"+wasserkosten[1]/100.0+"€</td><td>"+wasserkosten[2]/100.0+"€</td>"
-						+ "<td>Umsatzerlöse<br>aus Kaugummiautomaten</td><td>"+automatenumsatzKaugummi[0]/100.0+"€</td><td>"+automatenumsatzKaugummi[1]/100.0+"€</td><td>"+automatenumsatzKaugummi[2]/100.0+"€</td></tr>"
-				+"<tr><td>Variable Stromkosten</td><td>"+stromkosten[0]/100.0+"€</td><td>"+stromkosten[1]/100.0+"€</td><td>"+stromkosten[2]/100.0+"€</td>"
-						+ "<td>Umsatzerlöse<br>aus Münzautomaten</td><td>"+automatenumsatzMuenzen[0]/100.0+"€</td><td>"+automatenumsatzMuenzen[1]/100.0+"€</td><td>"+automatenumsatzMuenzen[2]/100.0+"€</td></tr>"
-				+"<tr><td>Anschaffungskosten<br>Klohäuser</td><td>"+anschaffungskostenKlo[0]/100.0+"€</td><td>"+anschaffungskostenKlo[1]/100.0+"€</td><td>"+anschaffungskostenKlo[2]/100.0+"€</td>"
-						+ "<td>Sondererträge</td><td colspan='3'>"+sonderertraege/100.0+"€</td></tr>"
-				+"<tr><td>Anschaffungskosten<br>Sonderausstattungen</td><td>"+anschaffungskostenSonder[0]/100.0+"€</td><td>"+anschaffungskostenSonder[1]/100.0+"€</td><td>"+anschaffungskostenSonder[2]/100.0+"€</td>";
+		tmp +="<tr><td>Fixkosten</td><td>"+fixkosten[0]/100.0 +" €</td><td>"+fixkosten[1]/100.0 +" €</td><td>"+fixkosten[2]/100.0 +" €</td>"
+				+ "<td>Umsatzerlöse<br>aus Klohäusern</td><td>"+kloumsatz[0]/100.0 +" €</td><td>"+kloumsatz[1]/100.0 +" €</td><td>"+kloumsatz[2]/100.0 +" €</td></tr>"
+				+"<tr><td>Materialkosten</td><td>"+materialkosten[0]/100.0 +" €</td><td>"+materialkosten[1]/100.0 +" €</td><td>"+materialkosten[2]/100.0 +" €</td>"
+						+ "<td>Umsatzerlöse<br>aus Kondomautomaten</td><td>"+automatenumsatzKondom[0]/100.0 +" €</td><td>"+automatenumsatzKondom[1]/100.0 +" €</td><td>"+automatenumsatzKondom[2]/100.0 +" €</td></tr>"
+						+"<tr><td>Wasserkosten</td><td>"+wasserkosten[0]/100.0+" €</td><td>"+wasserkosten[1]/100.0+" €</td><td>"+wasserkosten[2]/100.0+" €</td>"
+						+ "<td>Umsatzerlöse<br>aus Kaugummiautomaten</td><td>"+automatenumsatzKaugummi[0]/100.0+" €</td><td>"+automatenumsatzKaugummi[1]/100.0+" €</td><td>"+automatenumsatzKaugummi[2]/100.0+" €</td></tr>"
+				+"<tr><td>Variable Stromkosten</td><td>"+stromkosten[0]/100.0+" €</td><td>"+stromkosten[1]/100.0+" €</td><td>"+stromkosten[2]/100.0+" €</td>"
+						+ "<td>Umsatzerlöse<br>aus Münzautomaten</td><td>"+automatenumsatzMuenzen[0]/100.0+" €</td><td>"+automatenumsatzMuenzen[1]/100.0+" €</td><td>"+automatenumsatzMuenzen[2]/100.0+" €</td></tr>"
+				+"<tr><td>Anschaffungskosten<br>Klohäuser</td><td>"+anschaffungskostenKlo[0]/100.0+" €</td><td>"+anschaffungskostenKlo[1]/100.0+" €</td><td>"+anschaffungskostenKlo[2]/100.0+" €</td>"
+						+ "<td>Sondererträge</td><td colspan='3'>"+sonderertraege/100.0+" €</td></tr>"
+				+"<tr><td>Anschaffungskosten<br>Sonderausstattungen</td><td>"+anschaffungskostenSonder[0]/100.0+" €</td><td>"+anschaffungskostenSonder[1]/100.0+" €</td><td>"+anschaffungskostenSonder[2]/100.0+" €</td>";
 		if(berechneGesamtumsatz() -berechneGesamtkosten()<0){
-			tmp += "<td><b>Verlust</b></td><td colspan='3'>"+(berechneGesamtumsatz() - berechneGesamtkosten())/100.0+"€</td></tr>";
+			tmp += "<td><b>Verlust</b></td><td colspan='3'>"+(berechneGesamtumsatz() - berechneGesamtkosten())/100.0+" €</td></tr>";
 		}
-		tmp +="<tr><td>Lohnkosten</td><td>"+lohnkosten[0]/100.0+"€</td><td>"+lohnkosten[1]/100.0+"€</td><td>"+lohnkosten[2]/100.0+"€</td></tr>"
-				+"<tr><td>Verwaltungskosten</td><td colspan='3'>"+verwaltungskosten/100.0+"€</td></tr>";
+		tmp +="<tr><td>Lohnkosten</td><td>"+lohnkosten[0]/100.0+" €</td><td>"+lohnkosten[1]/100.0+" €</td><td>"+lohnkosten[2]/100.0+" €</td></tr>"
+				+"<tr><td>Verwaltungskosten</td><td colspan='3'>"+verwaltungskosten/100.0+" €</td></tr>";
 		
 		if(zinsaufwendungenDarlehen !=0){
-			tmp+="<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>"+zinsaufwendungenDarlehen/100.0+"€</td></tr>";
+			tmp+="<tr><td>Zinsaufwendungen<br>Darlehen</td><td colspan='3'>"+zinsaufwendungenDarlehen/100.0+" €</td></tr>";
 		}
 		if(zinsaufwendungenDispo !=0){
-			tmp+="<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>"+zinsaufwendungenDispo/100.0+"€</td></tr>";
+			tmp+="<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>"+zinsaufwendungenDispo/100.0+" €</td></tr>";
 		}		
 		if(mafokosten !=0){
-			tmp+="<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+mafokosten/100.0+"€</td></tr>";
+			tmp+="<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+mafokosten/100.0+" €</td></tr>";
 		}
 		if(this.besitzer.getMarketingbudget() !=0){
-			tmp+="<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+marketingkosten/100.0+"€</td></tr>";
+			tmp+="<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+marketingkosten/100.0+" €</td></tr>";
 		}	
 		if(sonderkosten != 0){
-			tmp+="<tr><td>Sonderkosten</td><td colspan='3'>"+sonderkosten/100.0+"€</td></tr>";
+			tmp+="<tr><td>Sonderkosten</td><td colspan='3'>"+sonderkosten/100.0+" €</td></tr>";
 		}	
 		if(berechneGesamtumsatz() -berechneGesamtkosten()>=0){
-			tmp+= "<tr><td>Gewinn</td><td colspan='3'>"+(berechneGesamtumsatz() -berechneGesamtkosten())/100.0 +"€</td></tr>";
+			tmp+= "<tr><td>Gewinn</td><td colspan='3'>"+(berechneGesamtumsatz() -berechneGesamtkosten())/100.0 +" €</td></tr>";
 		}
-		tmp +="<tr><td>Summe Aufwendungen</td><td colspan='3'>"+berechneGesamtkosten()/100.0 +"€</td><td>Summe Erträge</td><td colspan='3'>"+berechneGesamtumsatz()/100.0 +"€</td></tr>"					
+		tmp +="<tr><td>Summe Aufwendungen</td><td colspan='3'>"+berechneGesamtkosten()/100.0 +" €</td><td>Summe Erträge</td><td colspan='3'>"+berechneGesamtumsatz()/100.0 +" €</td></tr>"					
 				+"</table>"
 		+ "</html>";
 		

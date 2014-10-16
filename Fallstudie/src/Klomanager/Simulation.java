@@ -346,7 +346,7 @@ public class Simulation
 			}
 			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+" %</td><td>"+marktanteil[1]+" %</td><td>"+marktanteil[2]+" %</td></tr>"
 					+"<tr><td>Anzahl der Klohäuser</td><td>"+spieler[i].getKlos()[0].getAnzahl()+"</td><td>"+spieler[i].getKlos()[1].getAnzahl()+"</td><td>"+spieler[i].getKlos()[2].getAnzahl()+"</td></tr>"
-					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()/100.0+"€</td><td>"+spieler[i].getKlos()[1].getPreis()/100.0+"€</td><td>"+spieler[i].getKlos()[2].getPreis()/100.0+"€</td></tr>"
+					+"<tr><td>Preise letzter Monat</td><td>"+spieler[i].getKlos()[0].getPreis()/100.0+" €</td><td>"+spieler[i].getKlos()[1].getPreis()/100.0+" €</td><td>"+spieler[i].getKlos()[2].getPreis()/100.0+" €</td></tr>"
 					+"<tr><td>Hygienelevel letzter Monat</td><td>"+spieler[i].getKlos()[0].getHygiene()+"</td><td>"+spieler[i].getKlos()[1].getHygiene()+"</td><td>"+spieler[i].getKlos()[2].getHygiene()+"</td></tr>"
 					+"</table>";
 		}
