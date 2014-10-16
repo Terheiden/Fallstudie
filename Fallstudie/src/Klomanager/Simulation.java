@@ -152,14 +152,16 @@ public class Simulation
 			aktuellerSpieler.stelleMitarbeiterEin(mitarbeiterAaenderung);
 		}
 		
-		aktuellerSpieler.setMafoberichtGefordert(mafoBericht);
 		aktuellerSpieler.setMarketingbudget(marketingbudget);
-		int marketingkosten = marketingbudget;
+		aktuellerSpieler.getGuv().setMarketingkosten(marketingbudget);
+
+		aktuellerSpieler.setMafoberichtGefordert(mafoBericht);
+		int mafokosten = 0;
 		if(mafoBericht)
 		{
-			marketingkosten += Spieler.MAFOKOSTEN;
+			mafokosten = Spieler.MAFOKOSTEN;
 		}
-		aktuellerSpieler.getGuv().setMarketingkosten(marketingkosten);
+		aktuellerSpieler.getGuv().setMafokosten(mafokosten);
 		int[] lohnkosten = new int[mitarbeiterVerteilung.length];
 		for (int i = 0; i < lohnkosten.length; i++)
 		{

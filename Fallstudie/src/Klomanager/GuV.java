@@ -13,6 +13,7 @@ public class GuV
 	private int zinsaufwendungenDarlehen;
 	private int zinsaufwendungenDispo;
 	private int marketingkosten;
+	private int mafokosten;
 	private int sonderkosten;
 	private int[] kloumsatz = new int[3];
 	private int[] automatenumsatzKondom = new int[3];
@@ -102,11 +103,11 @@ public class GuV
 		if(zinsaufwendungenDispo !=0){
 			tmp+="<tr><td>Zinsaufwendungen<br>Überziehungskredit</td><td colspan='3'>"+zinsaufwendungenDispo/100.0+"€</td></tr>";
 		}		
-		if((marketingkosten - this.besitzer.getMarketingbudget()) !=0){
-			tmp+="<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+(marketingkosten - this.besitzer.getMarketingbudget())/100.0+"€</td></tr>";
+		if(mafokosten !=0){
+			tmp+="<tr><td>Aufwendungen für<br>MaFoBericht</td><td colspan='3'>"+mafokosten/100.0+"€</td></tr>";
 		}
 		if(this.besitzer.getMarketingbudget() !=0){
-			tmp+="<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+this.besitzer.getMarketingbudget()/100.0+"€</td></tr>";
+			tmp+="<tr><td>Aufwendungen für<br>Marketing</td><td colspan='3'>"+marketingkosten/100.0+"€</td></tr>";
 		}	
 		if(sonderkosten != 0){
 			tmp+="<tr><td>Sonderkosten</td><td colspan='3'>"+sonderkosten/100.0+"€</td></tr>";
@@ -166,6 +167,16 @@ public class GuV
 	public int[] getFixkosten()
 	{
 		return fixkosten;
+	}
+
+	public int getMafokosten()
+	{
+		return mafokosten;
+	}
+
+	public void setMafokosten(int mafokosten)
+	{
+		this.mafokosten = mafokosten;
 	}
 
 	public void setFixkosten(int[] fixkosten)
