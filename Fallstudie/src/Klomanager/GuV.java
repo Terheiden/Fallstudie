@@ -9,7 +9,7 @@ public class GuV
 	private int[] anschaffungskostenKlo = new int[3];
 	private int[] anschaffungskostenSonder = new int[3];
 	private int[] lohnkosten = new int[3];
-	private int verwaltungskosten;
+	private static int verwaltungskosten = 150000; //1.500,00 €
 	private int zinsaufwendungenDarlehen;
 	private int zinsaufwendungenDispo;
 	private int marketingkosten;
@@ -27,9 +27,7 @@ public class GuV
 	{
 		this.besitzer = besitzer;
 		
-		//Nur die (voraussichtlich konstanten) Verwaltungskosten werden festgelegt, 
-		//alle anderen Kosten können sich ändern
-		verwaltungskosten = 150000; //1.500 €
+		//Nur die Darlehenszinsen werden sofort eingebucht, da sie der Vorrunde entstammen
 		this.zinsaufwendungenDarlehen = this.besitzer.getDarlehenkonto().berechneZinsen();
 		
 		if(vorperiode != null)
@@ -145,6 +143,7 @@ public class GuV
 		
 		return gesamtkosten;
 	}
+	
 	private int berechneGesamtumsatz()
 	{
 		int gesamtumsatz = 0;
@@ -157,6 +156,11 @@ public class GuV
 		gesamtumsatz = gesamtumsatz + sonderertraege;
 		
 		return gesamtumsatz;
+	}
+	
+	public static void erhoeheVerwaltungskosten(int aenderung)
+	{
+		verwaltungskosten += aenderung;
 	}
 	
 	/**
@@ -243,14 +247,14 @@ public class GuV
 		this.lohnkosten = lohnkosten;
 	}
 
-	public int getVerwaltungskosten()
+	public static int getVerwaltungskosten()
 	{
 		return verwaltungskosten;
 	}
 
-	public void setVerwaltungskosten(int verwaltungskosten)
+	public static void setVerwaltungskosten(int verwaltungskosten)
 	{
-		this.verwaltungskosten = verwaltungskosten;
+		GuV.verwaltungskosten = verwaltungskosten;
 	}
 
 	public int getZinsaufwendungenDarlehen()

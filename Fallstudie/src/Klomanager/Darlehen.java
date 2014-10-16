@@ -20,8 +20,18 @@ public class Darlehen
 		return (int) (darlehen * zinssatz);
 	}
 	
+	//Umrechnungen in int, um technisch bedingte Rundungsfehler (11,200000000000001 %) zu vermeiden
 	public static void leitzinsaenderung(double aenderung)
 	{
+		//int tmp = (int) (aenderung * 1000);
+		
+		//int tmp = (int) Math.round(aenderung * 1000.0);
+		//int tmp2 = (int) Math.round(zinssatz * 1000.0);
+		//int sum = tmp + tmp2;
+		//double tmp3 = sum / 1000.0;
+
+		//zinssatz = tmp3;
+		
 		zinssatz += aenderung;
 	}
 

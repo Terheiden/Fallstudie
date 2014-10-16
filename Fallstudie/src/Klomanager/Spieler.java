@@ -118,14 +118,14 @@ public class Spieler
 	{
 		personal.setGesamtAnzahl(personal.getGesamtAnzahl() + anzahl);
 		
-		guv.setSonderkosten(guv.getSonderkosten() + (personal.getEinstellungskosten() * anzahl));
+		guv.setSonderkosten(guv.getSonderkosten() + (Personal.getEinstellungskosten() * anzahl));
 	}
 	
 	public void entlasseMitarbeiter(int anzahl)
 	{
 		personal.setGesamtAnzahl(personal.getGesamtAnzahl() - anzahl);
 		
-		guv.setSonderkosten(guv.getSonderkosten() + (personal.getKuendigungskosten() * anzahl));
+		guv.setSonderkosten(guv.getSonderkosten() + (Personal.getKuendigungskosten() * anzahl));
 	}
 	
 	public String mitarbeiterKuendigt(int anzahl)

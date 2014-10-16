@@ -122,26 +122,30 @@ public class Ereignis
 		case 16:
 			//Leitzinserhöhung
 			ereignistext += "Die EZB erhöht den Leitzins. Der Zinssatz für Darlehen steigt um 1,2%!";
-			Darlehen.leitzinsaenderung(1.2);
+			Darlehen.leitzinsaenderung(0.012);
 			break;
 		case 17:
 			//Leitzinsverringerung
 			ereignistext += "Die EZB senkt den Leitzins. Der Zinssatz für Darlehen sinkt um 0,8%!";
-			Darlehen.leitzinsaenderung(-0.8);
+			Darlehen.leitzinsaenderung(-0.008);
 			break;
 		case 18:
 			//Leitzinserhöhung
 			ereignistext += "Die EZB erhöht den Leitzins. Der Zinssatz für Darlehen steigt um 1,0%!";
-			Darlehen.leitzinsaenderung(1.0);
+			Darlehen.leitzinsaenderung(0.01);
 			break;
 		case 19:
 			//Leitzinsverringerung
 			ereignistext += "Die EZB senkt den Leitzins. Der Zinssatz für Darlehen sinkt um 0,5%!";
-			Darlehen.leitzinsaenderung(-0.5);
+			Darlehen.leitzinsaenderung(-0.005);
+			break;
+		case 20:
+			//Verwaltungskostenerhöhung
+			ereignistext += "Aufgrund höherer Ausgaben für Personal und Büromaterial steigen die Kosten für die Verwaltung.";
 			break;
 		}
 		
-		if (ereignisnummer > 15 || ereignisnummer < 1)
+		if (ereignisnummer > 20 || ereignisnummer < 1)
 		{
 			throw new IllegalArgumentException("Ereignisnummer nicht vorhanden");
 		}

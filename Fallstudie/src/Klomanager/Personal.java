@@ -5,8 +5,8 @@ public class Personal
 	private int gesamtAnzahl;
 	private int[] verteilung;
 	private int gehalt;
-	private int einstellungskosten;
-	private int kuendigungskosten;
+	private static int einstellungskosten;
+	private static int kuendigungskosten;
 	private Spieler besitzer;
 
 	public Personal(Spieler besitzer)
@@ -92,24 +92,24 @@ public class Personal
 		this.gehalt = gehalt;
 	}
 
-	public int getEinstellungskosten()
+	public static int getEinstellungskosten()
 	{
 		return einstellungskosten;
 	}
 
-	public void setEinstellungskosten(int einstellungskosten)
+	public static void setEinstellungskosten(int einstellungskosten)
 	{
-		this.einstellungskosten = einstellungskosten;
+		Personal.einstellungskosten = einstellungskosten;
 	}
 
-	public int getKuendigungskosten()
+	public static int getKuendigungskosten()
 	{
 		return kuendigungskosten;
 	}
 
-	public void setKuendigungskosten(int kuendigungskosten)
+	public static void setKuendigungskosten(int kuendigungskosten)
 	{
-		this.kuendigungskosten = kuendigungskosten;
+		Personal.kuendigungskosten = kuendigungskosten;
 	}
 
 	public Spieler getBesitzer()
