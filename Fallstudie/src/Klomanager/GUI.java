@@ -27,9 +27,8 @@ public class GUI extends JFrame implements ActionListener
 	private JButton maFoBerichtKaufen;
 
 	//Ausgabelabel 
-	//TODO: field in label umtaufen
-	private JLabel anzBahnhofField, anzRastplatzField, anzStadtField;
-	private JLabel anzMitarbeiterGesField;
+	private JLabel anzBahnhofLabel, anzRastplatzLabel, anzStadtLabel;
+	private JLabel anzMitarbeiterGesLabel;
 	
 	private JFormattedTextField  marketingAusgabenField; 
 	private JFormattedTextField preisStadtField,
@@ -40,7 +39,7 @@ public class GUI extends JFrame implements ActionListener
 
 	private JCheckBox sonderausstattungen[][];
 
-	//Beschriftungslabel - Arrays nach regionen
+	//Beschriftungslabel - Arrays nach Regionen
 	private JLabel preisLabel[], marketingLabel, mitarbeiterZuweisenLabel[], sonderausstattungenLabel[];
 	private JLabel kloAnzahlLabel[], darlehenAufnehmenLabel,darlehenTilgenLabel;
 	private JLabel mitarbeiterAnzLabel;
@@ -48,7 +47,6 @@ public class GUI extends JFrame implements ActionListener
 	private int anzMitarbeiterGes, anzBahnhof, anzRastplatz, anzStadt;
 	private int aenderungMitarbeiter, aenderungStadt, aenderungBahnhof, aenderungRastplatz;
 
-	private double preisBahnhof, preisRastplatz, preisStadt;
 	private boolean maFoBerichtBool;
 	
 	Simulation sim;
@@ -59,7 +57,7 @@ public class GUI extends JFrame implements ActionListener
 		super("Klomanager - " + spielername);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setBounds(0, 0, 1208, 620);
+		setBounds(0, 0, 1218, 620);
 		
 		this.sim = sim;
 		
@@ -95,11 +93,11 @@ public class GUI extends JFrame implements ActionListener
 			System.err.println("Karte nicht gefunden :(");
 			e.printStackTrace();
 		}
-		karte =  karte.getScaledInstance(680, 270, Image.SCALE_SMOOTH);
+		karte =  karte.getScaledInstance(690, 270, Image.SCALE_SMOOTH);
 		karteLabel = new JLabel(new ImageIcon(karte));
 		
 		// Variablen initialisieren
-		//klos
+		//Klos
 		anzStadt = 1;
 		anzBahnhof = 1;
 		anzRastplatz = 1;
@@ -115,7 +113,6 @@ public class GUI extends JFrame implements ActionListener
 		// Objekte erzeugen
 		
 		//Formate für Felder
-		//TODO: Formatter nochmal durchtesten
 		NumberFormatter positiveInt = new NumberFormatter(); 
 		positiveInt.setMinimum(new Integer(0));
 		positiveInt.setAllowsInvalid(false);
@@ -128,9 +125,9 @@ public class GUI extends JFrame implements ActionListener
 		positiveDouble.setAllowsInvalid(false);
 		positiveDouble.setOverwriteMode(true);
 		
-		anzBahnhofField = new JLabel(String.valueOf(anzBahnhof));
-		anzRastplatzField = new JLabel(String.valueOf(anzRastplatz));
-		anzStadtField = new JLabel(String.valueOf(anzStadt));
+		anzBahnhofLabel = new JLabel(String.valueOf(anzBahnhof));
+		anzRastplatzLabel = new JLabel(String.valueOf(anzRastplatz));
+		anzStadtLabel = new JLabel(String.valueOf(anzStadt));
 		anzMitarbeiterStadtField = new JFormattedTextField(positiveInt);
 		anzMitarbeiterStadtField.setText("1");
 		anzMitarbeiterBahnhofField = new JFormattedTextField(positiveInt);
@@ -138,7 +135,7 @@ public class GUI extends JFrame implements ActionListener
 		anzMitarbeiterRastplatzField = new JFormattedTextField(positiveInt);
 		anzMitarbeiterRastplatzField.setText("1");
 		
-		anzMitarbeiterGesField = new JLabel(
+		anzMitarbeiterGesLabel = new JLabel(
 				String.valueOf(anzMitarbeiterGes));
 		preisStadtField = new JFormattedTextField(positiveDouble);
 		preisStadtField.setText("0,50");
@@ -318,16 +315,13 @@ public class GUI extends JFrame implements ActionListener
 		// Toiletten nach Region
 		add(regionenTabbedPane);
 		regionenTabbedPane.setBounds(10, 300, 480, 270);		
-
 		this.buildStadtPanel();
 		this.buildBahnhofPanel();
 		this.buildRastplatzPanel();
-		
-		
 
 		// Rechte Seite
 		add(anzeigenTabbedPane);
-		anzeigenTabbedPane.setBounds(500, 10, 680, 270);
+		anzeigenTabbedPane.setBounds(500, 10, 690, 270);
 		
 		this.buildKennzahlenPanel("");		
 		this.buildGuVPanel("");
@@ -335,7 +329,7 @@ public class GUI extends JFrame implements ActionListener
 
 		
 		add(karteLabel);
-		karteLabel.setBounds(500, 300, 680, 270);
+		karteLabel.setBounds(500, 300, 690, 270);
 		karteLabel.setBorder(new CompoundBorder(karteLabel.getBorder(), new LineBorder(Color.LIGHT_GRAY,2)));		
 	}
 
@@ -381,8 +375,8 @@ public class GUI extends JFrame implements ActionListener
 
 		allgemeinPanel.add(mitarbeiterAnzLabel);
 		mitarbeiterAnzLabel.setBounds(300, 40, 120, 20);
-		allgemeinPanel.add(anzMitarbeiterGesField);
-		anzMitarbeiterGesField.setBounds(440, 40, 20, 20);		
+		allgemeinPanel.add(anzMitarbeiterGesLabel);
+		anzMitarbeiterGesLabel.setBounds(440, 40, 20, 20);		
 		allgemeinPanel.add(mitarbeiterEinstellen);
 		mitarbeiterEinstellen.setBounds(300, 70, 150, 30);
 		allgemeinPanel.add(mitarbeiterEntlassen);
@@ -409,8 +403,8 @@ public class GUI extends JFrame implements ActionListener
 		stadtPanel.add(verkaufeStadt);
 		verkaufeStadt.setBounds(10, 50, 200, 30);
 		
-		stadtPanel.add(anzStadtField);
-		anzStadtField.setBounds(220, 50, 30, 20);		
+		stadtPanel.add(anzStadtLabel);
+		anzStadtLabel.setBounds(220, 50, 30, 20);		
 		stadtPanel.add(preisStadtField);
 		preisStadtField.setBounds(275, 50, 30, 20);
 		stadtPanel.add(anzMitarbeiterStadtField);
@@ -442,8 +436,8 @@ public class GUI extends JFrame implements ActionListener
 		bahnhofPanel.add(verkaufeBahnhof);
 		verkaufeBahnhof.setBounds(10, 50, 200, 30);
 		
-		bahnhofPanel.add(anzBahnhofField);
-		anzBahnhofField.setBounds(220, 50, 30, 20);		
+		bahnhofPanel.add(anzBahnhofLabel);
+		anzBahnhofLabel.setBounds(220, 50, 30, 20);		
 		bahnhofPanel.add(preisBahnhofField);
 		preisBahnhofField.setBounds(275, 50, 30, 20);
 		bahnhofPanel.add(anzMitarbeiterBahnhofField);
@@ -476,8 +470,8 @@ public class GUI extends JFrame implements ActionListener
 		rastplatzPanel.add(verkaufeRastplatz);
 		verkaufeRastplatz.setBounds(10, 50, 200, 30);
 		
-		rastplatzPanel.add(anzRastplatzField);
-		anzRastplatzField.setBounds(220, 50, 30, 20);		
+		rastplatzPanel.add(anzRastplatzLabel);
+		anzRastplatzLabel.setBounds(220, 50, 30, 20);		
 		rastplatzPanel.add(preisRastplatzField);
 		preisRastplatzField.setBounds(275, 50, 30, 20);
 		rastplatzPanel.add(anzMitarbeiterRastplatzField);
@@ -548,18 +542,18 @@ public class GUI extends JFrame implements ActionListener
 		} catch (ParseException e)
 		{
 			marketingAusgabenField.setText("0");
-			System.out.println("fehler bei markeitng setzen");
+			e.printStackTrace();
 		}
 	
 		preisStadtField.setText(stellePreisDar(preisStadt));
 		preisBahnhofField.setText(stellePreisDar(preisBahnhof));
 		preisRastplatzField.setText(stellePreisDar(preisRastplatz));
 		
-		anzStadtField.setText(String.valueOf(this.anzStadt));
-		anzBahnhofField.setText(String.valueOf(this.anzBahnhof));
-		anzRastplatzField.setText(String.valueOf(this.anzRastplatz));
+		anzStadtLabel.setText(String.valueOf(this.anzStadt));
+		anzBahnhofLabel.setText(String.valueOf(this.anzBahnhof));
+		anzRastplatzLabel.setText(String.valueOf(this.anzRastplatz));
 		
-		anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes));
+		anzMitarbeiterGesLabel.setText(String.valueOf(anzMitarbeiterGes));
 		anzMitarbeiterStadtField.setText(String.valueOf(mitarbeiterVerteilung[0]));
 		anzMitarbeiterBahnhofField.setText(String.valueOf(mitarbeiterVerteilung[1]));
 		anzMitarbeiterRastplatzField.setText(String.valueOf(mitarbeiterVerteilung[2]));
@@ -701,7 +695,7 @@ public class GUI extends JFrame implements ActionListener
 					}
 				}
 			}
-			//alle Preise *100 wegen Centberechnung
+			
 			fehlerString += sim.spielerRundeBeendet(darlehenAufnehmen, 
 					darlehenTilgung, aenderungMitarbeiter, 
 					maFoBerichtBool, marketingAusgaben, tmpVerteilung,
@@ -716,6 +710,7 @@ public class GUI extends JFrame implements ActionListener
 		System.out.println(fehlerString);
 		}
 	}
+	
 	/*
 	 * gibt den im FormattedTextField angezeigten Wert als Integer berechnet auf Cent zurück
 	 */
@@ -735,6 +730,7 @@ public class GUI extends JFrame implements ActionListener
 				if(i != tmp.length-4 && i != tmp.length-8)
 				wertString += tmp[i];
 			}	
+			//alle Preise *100 wegen Centberechnung
 			wert = Integer.parseInt(wertString) * 100; 
 		}
 		return wert;
@@ -750,6 +746,7 @@ public class GUI extends JFrame implements ActionListener
 		int preis;
 		//mit Punkt gesetzte Werte
 		if(tmp.length == 1){
+			//alle Preise *100 wegen Centberechnung
 			preis = (int)(Double.parseDouble(field.getText())*100);
 		}else
 		//mit Komma eingegebene/formatierte Werte
@@ -769,13 +766,13 @@ public class GUI extends JFrame implements ActionListener
 		//Mitarbeiterzahl ändern
 		if(object == mitarbeiterEinstellen){
 			aenderungMitarbeiter++;
-			anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
+			anzMitarbeiterGesLabel.setText(String.valueOf(anzMitarbeiterGes+aenderungMitarbeiter));
 		}
 		if(object == mitarbeiterEntlassen){
 			if (anzMitarbeiterGes + aenderungMitarbeiter > 0)
 			{
 				aenderungMitarbeiter--;
-				anzMitarbeiterGesField.setText(String.valueOf(anzMitarbeiterGes + aenderungMitarbeiter));
+				anzMitarbeiterGesLabel.setText(String.valueOf(anzMitarbeiterGes + aenderungMitarbeiter));
 			}
 		}
 		if(object == maFoBerichtKaufen){			
@@ -794,33 +791,33 @@ public class GUI extends JFrame implements ActionListener
 		//Klohäuser anmieten/abgeben
 		if(object == neuKaufenStadt){
 			aenderungStadt++;
-			anzStadtField.setText(String.valueOf(anzStadt+aenderungStadt));
+			anzStadtLabel.setText(String.valueOf(anzStadt+aenderungStadt));
 		}
 		if(object == neuKaufenBahnhof){
 			aenderungBahnhof++;
-			anzBahnhofField.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
+			anzBahnhofLabel.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
 		}
 		if(object == neuKaufenRastplatz){
 			aenderungRastplatz++;
-			anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
+			anzRastplatzLabel.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
 		}
 		if(object == verkaufeStadt){
 			if (anzStadt + aenderungStadt > 0)
 			{
 				aenderungStadt--;
-				anzStadtField.setText(String.valueOf(anzStadt + aenderungStadt));
+				anzStadtLabel.setText(String.valueOf(anzStadt + aenderungStadt));
 			}
 		}
 		if(object == verkaufeBahnhof){
 			if(anzBahnhof+aenderungBahnhof > 0){
 				aenderungBahnhof--;
-				anzBahnhofField.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
+				anzBahnhofLabel.setText(String.valueOf(anzBahnhof+aenderungBahnhof));
 			}
 		}			
 		if(object == verkaufeRastplatz){
 			if(anzRastplatz+aenderungRastplatz > 0){
 				aenderungRastplatz--;
-				anzRastplatzField.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
+				anzRastplatzLabel.setText(String.valueOf(anzRastplatz+aenderungRastplatz));
 			}
 		}
 	}
