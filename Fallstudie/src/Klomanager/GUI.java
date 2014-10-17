@@ -121,7 +121,7 @@ public class GUI extends JFrame implements ActionListener
 		DecimalFormat format = new DecimalFormat("#0.00");
 		NumberFormatter positiveDouble = new NumberFormatter(format); 
 		positiveDouble.setMinimum(new Double(0));
-		positiveDouble.setMaximum(new Double(10.0));
+		positiveDouble.setMaximum(new Double(3.0));
 		positiveDouble.setAllowsInvalid(false);
 		positiveDouble.setOverwriteMode(true);
 		
