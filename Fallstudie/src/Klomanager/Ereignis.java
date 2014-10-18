@@ -1,12 +1,16 @@
 package Klomanager;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class Ereignis
 {
 	private int ereignisnummer;
 	private String ereignistext;
 	private int lebenszeit;
 	//Lebenszeiten der einzelnen Ereignisse    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1};
+	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1};
 	//Dauerereignisse bekommen die Lebenszeit 1
 	private Simulation sim;
 
@@ -60,9 +64,9 @@ public class Ereignis
 			//Wirtschaftskrise
 			ereignistext += "Das Land steckt kurzzeitig in einer Wirtschaftskrise. Die Menschen gehen vorsichtig mit ihrem <br>"
 					     +  "Geld um und sind zurzeit sehr sparsam! Achten Sie diesen Monat besonders auf angemessene Preise!";
-			Simulation.setPkanteil(0.65);
-			Simulation.setHkanteil(0.3);
-			Simulation.setAkanteil(0.05);
+			Simulation.setPkanteil(0.8);
+			Simulation.setHkanteil(0.175);
+			Simulation.setAkanteil(0.025);
 			break;
 		case 7:
 			//Ferienbeginn
@@ -81,7 +85,7 @@ public class Ereignis
 		case 9:
 			//Lohnerhöhung nach Tarif
 			ereignistext += "Die Gewerkschaft der Putzfrauen fordert Tariferhöhungen ein, es stehen harte Verhandlungen bevor! <br>"
-					     +  "Es wird ab Ende des nächsten Monats mit einer Lohnsteigerung von 5 % gerechnet!";
+					     +  "Es wird ab Ende des nächsten Monats mit einer Lohnsteigerung von ca. 5 % gerechnet!";
 			//Hier noch keine Auswirkungen, diese treten später ein
 			break;
 		case 10:
@@ -89,7 +93,7 @@ public class Ereignis
 			ereignistext += "Die Putzfrauen leiden unter schlechten Bedingungen bei den Bahnhofstoiletten und streiken für bessere Putzausstattung. <br>"
 					     +  "Um den Geschäftsbetrieb nicht zu beinträchtigen, mussten Sie ihr Budget für die Putzausstattung erheblich aufstocken. <br>"
 					     +  "Die Lohnkosten pro Reinigungskraft steigen um 40 €!";
-			Personal.ausstattungserhoehung(sim.getSpieler());
+			Personal.ausstattungserhoehung();
 			break;
 		case 11:
 			//Stadtfest
@@ -106,7 +110,8 @@ public class Ereignis
 			Bahnhofsklo.vandalismus(sim.getSpieler());
 			break;
 		case 13:
-			//Nicht möglich
+			//Wasserknappheit
+			//TODO
 		case 14:
 			//Verstopfung
 			ereignistext += "Aufgrund ein paar unliebsamer Toilettenbesucher sind einige Toiletten verstopft. Das muss kostspielig behoben werden! <br>"
@@ -141,7 +146,8 @@ public class Ereignis
 			break;
 		case 20:
 			//Verwaltungskostenerhöhung
-			ereignistext += "Aufgrund höherer Ausgaben für Personal und Büromaterial steigen die Kosten für die Verwaltung.";
+			ereignistext += "Aufgrund höherer Ausgaben für Personal und Büromaterial steigen die Kosten für die Verwaltung ab sofort um 500,00 € je Monat.";
+			GuV.erhoeheVerwaltungskosten(50000); //500,00 €
 			break;
 		}
 		
@@ -165,9 +171,14 @@ public class Ereignis
 		ereignistext = null;
 		
 		//Einige Ereignisse treten erst verzögert ein - deren Auswirkungen werden hier angestoßen
-		if(ereignisnummer == 9)
+		if(ereignisnummer == 9 && lebenszeit == 1)
 		{
-			Personal.tariferhoehung(sim.getSpieler());
+			double ergebnis = Personal.tariferhoehung() * 100.0;
+			NumberFormat nf = java.text.NumberFormat.getInstance(Locale.US); 
+	        nf.setMaximumFractionDigits(1); 
+			ereignistext = "Die Verhandlungen mit der Gewerkschaft der Putzfrauen sind abgeschlossen. <br>"
+					     + "Die Löhne werden ab Ende diesen Monats um rund " + nf.format(new BigDecimal(ergebnis)) + "% erhöht. <br>"
+					     + "Das Gehalt jeder Putzfrau erhöht sich damit auf " + Personal.getGehalt()/100.0 + " €.";
 		}
 		if(ereignisnummer == 15)
 		{

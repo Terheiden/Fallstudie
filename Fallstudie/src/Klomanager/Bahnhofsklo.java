@@ -71,7 +71,11 @@ public class Bahnhofsklo extends Klohaus
 	{
 		for (int i = 0; i < spieler.length; i++)
 		{
-			spieler[i].getGuv().setSonderkosten(spieler[i].getGuv().getSonderkosten() + (30000 * spieler[i].getKlos()[1].anzahl)); //Je 300,00 €
+			//Zufallszahl zwischen 5000 und 15000 (Viertstellige Genauigkeit)
+			int tmp = (int) ((Math.random()) * 10001 + 5000);
+			//Zufallszahl zwischen 0,5 und 1,5
+			double zufall = tmp/10000.0;
+			spieler[i].getGuv().setSonderkosten(spieler[i].getGuv().getSonderkosten() + ((int) (30000 * zufall) * spieler[i].getKlos()[1].anzahl)); //300,00 €
 		}
 	}
 	

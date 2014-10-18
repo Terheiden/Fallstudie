@@ -4,9 +4,9 @@ public class Personal
 {
 	private int gesamtAnzahl;
 	private int[] verteilung;
-	private int gehalt;
-	private static int einstellungskosten;
-	private static int kuendigungskosten;
+	private static int gehalt = 95000; //950,00 €
+	private static int einstellungskosten = 200000; //2.000,00 €
+	private static int kuendigungskosten = 150000; //1.500,00 €
 	private Spieler besitzer;
 
 	public Personal(Spieler besitzer)
@@ -16,10 +16,7 @@ public class Personal
 		verteilung[0] = 1;
 		verteilung[1] = 1;
 		verteilung[2] = 1;
-		
-		gehalt = 95000; //950 €
-		einstellungskosten = 200000; // 2.000 €
-		kuendigungskosten = 150000; // 1.500 €
+
 		this.besitzer = besitzer;
 	}
 	
@@ -42,20 +39,23 @@ public class Personal
 		}
 	}
 	
-	public static void tariferhoehung(Spieler[] spieler)
+	public static double tariferhoehung()
 	{
-		for (int i = 0; i < spieler.length; i++)
-		{
-			spieler[i].getPersonal().gehalt *= 1.05;
-		}
+		//Zufallszahl zwischen 50 und 200
+		int tmp = (int) ((Math.random()) * 151 + 50);
+		//5% mal Zufallszahl zwischen 0,50 und 2,00 (-> vierstellige Genauigkeit)
+		double erhoehung = (tmp/100.0) * 0.05;
+		double multiplikator = erhoehung + 1.0;
+		System.out.println("Multiplikator: " +  multiplikator);
+		
+		gehalt *= multiplikator;
+		
+		return erhoehung;
 	}
 	
-	public static void ausstattungserhoehung(Spieler[] spieler)
+	public static void ausstattungserhoehung()
 	{
-		for (int i = 0; i < spieler.length; i++)
-		{
-			spieler[i].getPersonal().gehalt += 4000; //40,00 €
-		}
+		gehalt += 4000; //40,00 €
 	}
 
 	/**
@@ -82,14 +82,14 @@ public class Personal
 		this.verteilung = verteilung;
 	}
 
-	public int getGehalt()
+	public static int getGehalt()
 	{
 		return gehalt;
 	}
 
-	public void setGehalt(int gehalt)
+	public static void setGehalt(int gehalt)
 	{
-		this.gehalt = gehalt;
+		Personal.gehalt = gehalt;
 	}
 
 	public static int getEinstellungskosten()

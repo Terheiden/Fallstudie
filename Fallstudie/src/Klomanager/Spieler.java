@@ -261,7 +261,11 @@ public class Spieler
 	{
 		for (int i = 0; i < spieler.length; i++)
 		{
-			spieler[i].guv.setSonderkosten(spieler[i].guv.getSonderkosten() + 45000); //450,00 €
+			//Zufallszahl zwischen 5000 und 15000 (Viertstellige Genauigkeit)
+			int tmp = (int) ((Math.random()) * 10001 + 5000);
+			//Zufallszahl zwischen 0,5 und 1,5
+			double zufall = tmp/10000.0;
+			spieler[i].guv.setSonderkosten(spieler[i].guv.getSonderkosten() + (int) (45000 * zufall)); //450,00 €
 		}
 	}
 
