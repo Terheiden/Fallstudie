@@ -165,7 +165,7 @@ public class Simulation
 		int[] lohnkosten = new int[mitarbeiterVerteilung.length];
 		for (int i = 0; i < lohnkosten.length; i++)
 		{
-			lohnkosten[i] = mitarbeiterVerteilung[i] * aktuellerSpieler.getPersonal().getGehalt();
+			lohnkosten[i] = mitarbeiterVerteilung[i] * Personal.getGehalt();
 		}
 		aktuellerSpieler.getGuv().setLohnkosten(lohnkosten);
 		
