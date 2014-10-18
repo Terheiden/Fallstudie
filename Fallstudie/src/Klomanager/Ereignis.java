@@ -10,7 +10,7 @@ public class Ereignis
 	private String ereignistext;
 	private int lebenszeit;
 	//Lebenszeiten der einzelnen Ereignisse    1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
-	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1};
+	private static final int[] LEBENSZEITEN = {1, 2, 1, 1, 1, 3, 1, 1, 2, 1, 1, 1, 3, 1, 3, 1, 1, 1, 1, 1};
 	//Dauerereignisse bekommen die Lebenszeit 1
 	private Simulation sim;
 
@@ -111,7 +111,10 @@ public class Ereignis
 			break;
 		case 13:
 			//Wasserknappheit
-			//TODO
+			ereignistext += "Wasserrohrbruch im Wassernetz der Stadtwerke! In einigen Stadtbereichen wird das Wasser knapp und teuer. <br>"
+					     +  "Die Stadtwerke bitten um Geduld und beheben den Schaden schnellstmöglich.";
+			Stadtklo.wasserknappheit(sim.getSpieler());
+			break;
 		case 14:
 			//Verstopfung
 			ereignistext += "Aufgrund ein paar unliebsamer Toilettenbesucher sind einige Toiletten verstopft. Das muss kostspielig behoben werden! <br>"
@@ -241,6 +244,9 @@ public class Ereignis
 				Stadtklo.stadtfestEx();
 				Bahnhofsklo.stadtfestEx();
 				Rastplatzklo.stadtfestEx();
+				break;
+			case 13:
+				Stadtklo.wasserknappheitEx(sim.getSpieler());
 				break;
 			}
 			

@@ -72,6 +72,7 @@ public class Rastplatzklo extends Klohaus
 	{
 		kundenmarkt -= 1000;
 	}
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;

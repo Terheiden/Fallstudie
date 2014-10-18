@@ -46,6 +46,22 @@ public class Stadtklo extends Klohaus
 		kundenmarkt -= 3000;
 	}
 	
+	public static void wasserknappheit(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getKlos()[0].kvWasser *= 1.52671755725191;
+		}
+	}
+	
+	public static void wasserknappheitEx(Spieler[] spieler)
+	{
+		for (int i = 0; i < spieler.length; i++)
+		{
+			spieler[i].getKlos()[0].kvWasser /= 1.52671755725191;
+		}
+	}
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;
