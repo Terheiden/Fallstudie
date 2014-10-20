@@ -51,7 +51,7 @@ public class SpieldurchlaufTest
 		
 		//Spieler 3  mietet für den Bahnhofsbereich 2 neue Klohäuser und stellt 1 Mitarbeiter ein nimmt Darlehen von 5000 auf
 		tmpVerteilung[0] = 1;
-		tmpVerteilung[1] = 3;
+		tmpVerteilung[1] = 2;
 		tmpVerteilung[2] = 1;
 		
 		String textSpielerDrei = simu.spielerRundeBeendet(5000, 0, 0, false, 0, tmpVerteilung, 70, 40, 60, 0, 2, 0, tmpSonderausstattungen);
