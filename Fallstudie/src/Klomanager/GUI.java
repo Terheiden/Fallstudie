@@ -633,7 +633,7 @@ public class GUI extends JFrame implements ActionListener
 		} catch (ParseException e)
 		{
 			//fehlerString += "Ups, das dürfte nicht passieren.<br>" + e.getMessage();
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		if(preisStadtField.getValue() == null){
@@ -664,9 +664,9 @@ public class GUI extends JFrame implements ActionListener
 			} catch (NumberFormatException e1)
 			{	
 				tmpVerteilung[0] = 0;
-				// Fehler Ausgaben nicht ohne weiteres möglich, da mitarbeiterVeränderung neu nerechnet werden müsste
-				// sich jedoch nichts verändert hat
-				// Zudem wird der Nutzer schon aufgefordert seine Mitarbeiter korrekt zu verteilen
+				//Fehler Ausgaben nicht ohne weiteres möglich, da mitarbeiterVeränderung neu nerechnet werden müsste
+				//sich jedoch nichts verändert hat
+				//Zudem wird der Nutzer schon aufgefordert seine Mitarbeiter korrekt zu verteilen
 				//fehlerString += "Die Anzahl der Mitarbeiter in der Stadt ist keine korrekte Zahl.<br>";
 			}
 			try
@@ -845,7 +845,7 @@ public class GUI extends JFrame implements ActionListener
 				spielerZahl = Integer.parseInt(eingabe);
 			} catch (NumberFormatException e) // Falls unzulässiges eingegeben wird
 			{
-				e.printStackTrace();
+				//Spielerzahl wird wieder auf 0 gesetzt, der Nutzer muss erneut die Spielerzahl eingeben
 				spielerZahl = 0;
 			}
 		}
