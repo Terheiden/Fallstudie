@@ -48,7 +48,7 @@ public abstract class Klohaus
 		//Händetrockner
 		case 0:
 			kvPapier = 0.0; //0,00 €
-			kvStrom = kvStrom + 0.646425; //~ 0,006 €
+			kvStrom = kvStrom + 0.248625; //~ 0,002 €
 			attraktivitaetsboni[0] = 9000; //90,00 €
 			anschaffungskosten += 90000; //900,00 €
 			break;
