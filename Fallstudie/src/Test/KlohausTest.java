@@ -27,10 +27,12 @@ public class KlohausTest extends Klohaus
 		assertNotNull("Klohaus erzeugen ist fehlgeschlagen!", ktest);
 	}
 
+	//Szenario:	Ein Spieler kauft die Sonderausstattung Kaugummiautomat 
+	//			für alle Klos und diese müssen installiert werden
 	@Test
 	public void testInstalliereSonderausstattung()
 	{
-		ktest.installiereSonderausstattung(6); //Kaugumieautomat
+		ktest.installiereSonderausstattung(6); //Kaugummieautomat
 		
 		if(!ktest.sonderausstattungen[6]) {
 			fail("Kaugumieautomat konnte nicht hinzugefügt werden!");
@@ -42,10 +44,12 @@ public class KlohausTest extends Klohaus
 
 	}
 	
+	//Szenario:	Der Spieler kauft die Sonderaustattung Kaugummiautomat und Händetrockner 
+	//			für alle seine Klos um die Attraktivität zu steigern
 	@Test
 	public void testgetAttraktivitaet()
 	{
-		ktest.installiereSonderausstattung(6); //Kaugumieautomat
+		ktest.installiereSonderausstattung(6); //Kaugummieautomat
 		
 		ktest.installiereSonderausstattung(0); //Händetrockner
 		

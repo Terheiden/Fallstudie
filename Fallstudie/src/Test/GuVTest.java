@@ -25,6 +25,8 @@ public class GuVTest extends GuV
 		assertNotNull("GuV erzeugen ist fehlgeschlagen!", gtest);
 	}
 	
+	//Szenario: Man möchte am Ende einer Runde überprüfen lassen ob man seine
+	//			Kontountergrenze überschritten hat.
 	@Test
 	public void testPruefeUeberschreitung()
 	{
@@ -32,6 +34,8 @@ public class GuVTest extends GuV
 		
 	}
 	
+	//Szenario: Nachdem man seine erste Runde abschlossen hat, ohne etwas zu kaufen oder
+	//			zu verkaufen möchte man seine GuV für diese Periode angezeigt bekommen.
 	@Test
 	public void testErstelleGuV()
 	{
@@ -41,7 +45,8 @@ public class GuVTest extends GuV
 		
 	}
 	
-
+	//Szenario: Nach einer Runde passt die GuV den Kontostand des Spielers an, die auf Grundlage
+	//			mehrerer Veränderungen und Ergeignisse sich geändert haben könnte. 
 	@Test
 	public void testPasseKontostandAn()
 	{

@@ -24,6 +24,8 @@ public class PersonalTest
 		assertNotNull("Personal erzeugen ist fehlgeschlagen!", ptest);
 	}
 	
+	//Szenario:	Der Spieler verteilt sein vorhandenes Personal auf seine Bereiche auf
+	//			und überprüft ob das ganze Personal verteilt wurde.
 	@Test
 	public void testPruefeVerteilung()
 	{
@@ -33,6 +35,8 @@ public class PersonalTest
 
 	}
 	
+	//Szenario:	Durch ein Ereignis wird der Tarif zufällig erhöht.
+	//			Daraufhin wird überprüft, ob die Erhöhung im zulässigen Bereich liegt
 	@Test
 	public void testTariferhoehung()
 	{
@@ -45,6 +49,9 @@ public class PersonalTest
 
 	}
 	
+	//Szenario:	Die Ausstattung wird durch ein Ereignis erhöht, was das Gehalt des Personales
+	//			betrifft. Die höhe ist dabei auch Variabel und wird am Ende daraufhin überprüft
+	//			ob die Erhöhung im zulässigen Bereich liegt
 	@Test
 	public void testAusstattungserhoehung()
 	{
