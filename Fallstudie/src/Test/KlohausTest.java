@@ -51,7 +51,7 @@ public class KlohausTest extends Klohaus
 		
 		int summe = ktest.getAttraktivitaet();	
 		
-		if(summe != 14000) {
+		if(summe != 16000) {
 			fail("Attraktivitaet falsch!");
 		}
 

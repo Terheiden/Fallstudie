@@ -36,10 +36,10 @@ public class PersonalTest
 	@Test
 	public void testTariferhoehung()
 	{
-		//95000 before
-		//TODO: METHODE GEÄNDERT! ptest.tariferhoehung(stackStest);
-		//99750 after	
-		if(ptest.getGehalt() != 99750) {
+		
+		double erhoehung = ptest.tariferhoehung();
+
+		if(erhoehung >= 0.5) {
 		fail("Gehalt konnte nicht erhöht werden!");			
 		}
 
@@ -48,9 +48,9 @@ public class PersonalTest
 	@Test
 	public void testAusstattungserhoehung()
 	{
-		//TODO: METHODE GEÄNDERT! ptest.ausstattungserhoehung(stackStest);
-		
-		if(ptest.getGehalt() != 99000) {
+		ptest.ausstattungserhoehung();
+
+		if(ptest.getGehalt() <= 9000) {
 		fail("Gehalt konnte nicht erhöht werden!");			
 		}
 
