@@ -652,9 +652,9 @@ public class GUI extends JFrame implements ActionListener
 		if(preisStadtField.getValue() != null && preisBahnhofField.getValue() != null && preisRastplatzField.getValue() != null)
 		{
 			//Preis richtig darstellen 
-			int preisStadt = preisBekommen(preisStadtField);
-			int preisBahnhof = preisBekommen(preisBahnhofField);
-			int preisRastplatz = preisBekommen(preisRastplatzField);
+			int preisStadt = getPreis(preisStadtField);
+			int preisBahnhof = getPreis(preisBahnhofField);
+			int preisRastplatz = getPreis(preisRastplatzField);
 			
 					
 			int[] tmpVerteilung = {0,0,0};
@@ -739,7 +739,7 @@ public class GUI extends JFrame implements ActionListener
 	/*
 	 * gibt den Preis, der im FormattedTextField angezeigten wird als Integer berechnet auf Cent zurück
 	 */	
-	private int preisBekommen(JFormattedTextField field)
+	private int getPreis(JFormattedTextField field)
 	{
 		String preisString = field.getText();
 		String[] tmp = preisString.split(",");

@@ -40,7 +40,6 @@ public class BWLHistorie
 
 	public String erstelleBericht()
 	{
-		//TODO: Wird diese Methode benötigt?
 		return "Ich bin ein Dummy";
 	}
 
