@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 public class Simulation
 {
+	//Erlöse aus den drei Automatentypen und Anzahl der Kunden, die ein Produkt kaufen
 	private static final double KOAANTEIL = 0.009;
 	private static final int KOAERLOES = 300; //3,00 €
 	private static final double KAAANTEIL = 0.01;
@@ -11,6 +12,7 @@ public class Simulation
 	private static final double MUAANTEIL = 0.02;
 	private static final int MUAERLOES = 200; //2,00 €
 	
+	//Anteil der Kunden, die sich nach Preis, Hygiene und Attraktivität verteilen
 	private static double pkanteil = 0.625;
 	private static double hkanteil = 0.3;
 	private static double akanteil = 0.075;
@@ -21,10 +23,9 @@ public class Simulation
 	private GUI gui;
 	//Nummer des Spielers aktuellerSpieler
 	private int spielernummer;
+	//Wie lange war Spieler i schuldenfrei?
 	private byte[] schuldenfrei;
 	private Ereignis laufendesEreignis;
-	//private String eventtext;
-	//private int eventnummer;
 	
 	public Simulation(Spieler[] spieler)
 	{
@@ -54,7 +55,7 @@ public class Simulation
 		sonderausstattungen[1] = aktuellerSpieler.getKlos()[1].getSonderausstattungen();
 		sonderausstattungen[2] = aktuellerSpieler.getKlos()[2].getSonderausstattungen();
 		
-		System.out.println("Spieler " + spielernummer + " ist dran!");
+		//System.out.println("Spieler " + spielernummer + " ist dran!");
 		GuV alteGuV = aktuellerSpieler.getGuv();
 		GuV neueGuV = new GuV(aktuellerSpieler, alteGuV);
 		aktuellerSpieler.setGuv(neueGuV);
@@ -119,7 +120,6 @@ public class Simulation
 			int preisRastplatz, int aenderungStadt, int aenderungBahnhof, int aenderungRastplatz, boolean[][] neueSonderausstattungen)
 	{
 		//Prüfe, ob die Daten sinnvoll sind - falls nicht, gebe als String den Fehlertext zurück
-		
 		//HTML Tags werden in der GUI gesetzt
 		String fehler = "";
 		if((darlehenTilgen - darlehenAufnehmen) > aktuellerSpieler.getDarlehenkonto().getDarlehen())
@@ -141,6 +141,7 @@ public class Simulation
 		}
 		
 		//Führe alle Aktionen durch, die der Spieler auf der GUI eingestellt hat
+		//Buche die festgelegten Kosten in die GuV ein
 		aktuellerSpieler.nehmeDarlehenAuf(darlehenAufnehmen);
 		aktuellerSpieler.tilgeDarlehen(darlehenTilgen);
 		if(mitarbeiterAaenderung < 0)
@@ -229,12 +230,11 @@ public class Simulation
 		spielerRundeStart();
 		
 		//Methode erfolgreich durchlaufen, es wird kein String mit Fehlertext zurückgeliefert
-		// nicht null, sondern leerer String, da in der GUI diese Rückgabe mit html umgeben wird
 		return "";
 	}
 	
 	/**
-	 * Diese Methode simuliert den Wirtschaftsablauf - sie wird aufgerufen, nachdem alle Spieler einmal dran waren
+	 * Simuliert den Wirtschaftsablauf - wird aufgerufen, nachdem alle Spieler einmal dran waren
 	 */
 	public void simuliere()
 	{
@@ -269,10 +269,12 @@ public class Simulation
 		runde++;
 	}
 	
-	//Entfernt den aktuellen Spieler, da er verloren hat
+	/**
+	 * Entfernt den aktuellen Spieler, da er verloren hat
+	 */
 	private void entferneSpieler()
 	{
-		//Es ist nur noch ein Spieler übrig, dieser hat dementsprechend gewonnen
+		//Es wäre nach dem Entfernen nur noch ein Spieler übrig, dieser hat dementsprechend gewonnen
 		if(spieler.length == 2)
 		{
 			Spieler gewinner;
@@ -316,6 +318,9 @@ public class Simulation
 		spielerRundeStart();
 	}
 	
+	/**
+	 * Generiert den Martkforschungsbericht
+	 */
 	private String erstelleMafobericht()
 	{
 		String maFo ="";
@@ -341,7 +346,7 @@ public class Simulation
 					gesKundenZahl[j] += spieler[k].getKlos()[j].getKunden();
 				}
 				marktanteil[j] = spieler[i].getKlos()[j].getKunden() / (double) gesKundenZahl[j];
-				System.out.println("Marktanteil: " + marktanteil[j]);
+				//System.out.println("Marktanteil: " + marktanteil[j]);
 				marktanteil[j] = Math.round(1000.0 * marktanteil[j]) / 10.0;				
 			}
 			maFo+="<tr><td>Marktanteil</td><td>"+marktanteil[0]+" %</td><td>"+marktanteil[1]+" %</td><td>"+marktanteil[2]+" %</td></tr>"
@@ -355,6 +360,10 @@ public class Simulation
 		return maFo;
 	}
 	
+	/**
+	 * Erstellt für jeden Spieler ein neues BWLHistorie-Objekt
+	 * Dem Spieler wird das neue Objekt bekanntgegeben
+	 */
 	private void erstelleHistorie()
 	{
 		for (int i = 0; i < spieler.length; i++)
@@ -399,6 +408,9 @@ public class Simulation
 		}
 	}
 	
+	/**
+	 * Erzeugt (evtl.) ein Ereignis für die kommende Runde
+	 */
 	private void erzeugeEreignis()
 	{
 		//Wenn kein Ereignis läuft oder das aktuelle Ereignis nicht mehr fortgesetzt wird, kann ein neues erstellt werden
@@ -417,7 +429,10 @@ public class Simulation
 		}
 	}
 	
-	//TODO: Methode prüfen
+	/**
+	 * Prüft, ob ein Spieler gewonnen hat
+	 * Liefert eine Referenz auf diesen zurück
+	 */
 	private Spieler pruefeGewinnbedingung()
 	{
 		for (int i = 0; i < spieler.length; i++)
@@ -437,7 +452,6 @@ public class Simulation
 			//Damit hat er das Spiel gewonnen
 			if(schuldenfrei[i] > 2)
 			{
-				//TODO: Was wird hier auf der GUI getan?
 				return spieler[i];
 			}
 		}
@@ -445,6 +459,9 @@ public class Simulation
 		return null;
 	}
 	
+	/**
+	 * Weist allen Spielern den Marktforschungsbericht zu, die einen bestellt haben
+	 */
 	private void uebergebeMafoBericht()
 	{
 		for (int i = 0; i < spieler.length; i++)
@@ -461,12 +478,13 @@ public class Simulation
 		}
 	}
 	
-	//TODO: Methode prüfen
+	/**
+	 * Bucht alle Kosten in die GuV ein, die die Kundenanzahlen benötigen und daher noch nicht gebucht wurden
+	 */
 	private void vervollstaendigeGuV()
 	{
 		for (int i = 0; i < spieler.length; i++)
 		{
-			//TODO: Echtes Call by Reference?
 			GuV guv = spieler[i].getGuv();
 			Klohaus[] klos = spieler[i].getKlos();
 			
@@ -519,6 +537,9 @@ public class Simulation
 		}
 	}
 	
+	/**
+	 * Berechnet den Hygienelevel gemäß den Formeln in der Spezifikation in einer Region
+	 */
 	private void berechneHygiene(int region)
 	{
 		for (int i = 0; i < spieler.length; i++)
@@ -526,7 +547,7 @@ public class Simulation
 			Klohaus[] klos = spieler[i].getKlos();
 			
 			int[] personal = spieler[i].getPersonal().getVerteilung();
-			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[i] * 52);
+			int hygieneNeu = (int) (100 - klos[region].getKunden() * klos[region].getVerschmutzungsfaktor() + personal[region] * 52);
 			
 			//Wenn der Spieler sich erstmalig ein Klohaus in dieser Region gekauft hat
 			if(klos[region].getKunden() == 0)
@@ -540,12 +561,13 @@ public class Simulation
 			}
 			
 			klos[region].setHygiene(hygieneNeu);
-			//TODO: Syso entfernen
-			System.out.println("Hygiene festgesetzt auf " + hygieneNeu);
+			//System.out.println("Hygiene festgesetzt auf " + hygieneNeu);
 		}
 	}
 	
-	//TODO: Syso's entfernen
+	/**
+	 * Verteilt die Kunden auf Basis der in der Spezifikation festgelegten Formeln
+	 */
 	private void verteileKunden(int region)
 	{
 		//Da die Preise mit der vierten Potenz eingehen reicht Int beim Maximalpreis (300 Cent) nicht als Datentyp aus
@@ -582,17 +604,17 @@ public class Simulation
 			double preiskundenanteil = (1.0 - ((double) Math.pow(alleKlos[region].getPreis(), 4) / preissumme)) / (double) (spieler.length - 1);
 			int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
 			tmpPreiskunden[i] = preiskunden;
-			System.out.println("Preiskunden bei Spieler " + i + ": " + preiskunden);
+			//System.out.println("Preiskunden bei Spieler " + i + ": " + preiskunden);
 			
 			//Hygienekunden
 			double hygienekundenanteil = ((double) alleKlos[region].getHygiene() / hygienesumme);
 			int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * hkanteil);
-			System.out.println("Hygienekunden bei Spieler " + i + ": " + hygienekunden);
+			//System.out.println("Hygienekunden bei Spieler " + i + ": " + hygienekunden);
 			
 			//Attraktivitätskunden
 			double attraktivitaetskundenanteil = ((double) alleKlos[region].getAttraktivitaet() / attraktivitaetssumme);
 			int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * akanteil);
-			System.out.println("Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
+			//System.out.println("Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
 			
 			int alleKunden = preiskunden + hygienekunden + attraktivitaetskunden;
 			
@@ -604,7 +626,7 @@ public class Simulation
 				kundenueberlauf += alleKunden - alleKlos[region].getKapazitaet();
 				betroffenerSpieler[i] = true;
 				anzahlbetroffenerSpieler++;
-				System.out.println("Überlauf bei Spieler " + i + ". " + (alleKunden - alleKlos[region].getKapazitaet()) + " Kunden zu viel!");
+				//System.out.println("Überlauf bei Spieler " + i + ". " + (alleKunden - alleKlos[region].getKapazitaet()) + " Kunden zu viel!");
 			}
 			else
 			{			
@@ -615,10 +637,9 @@ public class Simulation
 		//Wenn Kunden übrig sind, werden diese auf die übrigen Spieler neu verteilt
 		if(kundenueberlauf > 0)
 		{
+			//System.out.println("Verteile Überlauf (" + kundenueberlauf + " Kunden)...");
 			
 			//Restkunden verteilen
-			System.out.println("Verteile Überlauf (" + kundenueberlauf + " Kunden)...");
-			
 			preissumme = 0;
 			hygienesumme = 0;
 			attraktivitaetssumme = 0;
@@ -653,17 +674,17 @@ public class Simulation
 						preiskundenanteil = 1.0;
 					}
 					int preiskunden = (int) (preiskundenanteil * gesamtkunden * pkanteil);
-					System.out.println("Zusätzliche Preiskunden bei Spieler " + i + ": " + preiskunden);
+					//System.out.println("Zusätzliche Preiskunden bei Spieler " + i + ": " + preiskunden);
 
 					//Hygienekunden
 					double hygienekundenanteil = ((double) alleKlos[region].getHygiene() / hygienesumme);
 					int hygienekunden = (int) (hygienekundenanteil * gesamtkunden * hkanteil);
-					System.out.println("Zusätzliche Hygienekunden bei Spieler " + i + ": " + hygienekunden);
+					//System.out.println("Zusätzliche Hygienekunden bei Spieler " + i + ": " + hygienekunden);
 
 					//Attraktivitätskunden
 					double attraktivitaetskundenanteil = ((double) alleKlos[region].getAttraktivitaet() / attraktivitaetssumme);
 					int attraktivitaetskunden = (int) (attraktivitaetskundenanteil * gesamtkunden * akanteil);
-					System.out.println("Zusätzliche Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
+					//System.out.println("Zusätzliche Attraktivitätskunden bei Spieler " + i + ": " + attraktivitaetskunden);
 
 					int alleneuenKunden = preiskunden + hygienekunden + attraktivitaetskunden;
 					int alleKunden = alleKlos[region].getKunden() + alleneuenKunden;
@@ -673,37 +694,39 @@ public class Simulation
 					if(alleneuenKunden > tmpPreiskunden[i])
 					{
 						alleKlos[region].setKunden(alleKlos[region].getKunden() + tmpPreiskunden[i]);
-						System.out.println("Spieler " + i + " darf seine Kapazität nicht ausnutzen, er bekommt " + (alleKlos[region].getKunden()) + " Kunden.");
+						//System.out.println("Spieler " + i + " darf seine Kapazität nicht ausnutzen, er bekommt " + (alleKlos[region].getKunden()) + " Kunden.");
 					}
 					//Übersteigt die Summe aller Kunden für einen Spieler dessen Kapazität, bekommt er so viele Kunden, wie er Kapazitäten frei hat
 					else if(alleKunden > alleKlos[region].getKapazitaet())
 					{
 						alleKlos[region].setKunden(alleKlos[region].getKapazitaet());
-						System.out.println("Überlauf bei Spieler " + i + ". Wird nicht mehr verteilt!");
+						//System.out.println("Überlauf bei Spieler " + i + ". Wird nicht mehr verteilt!");
 					}
 					else
 					{			
-						System.out.println("Kunden neu gesetzt bei Spieler " + i + ": " + (alleKunden));
+						//System.out.println("Kunden neu gesetzt bei Spieler " + i + ": " + (alleKunden));
 						alleKlos[region].setKunden(alleKunden);	
 					}	
 					//Übrige Kunden werden nicht mehr weiter verteilt
 				}
 			}
 		}
-		System.out.println("-----------------------------------------");
-		System.out.println("Folgende Kundenzahlen wurden festgesetzt:");
-		
-		for (int i = 0; i < spieler.length; i++)
-		{
-			Klohaus[] alleKlos = spieler[i].getKlos();
-			
-			int kkk = alleKlos[region].getKunden();
-			
-			System.out.println("Spieler " + i + " hat insgesamt " + kkk + " Kunden.");
-		}
+		//System.out.println("-----------------------------------------");
+		//System.out.println("Folgende Kundenzahlen wurden festgesetzt:");
+//		
+//		for (int i = 0; i < spieler.length; i++)
+//		{
+//			Klohaus[] alleKlos = spieler[i].getKlos();
+//			
+//			int kkk = alleKlos[region].getKunden();
+//			
+//			System.out.println("Spieler " + i + " hat insgesamt " + kkk + " Kunden.");
+//		}
 	}
 
-	//Berechnet, wie viele Kunden es in dieser Region gibt
+	/**
+	 * Berechnet, wie viele Kunden es in dieser Region gibt
+	 */
 	private int errechneKundenstamm(int region)
 	{
 		//Anzahl Kunden, die in dieser Region pro Klohaus vorhanden sind
@@ -838,22 +861,4 @@ public class Simulation
 	{
 		this.schuldenfrei = schuldenfrei;
 	}
-	
-	//TESTMETHODE
-	/*public static void main(String args[])
-	{
-		Simulation s = new Simulation();
-		
-		s.spieler[0].getKlos()[1].setKunden(200);
-		s.spieler[1].getKlos()[1].setKunden(2000);
-		s.spieler[2].getKlos()[1].setKunden(20000);
-		
-		s.berechneHygiene(1);
-		
-		System.out.println((int) 3000/1000 + 1);
-		
-		int[] array = {1,2,1};
-		System.out.println(s.spielerRundeBeendet(999999999, 0, 0, false, 2000, array, 50, 50, 50, 0, 0, 0, null));
-	}*/
-
 }
