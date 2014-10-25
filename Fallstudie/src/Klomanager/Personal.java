@@ -46,7 +46,7 @@ public class Personal
 		//5% mal Zufallszahl zwischen 0,50 und 2,00 (-> vierstellige Genauigkeit)
 		double erhoehung = (tmp/100.0) * 0.05;
 		double multiplikator = erhoehung + 1.0;
-		System.out.println("Multiplikator: " +  multiplikator);
+		//System.out.println("Multiplikator: " +  multiplikator);
 		
 		gehalt *= multiplikator;
 		
