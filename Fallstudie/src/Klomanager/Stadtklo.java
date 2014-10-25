@@ -62,6 +62,10 @@ public class Stadtklo extends Klohaus
 		}
 	}
 	
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;

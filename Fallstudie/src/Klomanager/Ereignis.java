@@ -309,6 +309,10 @@ public class Ereignis
 		}
 	}
 	
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
 	public int getEreignisnummer()
 	{
 		return ereignisnummer;
@@ -338,4 +342,14 @@ public class Ereignis
 	{
 		this.lebenszeit = lebenszeit;
 	}	
+	
+	public Simulation getSim()
+	{
+		return sim;
+	}
+
+	public void setSim(Simulation sim)
+	{
+		this.sim = sim;
+	}
 }

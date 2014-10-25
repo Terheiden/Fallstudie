@@ -78,6 +78,10 @@ public class Bahnhofsklo extends Klohaus
 			spieler[i].getGuv().setSonderkosten(spieler[i].getGuv().getSonderkosten() + ((int) (30000 * zufall) * spieler[i].getKlos()[1].anzahl)); //300,00 €
 		}
 	}
+
+	/**
+	 * Ab hier: Getter & Setter
+	 */
 	
 	public static int getKundenmarkt()
 	{

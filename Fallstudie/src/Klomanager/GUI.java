@@ -13,6 +13,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.NumberFormatter;
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame implements ActionListener
 {
 	private Image karte;
@@ -568,7 +569,7 @@ public class GUI extends JFrame implements ActionListener
 		if(meldung != null)
 		{
 			JOptionPane.showMessageDialog(null, meldung, "Aktuelle Information!", JOptionPane.INFORMATION_MESSAGE);
-		System.out.println("aus GUI/wechselSpieler" + meldung );
+		//System.out.println("aus GUI/wechselSpieler" + meldung );
 		}
 	}
 
@@ -707,7 +708,7 @@ public class GUI extends JFrame implements ActionListener
 		fehlerString +="</html>";
 		if(!fehlerString.equals("<html></html>")){
             JOptionPane.showMessageDialog(null,fehlerString,"Fehler",JOptionPane.WARNING_MESSAGE);	
-		System.out.println(fehlerString);
+		//System.out.println(fehlerString);
 		}
 	}
 	
@@ -784,7 +785,7 @@ public class GUI extends JFrame implements ActionListener
 			}		
 		}
 		if(object == nächsteRunde){
-			System.out.println("nächsteRunde ...");
+			//System.out.println("nächsteRunde ...");
 			beendeSpielerRunde();
 		}
 		
@@ -867,7 +868,7 @@ public class GUI extends JFrame implements ActionListener
 		for (int i = 0; i < spielerZahl; i++)
 		{
 			spieler[i] = new Spieler(name[i].getText());
-			System.out.println(spieler[i].getName());
+			//System.out.println(spieler[i].getName());
 		}
 		//Simulation
 		Simulation simu = new Simulation(spieler);

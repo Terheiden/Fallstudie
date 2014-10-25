@@ -38,6 +38,7 @@ public class BWLHistorie
 		this.besitzer = besitzer;
 	}
 
+	//Vorgesehene Schnittstelle bei Umsetzung des UI-Mockups
 	public String erstelleBericht()
 	{
 		return "Ich bin ein Dummy";

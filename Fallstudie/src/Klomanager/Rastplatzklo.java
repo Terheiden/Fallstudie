@@ -73,6 +73,10 @@ public class Rastplatzklo extends Klohaus
 		kundenmarkt -= 1000;
 	}
 	
+	/**
+	 * Ab hier: Getter & Setter
+	 */
+	
 	public static int getKundenmarkt()
 	{
 		return kundenmarkt;
