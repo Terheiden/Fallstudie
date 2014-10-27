@@ -523,6 +523,7 @@ public class GUI extends JFrame implements ActionListener
 					if (j != 4)
 					{ // dickeres Klopapier(4) kann auch wieder abgewählt werden
 						//this.sonderausstattungen[i][j].setSelected(true); nicht möglich, wegen Abfrage der neuen
+						this.sonderausstattungen[i][j].setSelected(false);
 						this.sonderausstattungen[i][j].setEnabled(false);
 						this.sonderausstattungen[i][j].setToolTipText("Bereits gekauft.");
 					}else{//nur für Klopapier(4)
